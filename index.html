@@ -1,268 +1,827 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b3d91"><title>نظام حضور الطلاب</title><style>:root{--p:#0b3d91;--b:#f4f7fb;--c:#fff;--t:#172033;--m:#667085;--ok:#137333;--bad:#b3261e;--w:#946200;--bd:#dbe3ec}*{box-sizing:border-box}body{margin:0;background:var(--b);color:var(--t);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif}header{background:linear-gradient(135deg,#0b3d91,#1565c0);color:#fff;text-align:center;padding:22px 15px}h1{font-size:24px;margin:0 0 5px}header p{margin:0;font-size:14px}.test{background:#ffd400;color:#111;text-align:center;font-weight:900;padding:9px;position:sticky;top:0;z-index:20}main{max-width:720px;margin:16px auto;padding:0 13px 40px}.card{background:var(--c);border:1px solid var(--bd);border-radius:18px;padding:17px;margin:12px 0;box-shadow:0 5px 18px #0b3d9110}h3{margin:0 0 13px}label{display:block;font-weight:800;margin-bottom:7px}input,button{width:100%;padding:12px;border-radius:12px;font:inherit}input{border:1px solid var(--bd)}button{border:0;background:var(--p);color:#fff;font-weight:800;margin-top:9px;cursor:pointer}button.secondary{background:#edf3fa;color:var(--p);border:1px solid #cbd8e6}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #edf0f3}.row:last-child{border:0}.status{padding:11px 13px;border-radius:12px;background:#edf3fa;font-weight:700}.status.ok{background:#e9f7ef;color:var(--ok)}.status.bad{background:#fdeceb;color:var(--bad)}.status.warn{background:#fff6dc;color:var(--w)}.hidden{display:none!important}.pill{padding:4px 9px;border-radius:999px;background:#edf3fa;font-size:12px;font-weight:800}.small{font-size:12px;color:var(--m);line-height:1.65}.log{max-height:260px;overflow:auto;background:#101828;color:#e6edf3;border-radius:12px;padding:10px;font:12px/1.7 monospace;direction:ltr;text-align:left;white-space:pre-wrap}.testOpen{width:auto;background:#fff;color:var(--p);padding:8px 14px;margin-top:12px;border:1px solid #dbe3ec}.testOpen:hover{background:#edf3fa}footer{text-align:center;color:var(--m);font-size:12px;margin-top:18px}@media(max-width:500px){.grid{grid-template-columns:1fr}.row{align-items:center}}</style></head><body>
+<!doctype html>
+<html lang="ar" dir="rtl">
 
-<div id="testBanner" class="test hidden">وضع الاختبار — لن يتم إرسال أو تسجيل حضور حقيقي في الشيت</div>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3d91">
+<title>نظام حضور الطلاب</title>
+
+<style>
+:root{
+--p:#0b3d91;
+--b:#f4f7fb;
+--c:#fff;
+--t:#172033;
+--m:#667085;
+--ok:#137333;
+--bad:#b3261e;
+--w:#946200;
+--bd:#dbe3ec
+}
+
+*{
+box-sizing:border-box
+}
+
+body{
+margin:0;
+background:var(--b);
+color:var(--t);
+font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif
+}
+
+header{
+background:linear-gradient(135deg,#0b3d91,#1565c0);
+color:#fff;
+text-align:center;
+padding:22px 15px
+}
+
+h1{
+font-size:24px;
+margin:0 0 5px
+}
+
+header p{
+margin:0;
+font-size:14px
+}
+
+main{
+max-width:720px;
+margin:16px auto;
+padding:0 13px 40px
+}
+
+.card{
+background:var(--c);
+border:1px solid var(--bd);
+border-radius:18px;
+padding:17px;
+margin:12px 0;
+box-shadow:0 5px 18px #0b3d9110
+}
+
+h3{
+margin:0 0 13px
+}
+
+label{
+display:block;
+font-weight:800;
+margin-bottom:7px
+}
+
+input,
+button{
+width:100%;
+padding:12px;
+border-radius:12px;
+font:inherit
+}
+
+input{
+border:1px solid var(--bd)
+}
+
+button{
+border:0;
+background:var(--p);
+color:#fff;
+font-weight:800;
+margin-top:9px;
+cursor:pointer
+}
+
+button.secondary{
+background:#edf3fa;
+color:var(--p);
+border:1px solid #cbd8e6
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:9px
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:12px;
+padding:9px 0;
+border-bottom:1px solid #edf0f3
+}
+
+.row:last-child{
+border:0
+}
+
+.status{
+padding:11px 13px;
+border-radius:12px;
+background:#edf3fa;
+font-weight:700
+}
+
+.status.ok{
+background:#e9f7ef;
+color:var(--ok)
+}
+
+.status.bad{
+background:#fdeceb;
+color:var(--bad)
+}
+
+.status.warn{
+background:#fff6dc;
+color:var(--w)
+}
+
+.hidden{
+display:none!important
+}
+
+.pill{
+padding:4px 9px;
+border-radius:999px;
+background:#edf3fa;
+font-size:12px;
+font-weight:800
+}
+
+.small{
+font-size:12px;
+color:var(--m);
+line-height:1.65
+}
+
+footer{
+text-align:center;
+color:var(--m);
+font-size:12px;
+margin-top:18px
+}
+
+@media(max-width:500px){
+.grid{
+grid-template-columns:1fr
+}
+
+.row{
+align-items:center
+}
+}
+</style>
+
+</head>
+
+<body>
 
 <header>
 <h1>نظام حضور الطلاب</h1>
 <p>الحضور مرتبط بالطالب والمجموعة والمحاضرة والموقع</p>
-<button id="openTestBtn" class="testOpen">🔧 وضع الاختبار</button>
 </header>
 
 <main>
 
-<div id="status" class="status">جاري تجهيز النظام...</div>
+<div id="status" class="status">
+جاري تجهيز النظام...
+</div>
 
 <section class="card">
-<label for="studentId">الرقم الجامعي</label>
-<input id="studentId" inputmode="numeric" autocomplete="off" placeholder="أدخل الرقم الجامعي">
+
+<label for="studentId">
+الرقم الجامعي
+</label>
+
+<input
+id="studentId"
+inputmode="numeric"
+autocomplete="off"
+placeholder="أدخل الرقم الجامعي"
+>
+
 <div class="grid">
-<button id="loadBtn">تحقق من الطالب</button>
-<button id="clearBtn" class="secondary">مسح</button>
+
+<button id="loadBtn">
+تحقق من الطالب
+</button>
+
+<button id="clearBtn" class="secondary">
+مسح
+</button>
+
 </div>
-<p class="small">في أول استخدام يجب التحقق من الطالب مع الإنترنت حتى تُحفظ بياناته محليًا.</p>
+
+<p class="small">
+في أول استخدام يجب التحقق من الطالب مع الإنترنت حتى تُحفظ بياناته محليًا.
+</p>
+
 </section>
+
 
 <section id="studentCard" class="card hidden">
-<h3>بيانات الطالب</h3>
-<div class="row"><span>الاسم</span><b id="studentName">—</b></div>
-<div class="row"><span>المجموعة</span><b id="studentGroup">—</b></div>
-<div class="row"><span>الشبكة</span><span id="netState" class="pill">—</span></div>
+
+<h3>
+بيانات الطالب
+</h3>
+
+<div class="row">
+<span>الاسم</span>
+<b id="studentName">—</b>
+</div>
+
+<div class="row">
+<span>المجموعة</span>
+<b id="studentGroup">—</b>
+</div>
+
+<div class="row">
+<span>الشبكة</span>
+<span id="netState" class="pill">—</span>
+</div>
+
 </section>
+
 
 <section id="lectureCard" class="card hidden">
-<h3>المحاضرة الحالية</h3>
-<div class="row"><span>المادة</span><b id="subject">—</b></div>
-<div class="row"><span>رمز المحاضرة</span><b id="lectureId">—</b></div>
-<div class="row"><span>الوقت</span><b id="lectureTime">—</b></div>
-<div class="row"><span>المجموعات</span><b id="lectureGroups">—</b></div>
-<button id="attendanceBtn">تحقق من الموقع وتسجيل الحضور</button>
+
+<h3>
+المحاضرة الحالية
+</h3>
+
+<div class="row">
+<span>المادة</span>
+<b id="subject">—</b>
+</div>
+
+<div class="row">
+<span>رمز المحاضرة</span>
+<b id="lectureId">—</b>
+</div>
+
+<div class="row">
+<span>الوقت</span>
+<b id="lectureTime">—</b>
+</div>
+
+<div class="row">
+<span>المجموعات</span>
+<b id="lectureGroups">—</b>
+</div>
+
+<button id="attendanceBtn">
+تحقق من الموقع وتسجيل الحضور
+</button>
+
 </section>
+
 
 <section class="card">
-<h3>المزامنة</h3>
-<div class="row"><span>سجلات معلقة</span><b id="pendingCount">0</b></div>
-<button id="syncBtn" class="secondary">مزامنة الآن</button>
-<p class="small">عند انقطاع الإنترنت يُحفظ السجل محليًا ويحاول التطبيق إرساله عند عودة الاتصال. لا نعتمد على رفع مضمون بعد إغلاق الصفحة.</p>
+
+<h3>
+المزامنة
+</h3>
+
+<div class="row">
+<span>سجلات معلقة</span>
+<b id="pendingCount">0</b>
+</div>
+
+<button id="syncBtn" class="secondary">
+مزامنة الآن
+</button>
+
+<p class="small">
+عند انقطاع الإنترنت يُحفظ السجل محليًا ويحاول التطبيق إرساله عند عودة الاتصال.
+لا نعتمد على رفع مضمون بعد إغلاق الصفحة.
+</p>
+
 </section>
 
-<section id="testCard" class="card hidden">
-<h3>أدوات الاختبار</h3>
-<p class="small">هذا الوضع لا يرسل حضورًا حقيقيًا.</p>
-
-<button id="testApiBtn" class="secondary">اختبار API</button>
-
-<button id="testStudentBtn" class="secondary">اختبار الطالب 55</button>
-
-<button id="testLectureBtn" class="secondary">اختبار المحاضرة الحالية للمجموعة 2</button>
-
-<button id="testGpsBtn" class="secondary">اختبار GPS الحقيقي</button>
-
-<button id="simulateGpsBtn" class="secondary">محاكاة GPS داخل النطاق</button>
-
-<button id="testDbBtn" class="secondary">اختبار التخزين المحلي</button>
-
-<button id="exitTestBtn" class="secondary">إيقاف وضع الاختبار</button>
-
-<pre id="testLog" class="log">—</pre>
-</section>
 
 <footer>
-GitHub Pages + Google Apps Script + Google Sheets<br>
+GitHub Pages + Google Apps Script + Google Sheets
+<br>
 DeviceID معرف محلي للمتصفح وليس معرفًا عتاديًا.
 </footer>
 
 </main>
 
+
 <script>
+
 "use strict";
 
-const API_URL="https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
 
-const TARGET_LAT=13.571698,
-TARGET_LNG=43.981730,
-MAX_DISTANCE_METERS=150,
-MAX_GPS_ACCURACY_METERS=150;
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
 
-const TEST_MODE=new URLSearchParams(location.search).get("mode")==="test";
 
-const DB_NAME="TaizAttendanceDB",
-DB_VERSION=4,
-PENDING="pendingAttendance",
-STUDENTS="studentCache",
-META="meta";
+const TARGET_LAT = 13.571698,
+TARGET_LNG = 43.981730,
+MAX_DISTANCE_METERS = 150,
+MAX_GPS_ACCURACY_METERS = 150;
 
-const LECTURES=[
 
-{id:"SUN-01",day:"الأحد",start:"08:00",end:"10:00",subject:"عملي قواعد البيانات",groups:["1"]},
+const DB_NAME = "TaizAttendanceDB",
+DB_VERSION = 4,
+PENDING = "pendingAttendance",
+STUDENTS = "studentCache",
+META = "meta";
 
-{id:"SUN-02",day:"الأحد",start:"08:00",end:"10:00",subject:"عملي هياكل البيانات",groups:["2"]},
 
-{id:"SUN-03",day:"الأحد",start:"08:00",end:"10:00",subject:"عملي هياكل البيانات",groups:["3"]},
+const LECTURES = [
 
-{id:"SUN-04",day:"الأحد",start:"08:00",end:"10:00",subject:"عملي تحليل وتصميم النظم",groups:["4"]},
+{
+id:"SUN-01",
+day:"الأحد",
+start:"08:00",
+end:"10:00",
+subject:"عملي قواعد البيانات",
+groups:["1"]
+},
 
-{id:"SUN-05",day:"الأحد",start:"10:00",end:"12:00",subject:"عملي تصميم الشبكات",groups:["1"]},
+{
+id:"SUN-02",
+day:"الأحد",
+start:"08:00",
+end:"10:00",
+subject:"عملي هياكل البيانات",
+groups:["2"]
+},
 
-{id:"SUN-06",day:"الأحد",start:"10:00",end:"12:00",subject:"عملي هياكل البيانات",groups:["2"]},
+{
+id:"SUN-03",
+day:"الأحد",
+start:"08:00",
+end:"10:00",
+subject:"عملي هياكل البيانات",
+groups:["3"]
+},
 
-{id:"SUN-07",day:"الأحد",start:"10:00",end:"12:00",subject:"عملي قواعد البيانات",groups:["3"]},
+{
+id:"SUN-04",
+day:"الأحد",
+start:"08:00",
+end:"10:00",
+subject:"عملي تحليل وتصميم النظم",
+groups:["4"]
+},
 
-{id:"SUN-08",day:"الأحد",start:"10:00",end:"12:00",subject:"عملي تحليل وتصميم النظم",groups:["4"]},
+{
+id:"SUN-05",
+day:"الأحد",
+start:"10:00",
+end:"12:00",
+subject:"عملي تصميم الشبكات",
+groups:["1"]
+},
 
-{id:"SUN-10",day:"الأحد",start:"12:00",end:"15:00",subject:"متطلبات هندسة البرمجيات",groups:["1","2"]},
+{
+id:"SUN-06",
+day:"الأحد",
+start:"10:00",
+end:"12:00",
+subject:"عملي هياكل البيانات",
+groups:["2"]
+},
 
-{id:"MON-01",day:"الإثنين",start:"08:00",end:"10:00",subject:"تصميم المنطق الرقمي",groups:["1","2"]},
+{
+id:"SUN-07",
+day:"الأحد",
+start:"10:00",
+end:"12:00",
+subject:"عملي قواعد البيانات",
+groups:["3"]
+},
 
-{id:"MON-02",day:"الإثنين",start:"08:00",end:"10:00",subject:"عملي هياكل البيانات",groups:["3"]},
+{
+id:"SUN-08",
+day:"الأحد",
+start:"10:00",
+end:"12:00",
+subject:"عملي تحليل وتصميم النظم",
+groups:["4"]
+},
 
-{id:"MON-03",day:"الإثنين",start:"10:00",end:"12:00",subject:"عملي هياكل البيانات",groups:["1"]},
+{
+id:"SUN-10",
+day:"الأحد",
+start:"12:00",
+end:"15:00",
+subject:"متطلبات هندسة البرمجيات",
+groups:["1","2"]
+},
 
-{id:"MON-04",day:"الإثنين",start:"10:00",end:"12:00",subject:"تصميم المنطق الرقمي",groups:["3","4"]},
+{
+id:"MON-01",
+day:"الإثنين",
+start:"08:00",
+end:"10:00",
+subject:"تصميم المنطق الرقمي",
+groups:["1","2"]
+},
 
-{id:"MON-05",day:"الإثنين",start:"10:00",end:"12:00",subject:"عملي هياكل البيانات",groups:["2"]},
+{
+id:"MON-02",
+day:"الإثنين",
+start:"08:00",
+end:"10:00",
+subject:"عملي هياكل البيانات",
+groups:["3"]
+},
 
-{id:"MON-06",day:"الإثنين",start:"12:00",end:"15:00",subject:"متطلبات هندسة البرمجيات",groups:["3","4"]},
+{
+id:"MON-03",
+day:"الإثنين",
+start:"10:00",
+end:"12:00",
+subject:"عملي هياكل البيانات",
+groups:["1"]
+},
 
-{id:"TUE-01",day:"الثلاثاء",start:"08:00",end:"10:00",subject:"عملي الاحتمالات والإحصاء",groups:["2","3"]},
+{
+id:"MON-04",
+day:"الإثنين",
+start:"10:00",
+end:"12:00",
+subject:"تصميم المنطق الرقمي",
+groups:["3","4"]
+},
 
-{id:"TUE-02",day:"الثلاثاء",start:"08:00",end:"10:00",subject:"عملي تحليل وتصميم النظم",groups:["1"]},
+{
+id:"MON-05",
+day:"الإثنين",
+start:"10:00",
+end:"12:00",
+subject:"عملي هياكل البيانات",
+groups:["2"]
+},
 
-{id:"TUE-03",day:"الثلاثاء",start:"08:00",end:"10:00",subject:"عملي قواعد البيانات",groups:["4"]},
+{
+id:"MON-06",
+day:"الإثنين",
+start:"12:00",
+end:"15:00",
+subject:"متطلبات هندسة البرمجيات",
+groups:["3","4"]
+},
 
-{id:"TUE-04",day:"الثلاثاء",start:"10:00",end:"12:00",subject:"عملي قواعد البيانات",groups:["2"]},
+{
+id:"TUE-01",
+day:"الثلاثاء",
+start:"08:00",
+end:"10:00",
+subject:"عملي الاحتمالات والإحصاء",
+groups:["2","3"]
+},
 
-{id:"TUE-05",day:"الثلاثاء",start:"10:00",end:"12:00",subject:"عملي تحليل وتصميم النظم",groups:["3"]},
+{
+id:"TUE-02",
+day:"الثلاثاء",
+start:"08:00",
+end:"10:00",
+subject:"عملي تحليل وتصميم النظم",
+groups:["1"]
+},
 
-{id:"TUE-06",day:"الثلاثاء",start:"10:00",end:"12:00",subject:"عملي الاحتمالات والإحصاء",groups:["1","4"]},
+{
+id:"TUE-03",
+day:"الثلاثاء",
+start:"08:00",
+end:"10:00",
+subject:"عملي قواعد البيانات",
+groups:["4"]
+},
 
-{id:"WED-01",day:"الأربعاء",start:"08:00",end:"10:00",subject:"تحليل وتصميم النظم",groups:["1","2"]},
+{
+id:"TUE-04",
+day:"الثلاثاء",
+start:"10:00",
+end:"12:00",
+subject:"عملي قواعد البيانات",
+groups:["2"]
+},
 
-{id:"WED-02",day:"الأربعاء",start:"08:00",end:"10:00",subject:"هياكل البيانات والخوارزميات",groups:["3","4"]},
+{
+id:"TUE-05",
+day:"الثلاثاء",
+start:"10:00",
+end:"12:00",
+subject:"عملي تحليل وتصميم النظم",
+groups:["3"]
+},
 
-{id:"WED-03",day:"الأربعاء",start:"10:00",end:"12:00",subject:"تحليل وتصميم النظم",groups:["3","4"]},
+{
+id:"TUE-06",
+day:"الثلاثاء",
+start:"10:00",
+end:"12:00",
+subject:"عملي الاحتمالات والإحصاء",
+groups:["1","4"]
+},
 
-{id:"WED-04",day:"الأربعاء",start:"10:00",end:"12:00",subject:"هياكل البيانات والخوارزميات",groups:["1","2"]},
+{
+id:"WED-01",
+day:"الأربعاء",
+start:"08:00",
+end:"10:00",
+subject:"تحليل وتصميم النظم",
+groups:["1","2"]
+},
 
-{id:"THU-01",day:"الخميس",start:"08:00",end:"10:00",subject:"الاحتمالات والإحصاء",groups:["1","2"]},
+{
+id:"WED-02",
+day:"الأربعاء",
+start:"08:00",
+end:"10:00",
+subject:"هياكل البيانات والخوارزميات",
+groups:["3","4"]
+},
 
-{id:"THU-02",day:"الخميس",start:"08:00",end:"10:00",subject:"قواعد البيانات",groups:["3","4"]},
+{
+id:"WED-03",
+day:"الأربعاء",
+start:"10:00",
+end:"12:00",
+subject:"تحليل وتصميم النظم",
+groups:["3","4"]
+},
 
-{id:"THU-03",day:"الخميس",start:"10:00",end:"12:00",subject:"قواعد البيانات",groups:["1","2"]},
+{
+id:"WED-04",
+day:"الأربعاء",
+start:"10:00",
+end:"12:00",
+subject:"هياكل البيانات والخوارزميات",
+groups:["1","2"]
+},
 
-{id:"THU-04",day:"الخميس",start:"12:00",end:"14:00",subject:"الاحتمالات والإحصاء",groups:["3","4"]}
+{
+id:"THU-01",
+day:"الخميس",
+start:"08:00",
+end:"10:00",
+subject:"الاحتمالات والإحصاء",
+groups:["1","2"]
+},
+
+{
+id:"THU-02",
+day:"الخميس",
+start:"08:00",
+end:"10:00",
+subject:"قواعد البيانات",
+groups:["3","4"]
+},
+
+{
+id:"THU-03",
+day:"الخميس",
+start:"10:00",
+end:"12:00",
+subject:"قواعد البيانات",
+groups:["1","2"]
+},
+
+{
+id:"THU-04",
+day:"الخميس",
+start:"12:00",
+end:"14:00",
+subject:"الاحتمالات والإحصاء",
+groups:["3","4"]
+}
 
 ];
 
-let db=null,currentStudent=null,currentLecture=null;
 
-const $=id=>document.getElementById(id);
+let db = null,
+currentStudent = null,
+currentLecture = null;
+
+
+const $ = id =>
+document.getElementById(id);
+
 
 function status(m,t=""){
-$("status").className="status "+t;
-$("status").textContent=m
+
+$("status").className =
+"status " + t;
+
+$("status").textContent = m;
+
 }
+
 
 function online(){
-return navigator.onLine
+
+return navigator.onLine;
+
 }
+
 
 function net(){
-$("netState").textContent=online()?"متصل":"غير متصل"
+
+$("netState").textContent =
+online() ? "متصل" : "غير متصل";
+
 }
 
-function log(m){
-const e=$("testLog");
-
-if(e.textContent==="—")
-e.textContent="";
-
-e.textContent+="\n"+new Date().toLocaleTimeString()+"  "+m
-}
 
 function openDB(){
-return new Promise((ok,no)=>{
-const r=indexedDB.open(DB_NAME,DB_VERSION);
 
-r.onupgradeneeded=e=>{
-const d=e.target.result;
+return new Promise((ok,no)=>{
+
+const r =
+indexedDB.open(DB_NAME,DB_VERSION);
+
+
+r.onupgradeneeded = e => {
+
+const d = e.target.result;
+
 
 if(!d.objectStoreNames.contains(PENDING))
-d.createObjectStore(PENDING,{keyPath:"sessionKey"});
+
+d.createObjectStore(
+PENDING,
+{keyPath:"sessionKey"}
+);
+
 
 if(!d.objectStoreNames.contains(STUDENTS))
-d.createObjectStore(STUDENTS,{keyPath:"studentId"});
+
+d.createObjectStore(
+STUDENTS,
+{keyPath:"studentId"}
+);
+
 
 if(!d.objectStoreNames.contains(META))
-d.createObjectStore(META,{keyPath:"key"})
+
+d.createObjectStore(
+META,
+{keyPath:"key"}
+);
+
 };
 
-r.onsuccess=e=>{
-db=e.target.result;
-ok()
+
+r.onsuccess = e => {
+
+db = e.target.result;
+
+ok();
+
 };
 
-r.onerror=()=>no(r.error)
-})
+
+r.onerror = () =>
+no(r.error);
+
+});
+
 }
+
 
 function st(n,m="readonly"){
-return db.transaction(n,m).objectStore(n)
+
+return db
+.transaction(n,m)
+.objectStore(n);
+
 }
+
 
 function put(n,v){
+
 return new Promise((a,b)=>{
-const r=st(n,"readwrite").put(v);
-r.onsuccess=()=>a();
-r.onerror=()=>b(r.error)
-})
+
+const r =
+st(n,"readwrite").put(v);
+
+r.onsuccess = () => a();
+
+r.onerror = () =>
+b(r.error);
+
+});
+
 }
+
 
 function get(n,k){
+
 return new Promise((a,b)=>{
-const r=st(n).get(k);
-r.onsuccess=()=>a(r.result);
-r.onerror=()=>b(r.error)
-})
+
+const r =
+st(n).get(k);
+
+r.onsuccess = () =>
+a(r.result);
+
+r.onerror = () =>
+b(r.error);
+
+});
+
 }
+
 
 function del(n,k){
+
 return new Promise((a,b)=>{
-const r=st(n,"readwrite").delete(k);
-r.onsuccess=()=>a();
-r.onerror=()=>b(r.error)
-})
+
+const r =
+st(n,"readwrite").delete(k);
+
+r.onsuccess = () => a();
+
+r.onerror = () =>
+b(r.error);
+
+});
+
 }
+
 
 function all(n){
+
 return new Promise((a,b)=>{
-const r=st(n).getAll();
-r.onsuccess=()=>a(r.result||[]);
-r.onerror=()=>b(r.error)
-})
+
+const r =
+st(n).getAll();
+
+r.onsuccess = () =>
+a(r.result || []);
+
+r.onerror = () =>
+b(r.error);
+
+});
+
 }
+
 
 async function count(){
+
 try{
-$("pendingCount").textContent=(await all(PENDING)).length
+
+$("pendingCount").textContent =
+(await all(PENDING)).length;
+
 }catch{}
+
 }
+
 
 function device(){
-let x=localStorage.getItem("taiz_device_id");
+
+let x =
+localStorage.getItem(
+"taiz_device_id"
+);
+
 
 if(!x){
-x=window.crypto&&crypto.randomUUID?
-crypto.randomUUID():
-"dev-"+Date.now()+"-"+Math.random().toString(36).slice(2);
 
-localStorage.setItem("taiz_device_id",x)
+x =
+window.crypto &&
+crypto.randomUUID ?
+
+crypto.randomUUID() :
+
+"dev-" +
+Date.now() +
+"-" +
+Math.random()
+.toString(36)
+.slice(2);
+
+
+localStorage.setItem(
+"taiz_device_id",
+x
+);
+
 }
 
-return x
+
+return x;
+
 }
+
 
 function day(d){
-return[
+
+return [
+
 "الأحد",
 "الإثنين",
 "الثلاثاء",
@@ -270,55 +829,103 @@ return[
 "الخميس",
 "الجمعة",
 "السبت"
-][d.getDay()]
+
+][d.getDay()];
+
 }
+
 
 function min(t){
-const a=String(t).split(":").map(Number);
-return a[0]*60+a[1]
+
+const a =
+String(t)
+.split(":")
+.map(Number);
+
+return a[0] * 60 + a[1];
+
 }
+
 
 function localDate(){
-const d=new Date();
 
-return d.getFullYear()+"-"+
-String(d.getMonth()+1).padStart(2,"0")+"-"+
-String(d.getDate()).padStart(2,"0")
+const d = new Date();
+
+return d.getFullYear() +
+"-" +
+String(
+d.getMonth()+1
+).padStart(2,"0") +
+"-" +
+String(
+d.getDate()
+).padStart(2,"0");
+
 }
+
 
 function lecture(g,d=new Date()){
-const m=d.getHours()*60+d.getMinutes(),
-n=day(d);
 
-return LECTURES.find(x=>
-x.day===n&&
-m>=min(x.start)&&
-m<min(x.end)&&
-x.groups.includes(String(g).trim())
+const m =
+d.getHours()*60 +
+d.getMinutes();
+
+const n =
+day(d);
+
+
+return LECTURES.find(x =>
+
+x.day === n &&
+m >= min(x.start) &&
+m < min(x.end) &&
+x.groups.includes(
+String(g).trim()
 )
-}
 
-function dist(a,b,c,d){
-const R=6371000,
-p=Math.PI/180,
-x=(c-a)*p,
-y=(d-b)*p,
-q=Math.sin(x/2)**2+
-Math.cos(a*p)*
-Math.cos(c*p)*
-Math.sin(y/2)**2;
-
-return 2*R*Math.asin(Math.sqrt(q))
-}
-
-async function apiGet(p){
-const u=new URL(API_URL);
-
-Object.entries(p).forEach(([k,v])=>
-u.searchParams.set(k,String(v))
 );
 
-const r=await fetch(
+}
+
+
+function dist(a,b,c,d){
+
+const R = 6371000,
+p = Math.PI / 180,
+x = (c-a) * p,
+y = (d-b) * p;
+
+const q =
+Math.sin(x/2)**2 +
+Math.cos(a*p) *
+Math.cos(c*p) *
+Math.sin(y/2)**2;
+
+return 2 * R *
+Math.asin(
+Math.sqrt(q)
+);
+
+}
+
+
+async function apiGet(p){
+
+const u =
+new URL(API_URL);
+
+
+Object.entries(p).forEach(
+([k,v]) =>
+u.searchParams.set(
+k,
+String(v)
+)
+);
+
+
+const r =
+await fetch(
 u.toString(),
 {
 method:"GET",
@@ -326,325 +933,518 @@ cache:"no-store"
 }
 );
 
-if(!r.ok)
-throw Error("HTTP "+r.status);
 
-return r.json()
+if(!r.ok)
+throw Error(
+"HTTP " + r.status
+);
+
+
+return r.json();
+
 }
 
+
 async function apiPost(x){
-const r=await fetch(
+
+const r =
+await fetch(
 API_URL,
 {
 method:"POST",
 headers:{
-"Content-Type":"text/plain;charset=utf-8"
+"Content-Type":
+"text/plain;charset=utf-8"
 },
 body:JSON.stringify(x),
 cache:"no-store"
 }
 );
 
-if(!r.ok)
-throw Error("HTTP "+r.status);
 
-return r.json()
+if(!r.ok)
+throw Error(
+"HTTP " + r.status
+);
+
+
+return r.json();
+
 }
 
+
 function parseGroups(v){
-return String(v||"")
+
+return String(v || "")
 .replace(/[،؛]/g,",")
 .replace(/[و&+]/g,",")
 .split(/[,\s]+/)
-.map(x=>x.trim())
-.filter(Boolean)
+.map(x => x.trim())
+.filter(Boolean);
+
 }
+
 
 function serverLecture(x){
-if(!x)return null;
 
-return{
-id:x.lectureId||x.id||"",
-day:x.day||"",
-start:x.start||"",
-end:x.end||"",
-subject:x.subject||"",
-groups:parseGroups(x.group)
+if(!x)
+return null;
+
+
+return {
+
+id:
+x.lectureId ||
+x.id ||
+"",
+
+day:
+x.day ||
+"",
+
+start:
+x.start ||
+"",
+
+end:
+x.end ||
+"",
+
+subject:
+x.subject ||
+"",
+
+groups:
+parseGroups(x.group)
+
+};
+
 }
-}
+
 
 async function loadStudent(){
 
-const id=$("studentId").value.trim();
+const id =
+$("studentId")
+.value
+.trim();
+
 
 if(!id)
-return status("أدخل الرقم الجامعي أولًا","bad");
 
-status("جارٍ التحقق من الطالب...");
+return status(
+"أدخل الرقم الجامعي أولًا",
+"bad"
+);
+
+
+status(
+"جارٍ التحقق من الطالب..."
+);
+
 
 try{
 
 let s;
 
+
 if(online()){
 
-const r=await apiGet({
+const r =
+await apiGet({
+
 action:"student",
+
 studentId:id
+
 });
 
+
 if(!r.success)
-throw Error(r.message||"الطالب غير موجود");
 
-s=r.student;
+throw Error(
+r.message ||
+"الطالب غير موجود"
+);
 
-await put(STUDENTS,s);
+
+s = r.student;
+
+
+await put(
+STUDENTS,
+s
+);
+
 
 }else{
 
-s=await get(STUDENTS,id);
+s =
+await get(
+STUDENTS,
+id
+);
+
 
 if(!s)
-throw Error("لا توجد بيانات محفوظة لهذا الطالب. يجب التحقق منه مرة واحدة مع الإنترنت.")
+
+throw Error(
+"لا توجد بيانات محفوظة لهذا الطالب. يجب التحقق منه مرة واحدة مع الإنترنت."
+);
 
 }
 
-currentStudent=s;
 
-$("studentCard").classList.remove("hidden");
+currentStudent = s;
 
-$("studentName").textContent=s.name||"—";
-$("studentGroup").textContent=s.group||"—";
+
+$("studentCard")
+.classList
+.remove("hidden");
+
+
+$("studentName")
+.textContent =
+s.name || "—";
+
+
+$("studentGroup")
+.textContent =
+s.group || "—";
+
 
 net();
 
-/* المحاضرة المحلية هي الأساس */
 
-currentLecture=lecture(s.group);
+/*
+المحاضرة المحلية هي الأساس
+*/
 
-/* الخادم للتحقق الإضافي فقط */
+currentLecture =
+lecture(s.group);
+
+
+/*
+الخادم للتحقق الإضافي فقط
+*/
 
 if(online()){
 
 try{
 
-const r=await apiGet({
+const r =
+await apiGet({
+
 action:"currentLecture",
+
 group:s.group
+
 });
 
-if(r.success&&r.lecture){
 
-const sl=serverLecture(r.lecture);
+if(
+r.success &&
+r.lecture
+){
 
-if(sl&&sl.id)
-currentLecture=sl
+const sl =
+serverLecture(
+r.lecture
+);
+
+
+if(sl && sl.id)
+
+currentLecture = sl;
 
 }
 
 }catch(e){
-console.warn("تعذر جلب المحاضرة من الخادم:",e)
+
+console.warn(
+"تعذر جلب المحاضرة من الخادم:",
+e
+);
+
 }
 
 }
+
 
 if(!currentLecture){
 
-$("lectureCard").classList.add("hidden");
+$("lectureCard")
+.classList
+.add("hidden");
+
 
 return status(
 "لا توجد محاضرة حالية لمجموعة الطالب.",
 "warn"
-)
+);
 
 }
 
-$("lectureCard").classList.remove("hidden");
 
-$("subject").textContent=currentLecture.subject||"—";
+$("lectureCard")
+.classList
+.remove("hidden");
 
-$("lectureId").textContent=currentLecture.id||"—";
 
-$("lectureTime").textContent=
-(currentLecture.start||"—")+
-" — "+
-(currentLecture.end||"—");
+$("subject")
+.textContent =
+currentLecture.subject ||
+"—";
 
-$("lectureGroups").textContent=
-(currentLecture.groups||[]).join(" ، ")||"—";
+
+$("lectureId")
+.textContent =
+currentLecture.id ||
+"—";
+
+
+$("lectureTime")
+.textContent =
+(currentLecture.start || "—") +
+" — " +
+(currentLecture.end || "—");
+
+
+$("lectureGroups")
+.textContent =
+(currentLecture.groups || [])
+.join(" ، ") ||
+"—";
+
 
 status(
-online()?
-"تم التحقق من الطالب والمحاضرة.":
+online() ?
+"تم التحقق من الطالب والمحاضرة." :
 "تم التحقق محليًا — يعمل دون اتصال.",
 "ok"
 );
+
 
 }catch(e){
 
 console.error(e);
 
+
 status(
-e.message||"تعذر التحقق من الطالب",
+e.message ||
+"تعذر التحقق من الطالب",
 "bad"
-)
+);
 
 }
 
 }
+
 
 function gps(){
 
 return new Promise((a,b)=>{
 
 if(!navigator.geolocation)
-return b(Error("المتصفح لا يدعم GPS"));
+
+return b(
+Error(
+"المتصفح لا يدعم GPS"
+)
+);
+
 
 navigator.geolocation.getCurrentPosition(
 
 a,
 
-e=>{
+e => {
 
-let m="تعذر الحصول على الموقع.";
+let m =
+"تعذر الحصول على الموقع.";
 
-if(e.code===1)
-m="تم رفض إذن الموقع. اسمح للموقع من إعدادات المتصفح.";
 
-if(e.code===2)
-m="تعذر تحديد الموقع. تأكد من تشغيل GPS.";
+if(e.code === 1)
 
-if(e.code===3)
-m="انتهت مهلة تحديد الموقع.";
+m =
+"تم رفض إذن الموقع. اسمح للموقع من إعدادات المتصفح.";
 
-b(Error(m))
+
+if(e.code === 2)
+
+m =
+"تعذر تحديد الموقع. تأكد من تشغيل GPS.";
+
+
+if(e.code === 3)
+
+m =
+"انتهت مهلة تحديد الموقع.";
+
+
+b(Error(m));
 
 },
 
 {
+
 enableHighAccuracy:true,
+
 timeout:15000,
+
 maximumAge:0
-}
-
-)
-
-})
 
 }
+
+);
+
+});
+
+}
+
 
 async function realGPS(){
 
-const p=await gps(),
-a=p.coords.latitude,
-b=p.coords.longitude,
-c=p.coords.accuracy;
+const p =
+await gps();
 
-return{
+
+const a =
+p.coords.latitude;
+
+const b =
+p.coords.longitude;
+
+const c =
+p.coords.accuracy;
+
+
+return {
+
 lat:a,
+
 lng:b,
+
 accuracy:c,
-distance:dist(
+
+distance:
+dist(
 a,
 b,
 TARGET_LAT,
 TARGET_LNG
 )
-}
+
+};
 
 }
 
-function fakeGPS(){
-
-const a=TARGET_LAT+.0002,
-b=TARGET_LNG+.0002;
-
-return{
-lat:a,
-lng:b,
-accuracy:10,
-distance:dist(
-a,
-b,
-TARGET_LAT,
-TARGET_LNG
-)
-}
-
-}
 
 function record(loc){
 
-const date=localDate(),
-id=currentLecture.id;
+const date =
+localDate();
 
-return{
-studentId:String(currentStudent.studentId).trim(),
+const id =
+currentLecture.id;
+
+
+return {
+
+studentId:
+String(
+currentStudent.studentId
+).trim(),
+
 lectureId:id,
-latitude:Number(loc.lat),
-longitude:Number(loc.lng),
-accuracy:Number(loc.accuracy),
-deviceId:device(),
-timestamp:new Date().toISOString(),
-sessionDate:date,
+
+latitude:
+Number(loc.lat),
+
+longitude:
+Number(loc.lng),
+
+accuracy:
+Number(loc.accuracy),
+
+deviceId:
+device(),
+
+timestamp:
+new Date().toISOString(),
+
+sessionDate:
+date,
+
 sessionKey:
-String(currentStudent.studentId).trim()+
-"_"+id+
-"_"+date
-}
+String(
+currentStudent.studentId
+).trim() +
+"_" +
+id +
+"_" +
+date
+
+};
 
 }
+
 
 async function attendance(){
 
-if(!currentStudent||!currentLecture)
+if(
+!currentStudent ||
+!currentLecture
+)
+
 return status(
 "تحقق من الطالب والمحاضرة أولًا.",
 "bad"
 );
 
-status("جارٍ التحقق من الموقع...");
+
+status(
+"جارٍ التحقق من الموقع..."
+);
+
 
 try{
 
-const g=await realGPS();
+const g =
+await realGPS();
 
-if(g.accuracy>MAX_GPS_ACCURACY_METERS)
+
+if(
+g.accuracy >
+MAX_GPS_ACCURACY_METERS
+)
+
 throw Error(
 `دقة GPS غير كافية (${Math.round(g.accuracy)}م). الحد ${MAX_GPS_ACCURACY_METERS}م.`
 );
 
-if(g.distance>MAX_DISTANCE_METERS)
+
+if(
+g.distance >
+MAX_DISTANCE_METERS
+)
+
 throw Error(
 `أنت خارج النطاق (${Math.round(g.distance)}م). الحد ${MAX_DISTANCE_METERS}م.`
 );
 
-const r=record(g);
 
-if(TEST_MODE){
+const r =
+record(g);
 
-await put(
-PENDING,
-{
-...r,
-testOnly:true
-}
-);
-
-await count();
-
-return status(
-"اختبار ناجح: لم يُرسل شيء إلى الشيت.",
-"ok"
-)
-
-}
 
 if(online()){
 
 try{
 
-const x=await apiPost(r);
+const x =
+await apiPost(r);
+
 
 if(x.success){
 
@@ -653,9 +1453,10 @@ status(
 "ok"
 );
 
-return
+return;
 
 }
+
 
 if(x.duplicate){
 
@@ -664,19 +1465,27 @@ status(
 "warn"
 );
 
-return
+return;
 
 }
 
+
 throw Error(
-x.message||"رفض الخادم"
+x.message ||
+"رفض الخادم"
 );
+
 
 }catch(e){
 
 console.error(e);
 
-await put(PENDING,r);
+
+await put(
+PENDING,
+r
+);
+
 
 status(
 "تعذر الإرسال؛ تم حفظ السجل للمزامنة.",
@@ -687,7 +1496,11 @@ status(
 
 }else{
 
-await put(PENDING,r);
+await put(
+PENDING,
+r
+);
+
 
 status(
 "لا يوجد إنترنت؛ تم حفظ السجل محليًا.",
@@ -696,318 +1509,140 @@ status(
 
 }
 
+
 await count();
+
 
 }catch(e){
 
 console.error(e);
 
+
 status(
-e.message||"تعذر الحصول على الموقع",
+e.message ||
+"تعذر الحصول على الموقع",
 "bad"
-)
+);
 
 }
 
 }
+
 
 async function sync(){
 
-if(TEST_MODE)
-return status(
-"وضع الاختبار: لا توجد مزامنة إلى الشيت.",
-"warn"
-);
-
 if(!online())
+
 return status(
 "لا يوجد إنترنت.",
 "warn"
 );
 
-const a=await all(PENDING);
+
+const a =
+await all(PENDING);
+
 
 if(!a.length)
+
 return status(
 "لا توجد سجلات معلقة.",
 "ok"
 );
 
-let ok=0,fail=0;
 
-for(const r of a){
+let ok = 0,
+fail = 0;
+
+
+for(
+const r of a
+){
 
 try{
 
-const x=await apiPost(r);
+const x =
+await apiPost(r);
 
-if(x.success||x.duplicate){
+
+if(
+x.success ||
+x.duplicate
+){
 
 await del(
 PENDING,
 r.sessionKey
 );
 
-ok++
+ok++;
 
 }else{
 
-fail++
+fail++;
 
 }
 
 }catch(e){
 
-fail++
+fail++;
 
 }
 
 }
+
 
 await count();
 
+
 status(
 `المزامنة: نجح ${ok}، بقي ${fail}.`,
-fail?"warn":"ok"
+fail ?
+"warn" :
+"ok"
 );
 
 }
+
 
 async function clearLocal(){
 
 if(!confirm(
 "حذف بيانات التطبيق المحلية والسجلات المعلقة؟"
 ))
+
 return;
 
-for(const x of await all(PENDING))
-await del(PENDING,x.sessionKey);
 
-for(const x of await all(STUDENTS))
-await del(STUDENTS,x.studentId);
+for(
+const x of await all(PENDING)
+)
 
-localStorage.removeItem("taiz_device_id");
+await del(
+PENDING,
+x.sessionKey
+);
+
+
+for(
+const x of await all(STUDENTS)
+)
+
+await del(
+STUDENTS,
+x.studentId
+);
+
+
+localStorage.removeItem(
+"taiz_device_id"
+);
+
 
 location.reload();
 
 }
 
-async function testAPI(){
-
-$("testLog").textContent="";
-
-try{
-
-const r=await apiGet({
-action:"test"
-});
-
-log(JSON.stringify(r,null,2));
-
-status(
-"اختبار API ناجح.",
-"ok"
-)
-
-}catch(e){
-
-log("ERROR: "+e.message);
-
-status(
-"فشل اختبار API.",
-"bad"
-)
-
-}
-
-}
-
-async function testStudent(){
-
-$("testLog").textContent="";
-
-try{
-
-const r=await apiGet({
-action:"student",
-studentId:"55"
-});
-
-log(JSON.stringify(r,null,2));
-
-status(
-r.success?
-"اختبار الطالب 55 ناجح.":
-r.message||"الطالب غير موجود",
-r.success?
-"ok":
-"bad"
-)
-
-}catch(e){
-
-log("ERROR: "+e.message);
-
-status(
-"فشل اختبار الطالب.",
-"bad"
-)
-
-}
-
-}
-
-async function testLecture(){
-
-$("testLog").textContent="";
-
-try{
-
-const r=await apiGet({
-action:"currentLecture",
-group:"2"
-});
-
-log(JSON.stringify(r,null,2));
-
-status(
-r.success?
-(
-r.lecture?
-"تم العثور على المحاضرة.":
-"لا توجد محاضرة حاليًا للمجموعة 2."
-):
-"فشل الاختبار",
-
-r.success?
-(
-r.lecture?
-"ok":
-"warn"
-):
-"bad"
-)
-
-}catch(e){
-
-log("ERROR: "+e.message);
-
-status(
-"فشل اختبار المحاضرة.",
-"bad"
-)
-
-}
-
-}
-
-async function testGPS(){
-
-$("testLog").textContent="";
-
-try{
-
-const r=await realGPS();
-
-log(JSON.stringify(r,null,2));
-
-status(
-`GPS: ${Math.round(r.distance)}م، دقة ${Math.round(r.accuracy)}م`,
-"ok"
-)
-
-}catch(e){
-
-log("ERROR: "+e.message);
-
-status(
-"فشل اختبار GPS.",
-"bad"
-)
-
-}
-
-}
-
-async function sim(){
-
-$("testLog").textContent="";
-
-const r=fakeGPS();
-
-log(JSON.stringify(r,null,2));
-
-status(
-`محاكاة: ${Math.round(r.distance)}م داخل النطاق. لا إرسال للشيت.`,
-"ok"
-)
-
-}
-
-async function testDB(){
-
-$("testLog").textContent="";
-
-try{
-
-const k="test-"+Date.now();
-
-await put(
-META,
-{
-key:k,
-value:"OK"
-}
-);
-
-const r=await get(META,k);
-
-await del(META,k);
-
-log(JSON.stringify(r,null,2));
-
-status(
-"IndexedDB يعمل.",
-"ok"
-)
-
-}catch(e){
-
-log("ERROR: "+e.message);
-
-status(
-"فشل اختبار IndexedDB.",
-"bad"
-)
-
-}
-
-}
-
-function enterTestMode(){
-
-const u=new URL(location.href);
-
-u.searchParams.set(
-"mode",
-"test"
-);
-
-location.href=u.toString();
-
-}
-
-function exitTestMode(){
-
-const u=new URL(location.href);
-
-u.searchParams.delete(
-"mode"
-);
-
-location.href=u.toString();
-
-}
 
 async function boot(){
 
@@ -1015,23 +1650,16 @@ try{
 
 await openDB();
 
+
 await count();
+
 
 net();
 
-if(TEST_MODE){
 
-$("testBanner")
-.classList
-.remove("hidden");
-
-$("testCard")
-.classList
-.remove("hidden");
-
-}
-
-if("serviceWorker" in navigator){
+if(
+"serviceWorker" in navigator
+){
 
 try{
 
@@ -1048,88 +1676,101 @@ updateViaCache:"none"
 console.warn(
 "Service Worker:",
 e
-)
+);
 
 }
 
 }
+
 
 status(
-online()?
-"النظام جاهز — متصل.":
+online() ?
+"النظام جاهز — متصل." :
 "النظام جاهز — دون اتصال.",
 "ok"
 );
 
+
 }catch(e){
 
 status(
-"تعذر تهيئة التطبيق: "+e.message,
+"تعذر تهيئة التطبيق: " +
+e.message,
 "bad"
-)
+);
 
 }
 
 }
 
-$("openTestBtn").onclick=enterTestMode;
 
-$("exitTestBtn").onclick=exitTestMode;
+$("loadBtn").onclick =
+loadStudent;
 
-$("loadBtn").onclick=loadStudent;
 
-$("attendanceBtn").onclick=attendance;
+$("attendanceBtn").onclick =
+attendance;
 
-$("syncBtn").onclick=sync;
 
-$("clearBtn").onclick=clearLocal;
+$("syncBtn").onclick =
+sync;
 
-$("testApiBtn").onclick=testAPI;
 
-$("testStudentBtn").onclick=testStudent;
+$("clearBtn").onclick =
+clearLocal;
 
-$("testLectureBtn").onclick=testLecture;
 
-$("testGpsBtn").onclick=testGPS;
+$("studentId").onkeydown =
+e => {
 
-$("simulateGpsBtn").onclick=sim;
+if(e.key === "Enter")
 
-$("testDbBtn").onclick=testDB;
+loadStudent();
 
-$("studentId").onkeydown=e=>{
-if(e.key==="Enter")
-loadStudent()
 };
+
 
 addEventListener(
 "online",
-async()=>{
+async() => {
+
 net();
+
+
 status(
 "عاد الاتصال بالإنترنت.",
 "ok"
 );
 
-if(!TEST_MODE)
-await sync()
+
+await sync();
+
 }
 );
 
+
 addEventListener(
 "offline",
-()=>{
+() => {
+
 net();
+
 
 status(
 "انقطع الإنترنت — سيعمل التطبيق محليًا حسب البيانات المحفوظة.",
 "warn"
-)
+);
+
 }
 );
+
 
 addEventListener(
 "load",
 boot
 );
 
-</script></body></html>
+</script>
+
+</body>
+</html>
