@@ -1,21 +1,18 @@
-const CACHE_NAME = "taiz-attendance-v1";
+const CACHE_NAME = "taiz-attendance-v5";
 
-const APP_FILES = [
+const FILES = [
   "./",
-  "./index.html",
-  "./sw.js"
+  "./index.html"
 ];
 
-// تثبيت Service Worker وحفظ ملفات التطبيق
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_FILES))
+      .then(cache => cache.addAll(FILES))
       .then(() => self.skipWaiting())
   );
 });
 
-// تفعيل النسخة الجديدة وحذف الكاش القديم
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -28,60 +25,27 @@ self.addEventListener("activate", event => {
   );
 });
 
-// التعامل مع طلبات الصفحات والملفات
 self.addEventListener("fetch", event => {
-  const request = event.request;
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
 
-  // نتعامل فقط مع GET
-  if (request.method !== "GET") {
-    return;
-  }
-
-  // لا نتدخل في طلبات Google Apps Script أو المواقع الخارجية
-  if (!request.url.startsWith(self.location.origin)) {
-    return;
-  }
-
-  // عند فتح الصفحة: حاول الإنترنت أولاً، ثم الكاش
-  if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request)
-        .then(response => {
+        if (
+          event.request.method === "GET" &&
+          response.ok
+        ) {
           const copy = response.clone();
 
           caches.open(CACHE_NAME)
-            .then(cache => cache.put("./index.html", copy));
-
-          return response;
-        })
-        .catch(() => caches.match("./index.html"))
-    );
-
-    return;
-  }
-
-  // الملفات الأخرى: الكاش أولاً ثم الإنترنت
-  event.respondWith(
-    caches.match(request)
-      .then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
+            .then(cache => {
+              cache.put(event.request, copy);
+            });
         }
 
-        return fetch(request).then(response => {
-          if (
-            response &&
-            response.status === 200 &&
-            response.type === "basic"
-          ) {
-            const copy = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => cache.put(request, copy));
-          }
-
-          return response;
-        });
+        return response;
       })
+      .catch(() =>
+        caches.match(event.request)
+      )
   );
 });
