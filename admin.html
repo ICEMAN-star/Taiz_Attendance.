@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>لوحة تحكم المندوب</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+
+  background:
+    linear-gradient(
+      135deg,
+      #07111f,
+      #0d1b2f
+    );
+
+  color: #ffffff;
+
+  min-height: 100vh;
+
+}
+
+
+/* ================= HEADER ================= */
+
+.header {
+
+  padding: 25px 18px;
+
+  background:
+    rgba(10, 25, 45, 0.95);
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.1);
+
+  text-align: center;
+
+}
+
+.header h1 {
+
+  margin: 0;
+
+  font-size: 25px;
+
+}
+
+.header p {
+
+  margin:
+    8px 0 0;
+
+  color:
+    #a9bdd5;
+
+}
+
+
+/* ================= CONTAINER ================= */
+
+.container {
+
+  width: min(
+    1200px,
+    94%
+  );
+
+  margin:
+    25px auto;
+
+}
+
+
+/* ================= LOGIN ================= */
+
+.login {
+
+  max-width: 430px;
+
+  margin:
+    70px auto;
+
+  padding: 28px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  border:
+    1px solid rgba(255,255,255,0.1);
+
+  border-radius: 18px;
+
+  backdrop-filter:
+    blur(10px);
+
+  text-align: center;
+
+}
+
+.login h2 {
+
+  margin-top: 0;
+
+}
+
+input,
+select {
+
+  width: 100%;
+
+  padding: 13px;
+
+  margin:
+    7px 0;
+
+  border-radius: 10px;
+
+  border:
+    1px solid #314862;
+
+  background:
+    #101f33;
+
+  color: white;
+
+  font-size: 15px;
+
+}
+
+button {
+
+  border: none;
+
+  border-radius: 10px;
+
+  padding:
+    12px 18px;
+
+  background:
+    #1683e8;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+}
+
+button:hover {
+
+  opacity: 0.88;
+
+}
+
+button.secondary {
+
+  background:
+    #263b55;
+
+}
+
+
+/* ================= STATUS ================= */
+
+.status {
+
+  padding: 13px;
+
+  border-radius: 12px;
+
+  margin-bottom: 18px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  color:
+    #c7d7e8;
+
+}
+
+
+/* ================= CONTROLS ================= */
+
+.controls {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr auto;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+
+}
+
+
+/* ================= CARDS ================= */
+
+.cards {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 15px;
+
+  margin-bottom: 22px;
+
+}
+
+.card {
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+}
+
+.card .title {
+
+  color:
+    #9db4cc;
+
+  font-size: 14px;
+
+}
+
+.card .number {
+
+  font-size: 30px;
+
+  font-weight: bold;
+
+  margin-top: 8px;
+
+}
+
+
+/* ================= LECTURE ================= */
+
+.lecture {
+
+  padding: 20px;
+
+  margin-bottom: 20px;
+
+  border-radius: 16px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+}
+
+.lecture h2 {
+
+  margin-top: 0;
+
+}
+
+.lecture-info {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 10px;
+
+}
+
+.info {
+
+  padding: 12px;
+
+  background:
+    rgba(0,0,0,0.18);
+
+  border-radius: 10px;
+
+}
+
+.info small {
+
+  display: block;
+
+  color:
+    #8fa7c0;
+
+  margin-bottom: 5px;
+
+}
+
+
+/* ================= TABLE ================= */
+
+.table-container {
+
+  overflow-x: auto;
+
+  border-radius: 15px;
+
+}
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  background:
+    rgba(255,255,255,0.05);
+
+}
+
+th,
+td {
+
+  padding: 13px 10px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.08);
+
+  text-align: right;
+
+  white-space: nowrap;
+
+}
+
+th {
+
+  background:
+    #132941;
+
+}
+
+tr:hover {
+
+  background:
+    rgba(255,255,255,0.04);
+
+}
+
+
+/* ================= STATUS BADGES ================= */
+
+.badge {
+
+  display: inline-block;
+
+  padding:
+    5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+
+}
+
+.present {
+
+  background:
+    rgba(35, 180, 100, 0.18);
+
+  color:
+    #55e39a;
+
+}
+
+.absent {
+
+  background:
+    rgba(230, 70, 70, 0.18);
+
+  color:
+    #ff7777;
+
+}
+
+
+/* ================= HIDDEN ================= */
+
+.hidden {
+
+  display: none !important;
+
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width: 800px) {
+
+  .cards {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+  .lecture-info {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+  .controls {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+@media(max-width: 480px) {
+
+  .cards {
+
+    grid-template-columns:
+      1fr 1fr;
+
+  }
+
+  .header h1 {
+
+    font-size: 21px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= LOGIN ================= -->
+
+<div id="loginPage"
+     class="login">
+
+  <h2>🔐 لوحة تحكم المندوب</h2>
+
+  <p>
+    أدخل رمز الدخول للوصول إلى بيانات الحضور.
+  </p>
+
+  <input
+    id="pin"
+    type="password"
+    inputmode="numeric"
+    placeholder="رمز الدخول">
+
+  <button
+    onclick="login()">
+
+    دخول
+
+  </button>
+
+  <div
+    id="loginMessage"
+    style="margin-top:12px;color:#ff7777;">
+  </div>
+
+</div>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<div id="dashboardPage"
+     class="hidden">
+
+
+  <div class="header">
+
+    <h1>
+      📊 لوحة تحكم المندوب
+    </h1>
+
+    <p>
+      نظام حضور طلاب هندسة البرمجيات
+    </p>
+
+  </div>
+
+
+  <div class="container">
+
+
+    <div
+      id="status"
+      class="status">
+
+      جاري التحميل...
+
+    </div>
+
+
+    <!-- ================= CONTROLS ================= -->
+
+    <div class="controls">
+
+      <input
+        id="date"
+        type="date">
+
+      <select
+        id="lecture">
+
+        <option value="">
+          اختر المحاضرة
+        </option>
+
+      </select>
+
+      <button
+        onclick="loadDashboard()">
+
+        🔄 تحديث
+
+      </button>
+
+    </div>
+
+
+    <!-- ================= LECTURE ================= -->
+
+    <div
+      id="lectureBox"
+      class="lecture">
+
+      <h2>
+        📚 المحاضرة
+      </h2>
+
+      <div
+        class="lecture-info">
+
+        <div class="info">
+
+          <small>
+            المادة
+          </small>
+
+          <span id="subject">
+            -
+          </span>
+
+        </div>
+
+        <div class="info">
+
+          <small>
+            الوقت
+          </small>
+
+          <span id="time">
+            -
+          </span>
+
+        </div>
+
+        <div class="info">
+
+          <small>
+            المجموعة
+          </small>
+
+          <span id="group">
+            -
+          </span>
+
+        </div>
+
+        <div class="info">
+
+          <small>
+            رقم المحاضرة
+          </small>
+
+          <span id="lectureId">
+            -
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= CARDS ================= -->
+
+    <div class="cards">
+
+
+      <div class="card">
+
+        <div class="title">
+          إجمالي الطلاب
+        </div>
+
+        <div
+          id="total"
+          class="number">
+
+          0
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="title">
+          الحاضرون
+        </div>
+
+        <div
+          id="present"
+          class="number">
+
+          0
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="title">
+          الغائبون
+        </div>
+
+        <div
+          id="absent"
+          class="number">
+
+          0
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="title">
+          نسبة الحضور
+        </div>
+
+        <div
+          id="percentage"
+          class="number">
+
+          0%
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <input
+      id="search"
+      type="search"
+      placeholder="🔎 البحث برقم الطالب أو الاسم..."
+      oninput="filterTable()">
+
+
+    <br>
+    <br>
+
+
+    <!-- ================= TABLE ================= -->
+
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              #
+            </th>
+
+            <th>
+              الرقم الجامعي
+            </th>
+
+            <th>
+              اسم الطالب
+            </th>
+
+            <th>
+              المجموعة
+            </th>
+
+            <th>
+              الحالة
+            </th>
+
+            <th>
+              وقت التسجيل
+            </th>
+
+            <th>
+              دقة GPS
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody
+          id="studentsTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   إعدادات
+   ========================================================= */
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
+
+
+let ADMIN_PIN = "";
+
+let dashboardData = null;
+
+
+/* =========================================================
+   التاريخ الحالي
+   ========================================================= */
+
+function todayDate() {
+
+  const now =
+    new Date();
+
+  const y =
+    now.getFullYear();
+
+  const m =
+    String(
+      now.getMonth() + 1
+    ).padStart(2, "0");
+
+  const d =
+    String(
+      now.getDate()
+    ).padStart(2, "0");
+
+  return `${y}-${m}-${d}`;
+
+}
+
+
+/* =========================================================
+   تسجيل الدخول
+   ========================================================= */
+
+async function login() {
+
+  const pin =
+    document
+      .getElementById("pin")
+      .value
+      .trim();
+
+
+  if (!pin) {
+
+    document
+      .getElementById("loginMessage")
+      .textContent =
+        "أدخل رمز الدخول.";
+
+    return;
+
+  }
+
+
+  try {
+
+    const url =
+      API_URL +
+      "?action=dashboard" +
+      "&pin=" +
+      encodeURIComponent(pin);
+
+
+    const response =
+      await fetch(url);
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.success
+    ) {
+
+      document
+        .getElementById("loginMessage")
+        .textContent =
+          data.message ||
+          "رمز الدخول غير صحيح.";
+
+      return;
+
+    }
+
+
+    ADMIN_PIN =
+      pin;
+
+
+    document
+      .getElementById("loginPage")
+      .classList.add(
+        "hidden"
+      );
+
+
+    document
+      .getElementById("dashboardPage")
+      .classList.remove(
+        "hidden"
+      );
+
+
+    document
+      .getElementById("date")
+      .value =
+        todayDate();
+
+
+    await loadDashboard();
+
+
+  } catch (error) {
+
+    document
+      .getElementById("loginMessage")
+      .textContent =
+        "تعذر الاتصال بالخادم.";
+
+  }
+
+}
+
+
+/* =========================================================
+   تحميل لوحة التحكم
+   ========================================================= */
+
+async function loadDashboard() {
+
+  setStatus(
+    "جاري تحميل بيانات الحضور..."
+  );
+
+
+  try {
+
+    const date =
+      document
+        .getElementById("date")
+        .value;
+
+
+    const lectureId =
+      document
+        .getElementById("lecture")
+        .value;
+
+
+    let url =
+      API_URL +
+      "?action=dashboard" +
+      "&pin=" +
+      encodeURIComponent(
+        ADMIN_PIN
+      ) +
+      "&date=" +
+      encodeURIComponent(
+        date
+      );
+
+
+    if (lectureId) {
+
+      url +=
+        "&lectureId=" +
+        encodeURIComponent(
+          lectureId
+        );
+
+    }
+
+
+    const response =
+      await fetch(url);
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.success
+    ) {
+
+      if (
+        data.unauthorized
+      ) {
+
+        logout();
+
+        return;
+
+      }
+
+
+      throw new Error(
+        data.message ||
+        "فشل تحميل البيانات."
+      );
+
+    }
+
+
+    dashboardData =
+      data;
+
+
+    fillLectures(
+      data
+    );
+
+
+    showLecture(
+      data.selectedLecture
+    );
+
+
+    showSummary(
+      data.summary
+    );
+
+
+    showStudents(
+      data.students
+    );
+
+
+    setStatus(
+      "تم تحديث بيانات الحضور بنجاح."
+    );
+
+
+  } catch (error) {
+
+    setStatus(
+      error.message ||
+      "حدث خطأ أثناء تحميل البيانات."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   تعبئة قائمة المحاضرات
+   ========================================================= */
+
+function fillLectures(data) {
+
+  const select =
+    document
+      .getElementById("lecture");
+
+
+  const current =
+    select.value;
+
+
+  select.innerHTML =
+    '<option value="">اختر المحاضرة</option>';
+
+
+  data.lectures.forEach(
+    function(lecture) {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        lecture.lectureId;
+
+
+      option.textContent =
+        lecture.lectureId +
+        " — " +
+        lecture.subject +
+        " — " +
+        lecture.day +
+        " " +
+        lecture.start +
+        "-" +
+        lecture.end +
+        " — مجموعة " +
+        lecture.group;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  if (current) {
+
+    select.value =
+      current;
+
+  }
+  else if (
+    data.selectedLecture
+  ) {
+
+    select.value =
+      data.selectedLecture
+        .lectureId;
+
+  }
+
+}
+
+
+/* =========================================================
+   عرض المحاضرة
+   ========================================================= */
+
+function showLecture(lecture) {
+
+  if (!lecture) {
+
+    document
+      .getElementById("subject")
+      .textContent =
+        "لا توجد محاضرة محددة";
+
+    document
+      .getElementById("time")
+      .textContent =
+        "-";
+
+    document
+      .getElementById("group")
+      .textContent =
+        "-";
+
+    document
+      .getElementById("lectureId")
+      .textContent =
+        "-";
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("subject")
+    .textContent =
+      lecture.subject;
+
+
+  document
+    .getElementById("time")
+    .textContent =
+      lecture.start +
+      " - " +
+      lecture.end;
+
+
+  document
+    .getElementById("group")
+    .textContent =
+      lecture.group;
+
+
+  document
+    .getElementById("lectureId")
+    .textContent =
+      lecture.lectureId;
+
+}
+
+
+/* =========================================================
+   عرض الإحصائيات
+   ========================================================= */
+
+function showSummary(summary) {
+
+  document
+    .getElementById("total")
+    .textContent =
+      summary.total;
+
+
+  document
+    .getElementById("present")
+    .textContent =
+      summary.present;
+
+
+  document
+    .getElementById("absent")
+    .textContent =
+      summary.absent;
+
+
+  document
+    .getElementById("percentage")
+    .textContent =
+      summary.percentage +
+      "%";
+
+}
+
+
+/* =========================================================
+   عرض الطلاب
+   ========================================================= */
+
+function showStudents(students) {
+
+  const table =
+    document
+      .getElementById(
+        "studentsTable"
+      );
+
+
+  table.innerHTML = "";
+
+
+  students.forEach(
+    function(student, index) {
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      const status =
+        student.status ===
+        "Present";
+
+
+      tr.innerHTML = `
+
+        <td>
+          ${index + 1}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            student.studentId
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            student.name
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            student.group
+          )}
+        </td>
+
+        <td>
+
+          <span class="
+            badge
+            ${status
+              ? "present"
+              : "absent"}
+          ">
+
+            ${status
+              ? "حاضر ✓"
+              : "غائب"}
+
+          </span>
+
+        </td>
+
+        <td>
+          ${student.time || "-"}
+        </td>
+
+        <td>
+          ${student.accuracy
+            ? student.accuracy + " m"
+            : "-"}
+        </td>
+
+      `;
+
+
+      table.appendChild(
+        tr
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   البحث
+   ========================================================= */
+
+function filterTable() {
+
+  const query =
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const rows =
+    document
+      .querySelectorAll(
+        "#studentsTable tr"
+      );
+
+
+  rows.forEach(
+    function(row) {
+
+      const text =
+        row.textContent
+          .toLowerCase();
+
+
+      row.style.display =
+        text.includes(query)
+          ? ""
+          : "none";
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   تنظيف HTML
+   ========================================================= */
+
+function escapeHtml(value) {
+
+  return String(
+    value ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   الحالة
+   ========================================================= */
+
+function setStatus(message) {
+
+  document
+    .getElementById("status")
+    .textContent =
+      message;
+
+}
+
+
+/* =========================================================
+   تسجيل الخروج
+   ========================================================= */
+
+function logout() {
+
+  ADMIN_PIN = "";
+
+  location.reload();
+
+}
+
+
+/* =========================================================
+   الأحداث
+   ========================================================= */
+
+document
+  .getElementById("lecture")
+  .addEventListener(
+    "change",
+    loadDashboard
+  );
+
+
+document
+  .getElementById("date")
+  .addEventListener(
+    "change",
+    loadDashboard
+  );
+
+
+document
+  .getElementById("pin")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        login();
+
+      }
+
+    }
+  );
+
+
+</script>
+
+</body>
+
+</html>
