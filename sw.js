@@ -1,6 +1,6 @@
-const CACHE_NAME = "taiz-attendance-v5";
+const CACHE_NAME = "taiz-attendance-v6";
 
-const FILES = [
+const APP_FILES = [
   "./",
   "./index.html"
 ];
@@ -8,32 +8,36 @@ const FILES = [
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(FILES))
+      .then(cache => cache.addAll(APP_FILES))
       .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => {
+        return Promise.all(
+          keys.map(key => caches.delete(key))
+        );
+      })
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", event => {
+
+  if (event.request.method !== "GET") {
+    return;
+  }
+
   event.respondWith(
+
     fetch(event.request)
       .then(response => {
 
-        if (
-          event.request.method === "GET" &&
-          response.ok
-        ) {
+        if (response && response.ok) {
+
           const copy = response.clone();
 
           caches.open(CACHE_NAME)
@@ -44,8 +48,10 @@ self.addEventListener("fetch", event => {
 
         return response;
       })
-      .catch(() =>
-        caches.match(event.request)
-      )
+
+      .catch(() => {
+        return caches.match(event.request);
+      })
+
   );
 });
