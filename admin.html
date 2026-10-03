@@ -212,7 +212,7 @@ button{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:900px;
+    min-width:1050px;
 }
 
 th,
@@ -225,6 +225,7 @@ td{
 th{
     background:#123b63;
     color:white;
+    white-space:nowrap;
 }
 
 tr:hover{
@@ -336,6 +337,11 @@ tr:hover{
 
 .error-message{
     border-right:5px solid #c0392b;
+}
+
+.date-cell{
+    white-space:nowrap;
+    font-weight:bold;
 }
 
 @media(max-width:600px){
@@ -456,12 +462,14 @@ tr:hover{
             <div class="filter-grid">
 
                 <div>
-                    <label>التاريخ</label>
+
+                    <label>تاريخ المحاضرة</label>
 
                     <input
                         type="date"
                         id="attendanceDate"
                     >
+
                 </div>
 
                 <div>
@@ -471,9 +479,11 @@ tr:hover{
                     <select
                         id="lectureSelect"
                     >
+
                         <option value="">
                             اختر المحاضرة
                         </option>
+
                     </select>
 
                 </div>
@@ -590,6 +600,8 @@ tr:hover{
         ></div>
 
 
+        <!-- ATTENDANCE TABLE -->
+
         <div class="table-container">
 
             <table>
@@ -599,11 +611,20 @@ tr:hover{
                     <tr>
 
                         <th>#</th>
+
+                        <!-- NEW -->
+                        <th>📅 تاريخ المحاضرة</th>
+
                         <th>رقم الطالب</th>
+
                         <th>الاسم</th>
+
                         <th>المجموعة</th>
+
                         <th>الحالة</th>
+
                         <th>وقت التسجيل</th>
+
                         <th>دقة GPS</th>
 
                     </tr>
@@ -791,7 +812,7 @@ tr:hover{
         ></div>
 
 
-        <!-- TABLE -->
+        <!-- TAMPERING TABLE -->
 
         <div class="table-container">
 
@@ -889,10 +910,6 @@ function login(){
 
     .then(data => {
 
-        /*
-         * إذا كان PIN صحيحًا سيعيد API
-         * رسالة مختلفة عن PIN غير صحيح.
-         */
         if(
             data.message ===
             "PIN غير صحيح"
@@ -1193,7 +1210,7 @@ function loadAttendance(){
         "attendanceTable"
     )
     .innerHTML =
-        '<tr><td colspan="7" class="loading">جاري تحميل البيانات...</td></tr>';
+        '<tr><td colspan="8" class="loading">جاري تحميل البيانات...</td></tr>';
 
 
     const url =
@@ -1282,21 +1299,28 @@ function loadAttendance(){
             </h3>
 
             <p>
-                <strong>رقم المحاضرة:</strong>
+                <strong>📅 تاريخ المحاضرة:</strong>
+                ${escapeHtml(
+                    date
+                )}
+            </p>
+
+            <p>
+                <strong>🆔 رقم المحاضرة:</strong>
                 ${escapeHtml(
                     lecture.lectureId
                 )}
             </p>
 
             <p>
-                <strong>اليوم:</strong>
+                <strong>📆 اليوم:</strong>
                 ${escapeHtml(
                     lecture.day
                 )}
             </p>
 
             <p>
-                <strong>الوقت:</strong>
+                <strong>🕐 الوقت:</strong>
                 ${escapeHtml(
                     lecture.start
                 )}
@@ -1307,7 +1331,7 @@ function loadAttendance(){
             </p>
 
             <p>
-                <strong>المجموعة:</strong>
+                <strong>👥 المجموعة:</strong>
                 ${escapeHtml(
                     lecture.group
                 )}
@@ -1317,7 +1341,8 @@ function loadAttendance(){
 
 
         renderAttendance(
-            attendanceData
+            attendanceData,
+            date
         );
 
         hideMessage(
@@ -1345,7 +1370,10 @@ function loadAttendance(){
    RENDER ATTENDANCE
 ===================================================== */
 
-function renderAttendance(data){
+function renderAttendance(
+    data,
+    selectedDate
+){
 
     const tbody =
         document
@@ -1359,7 +1387,7 @@ function renderAttendance(data){
     if(!data.length){
 
         tbody.innerHTML =
-            '<tr><td colspan="7">لا توجد بيانات.</td></tr>';
+            '<tr><td colspan="8">لا توجد بيانات.</td></tr>';
 
         return;
     }
@@ -1383,10 +1411,33 @@ function renderAttendance(data){
                 : "absent";
 
 
+            /*
+             * نحاول أولًا أخذ تاريخ السجل
+             * من البيانات القادمة من الخادم.
+             *
+             * وإذا لم يكن موجودًا نستخدم
+             * التاريخ الذي اختاره الأدمن.
+             */
+
+            const lectureDate =
+                student.date ||
+                student.Date ||
+                student.sessionDate ||
+                student.SessionDate ||
+                selectedDate ||
+                "-";
+
+
             tr.innerHTML = `
 
                 <td>
                     ${index + 1}
+                </td>
+
+                <td class="date-cell">
+                    📅 ${escapeHtml(
+                        lectureDate
+                    )}
                 </td>
 
                 <td>
@@ -1476,7 +1527,18 @@ function filterStudents(){
         );
 
 
-    renderAttendance(filtered);
+    const selectedDate =
+        document
+        .getElementById(
+            "attendanceDate"
+        )
+        .value;
+
+
+    renderAttendance(
+        filtered,
+        selectedDate
+    );
 
 }
 
@@ -2040,7 +2102,9 @@ document
             )
             .value
         ){
+
             loadAttendance();
+
         }
 
     }
