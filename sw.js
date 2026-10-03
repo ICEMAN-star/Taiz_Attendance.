@@ -1,4 +1,6 @@
-const CACHE_NAME = "taiz-attendance-v99";
+const CACHE_NAME =
+    "taiz-attendance-v99";
+
 
 const APP_FILES = [
     "./",
@@ -7,82 +9,69 @@ const APP_FILES = [
 ];
 
 
-/* =====================================================
-   INSTALL
-===================================================== */
+self.addEventListener(
+    "install",
+    event => {
 
-self.addEventListener("install", event => {
+        event.waitUntil(
 
-    event.waitUntil(
-
-        caches.open(CACHE_NAME)
-            .then(cache => {
-
-                return cache.addAll(
-                    APP_FILES
-                );
-
-            })
-            .then(() => {
-
-                return self.skipWaiting();
-
-            })
-
-    );
-
-});
+            caches
+                .open(
+                    CACHE_NAME
+                )
+                .then(
+                    cache =>
+                        cache.addAll(
+                            APP_FILES
+                        )
+                )
+                .then(
+                    () =>
+                        self.skipWaiting()
+                )
+        );
+    }
+);
 
 
-/* =====================================================
-   ACTIVATE
-===================================================== */
+self.addEventListener(
+    "activate",
+    event => {
 
-self.addEventListener("activate", event => {
+        event.waitUntil(
 
-    event.waitUntil(
+            caches
+                .keys()
+                .then(
+                    keys =>
+                        Promise.all(
 
-        caches.keys()
-            .then(keys => {
+                            keys.map(
+                                key => {
 
-                return Promise.all(
+                                    if(
+                                        key !==
+                                        CACHE_NAME
+                                    ){
 
-                    keys.map(key => {
+                                        return caches.delete(
+                                            key
+                                        );
+                                    }
 
-                        /*
-                         * حذف أي Cache قديم
-                         */
+                                    return Promise.resolve();
+                                }
+                            )
+                        )
+                )
+                .then(
+                    () =>
+                        self.clients.claim()
+                )
+        );
+    }
+);
 
-                        if(
-                            key !== CACHE_NAME
-                        ){
-
-                            return caches.delete(
-                                key
-                            );
-
-                        }
-
-                        return Promise.resolve();
-                    })
-
-                );
-
-            })
-            .then(() => {
-
-                return self.clients.claim();
-
-            })
-
-    );
-
-});
-
-
-/* =====================================================
-   FETCH
-===================================================== */
 
 self.addEventListener(
     "fetch",
@@ -92,11 +81,11 @@ self.addEventListener(
             event.request;
 
         if(
-            request.method !== "GET"
+            request.method !==
+            "GET"
         ){
             return;
         }
-
 
         const url =
             new URL(
@@ -105,7 +94,7 @@ self.addEventListener(
 
 
         /*
-         * لا نحاول تخزين Google Apps Script
+         * لا نتدخل في Google Apps Script.
          */
 
         if(
@@ -118,7 +107,7 @@ self.addEventListener(
 
 
         /*
-         * لا نتعامل مع مواقع خارج GitHub Pages
+         * لا نتدخل في مواقع خارج GitHub Pages.
          */
 
         if(
@@ -129,29 +118,17 @@ self.addEventListener(
         }
 
 
-        /*
-         * index.html والصفحة الرئيسية
-         *
-         * الشبكة أولاً
-         * ثم Cache عند انقطاع الإنترنت
-         */
+        event.respondWith(
 
-        if(
-            url.pathname.endsWith(
-                "/"
-            ) ||
-            url.pathname.endsWith(
-                "/index.html"
+            fetch(
+                request,
+                {
+                    cache:
+                        "no-store"
+                }
             )
-        ){
-
-            event.respondWith(
-
-                fetch(request, {
-                    cache:"no-store"
-                })
-
-                .then(response => {
+            .then(
+                response => {
 
                     if(
                         response &&
@@ -161,104 +138,47 @@ self.addEventListener(
                         const copy =
                             response.clone();
 
-                        caches.open(
-                            CACHE_NAME
-                        )
-                        .then(cache => {
-
-                            cache.put(
-                                request,
-                                copy
+                        caches
+                            .open(
+                                CACHE_NAME
+                            )
+                            .then(
+                                cache =>
+                                    cache.put(
+                                        request,
+                                        copy
+                                    )
                             );
-
-                        });
-
                     }
 
                     return response;
-
-                })
-
-                .catch(() => {
-
-                    return caches.match(
-                        request
-                    )
-                    .then(cached => {
-
-                        if(cached){
-                            return cached;
-                        }
-
-                        return caches.match(
-                            "./index.html"
-                        );
-
-                    });
-
-                })
-
-            );
-
-            return;
-        }
-
-
-        /*
-         * باقي الملفات
-         */
-
-        event.respondWith(
-
-            fetch(request, {
-                cache:"no-store"
-            })
-
-            .then(response => {
-
-                if(
-                    response &&
-                    response.ok
-                ){
-
-                    const copy =
-                        response.clone();
-
-                    caches.open(
-                        CACHE_NAME
-                    )
-                    .then(cache => {
-
-                        cache.put(
-                            request,
-                            copy
-                        );
-
-                    });
-
                 }
+            )
+            .catch(
+                () =>
+                    caches
+                        .match(
+                            request
+                        )
+                        .then(
+                            cached => {
 
-                return response;
+                                if(
+                                    cached
+                                ){
+                                    return cached;
+                                }
 
-            })
-
-            .catch(() => {
-
-                return caches.match(
-                    request
-                );
-
-            })
-
+                                return caches.match(
+                                    "./index.html"
+                                );
+                            }
+                        )
+            )
         );
-
     }
 );
 
-
-/* =====================================================
-   FORCE UPDATE
-===================================================== */
 
 self.addEventListener(
     "message",
@@ -267,12 +187,10 @@ self.addEventListener(
         if(
             event.data &&
             event.data.type ===
-            "SKIP_WAITING"
+                "SKIP_WAITING"
         ){
 
             self.skipWaiting();
-
         }
-
     }
 );
