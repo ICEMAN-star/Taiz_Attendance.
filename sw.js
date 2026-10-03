@@ -1,14 +1,15 @@
-const CACHE_NAME = "taiz-attendance-v20";
+const CACHE_NAME = "taiz-attendance-v99";
 
 const APP_FILES = [
+    "./",
     "./index.html",
     "./manifest.json"
 ];
 
 
-/* ================================
+/* =====================================================
    INSTALL
-================================ */
+===================================================== */
 
 self.addEventListener("install", event => {
 
@@ -17,7 +18,9 @@ self.addEventListener("install", event => {
         caches.open(CACHE_NAME)
             .then(cache => {
 
-                return cache.addAll(APP_FILES);
+                return cache.addAll(
+                    APP_FILES
+                );
 
             })
             .then(() => {
@@ -31,16 +34,15 @@ self.addEventListener("install", event => {
 });
 
 
-/* ================================
+/* =====================================================
    ACTIVATE
-================================ */
+===================================================== */
 
 self.addEventListener("activate", event => {
 
     event.waitUntil(
 
         caches.keys()
-
             .then(keys => {
 
                 return Promise.all(
@@ -48,26 +50,25 @@ self.addEventListener("activate", event => {
                     keys.map(key => {
 
                         /*
-                         * حذف جميع النسخ القديمة
+                         * حذف أي Cache قديم
                          */
 
-                        if (
-                            key.startsWith("taiz-attendance-") &&
+                        if(
                             key !== CACHE_NAME
-                        ) {
+                        ){
 
-                            return caches.delete(key);
+                            return caches.delete(
+                                key
+                            );
 
                         }
 
                         return Promise.resolve();
-
                     })
 
                 );
 
             })
-
             .then(() => {
 
                 return self.clients.claim();
@@ -79,98 +80,91 @@ self.addEventListener("activate", event => {
 });
 
 
-/* ================================
+/* =====================================================
    FETCH
-================================ */
+===================================================== */
 
-self.addEventListener("fetch", event => {
+self.addEventListener(
+    "fetch",
+    event => {
 
-    const request =
-        event.request;
+        const request =
+            event.request;
 
-
-    /*
-     * نهتم فقط بطلبات GET
-     */
-
-    if (
-        request.method !== "GET"
-    ) {
-
-        return;
-
-    }
+        if(
+            request.method !== "GET"
+        ){
+            return;
+        }
 
 
-    const url =
-        new URL(request.url);
+        const url =
+            new URL(
+                request.url
+            );
 
 
-    /*
-     * لا نتدخل في Google Apps Script
-     */
+        /*
+         * لا نحاول تخزين Google Apps Script
+         */
 
-    if (
-        url.hostname.includes(
-            "script.google.com"
-        )
-    ) {
-
-        return;
-
-    }
+        if(
+            url.hostname.includes(
+                "script.google.com"
+            )
+        ){
+            return;
+        }
 
 
-    /*
-     * فقط ملفات GitHub Pages
-     */
+        /*
+         * لا نتعامل مع مواقع خارج GitHub Pages
+         */
 
-    if (
-        url.origin !==
-        self.location.origin
-    ) {
-
-        return;
-
-    }
+        if(
+            url.origin !==
+            self.location.origin
+        ){
+            return;
+        }
 
 
-    /*
-     * الصفحة الرئيسية
-     *
-     * Online:
-     * نحاول أخذ أحدث نسخة من GitHub.
-     *
-     * Offline:
-     * نستخدم آخر نسخة محفوظة.
-     */
+        /*
+         * index.html والصفحة الرئيسية
+         *
+         * الشبكة أولاً
+         * ثم Cache عند انقطاع الإنترنت
+         */
 
-    if (
-        url.pathname.endsWith(
-            "/"
-        ) ||
-        url.pathname.endsWith(
-            "/index.html"
-        )
-    ) {
+        if(
+            url.pathname.endsWith(
+                "/"
+            ) ||
+            url.pathname.endsWith(
+                "/index.html"
+            )
+        ){
 
-        event.respondWith(
+            event.respondWith(
 
-            fetch(request)
+                fetch(request, {
+                    cache:"no-store"
+                })
 
                 .then(response => {
 
-                    if (
+                    if(
                         response &&
                         response.ok
-                    ) {
+                    ){
 
                         const copy =
                             response.clone();
 
                         caches.open(
                             CACHE_NAME
-                        ).then(cache => {
+                        )
+                        .then(cache => {
 
                             cache.put(
                                 request,
@@ -189,38 +183,51 @@ self.addEventListener("fetch", event => {
 
                     return caches.match(
                         request
-                    );
+                    )
+                    .then(cached => {
+
+                        if(cached){
+                            return cached;
+                        }
+
+                        return caches.match(
+                            "./index.html"
+                        );
+
+                    });
 
                 })
 
-        );
+            );
 
-        return;
+            return;
+        }
 
-    }
 
+        /*
+         * باقي الملفات
+         */
 
-    /*
-     * باقي الملفات
-     */
+        event.respondWith(
 
-    event.respondWith(
-
-        fetch(request)
+            fetch(request, {
+                cache:"no-store"
+            })
 
             .then(response => {
 
-                if (
+                if(
                     response &&
                     response.ok
-                ) {
+                ){
 
                     const copy =
                         response.clone();
 
                     caches.open(
                         CACHE_NAME
-                    ).then(cache => {
+                    )
+                    .then(cache => {
 
                         cache.put(
                             request,
@@ -243,24 +250,25 @@ self.addEventListener("fetch", event => {
 
             })
 
-    );
+        );
 
-});
+    }
+);
 
 
-/* ================================
-   الرسائل
-================================ */
+/* =====================================================
+   FORCE UPDATE
+===================================================== */
 
 self.addEventListener(
     "message",
     event => {
 
-        if (
+        if(
             event.data &&
             event.data.type ===
             "SKIP_WAITING"
-        ) {
+        ){
 
             self.skipWaiting();
 
