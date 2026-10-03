@@ -1,174 +1,127 @@
-const CACHE_NAME = "taiz-attendance-v9";
-
-
-/*
-=========================================================
-ملفات التطبيق التي سيتم تخزينها محليًا
-=========================================================
-*/
+const CACHE_NAME = "taiz-attendance-v10";
 
 const APP_FILES = [
     "./",
-    "./index.html",
-    "./admin.html",
     "./manifest.json"
 ];
 
 
-/*
-=========================================================
-INSTALL
-يحدث عند تثبيت Service Worker
-=========================================================
-*/
+/* ===============================
+   INSTALL
+================================ */
 
-self.addEventListener(
-    "install",
-    event => {
+self.addEventListener("install", event => {
 
-        event.waitUntil(
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(APP_FILES))
+            .then(() => self.skipWaiting())
+    );
 
-            caches
-                .open(CACHE_NAME)
-
-                .then(cache => {
-
-                    return cache.addAll(
-                        APP_FILES
-                    );
-
-                })
-
-                .then(() => {
-
-                    return self.skipWaiting();
-
-                })
-
-        );
-
-    }
-);
+});
 
 
-/*
-=========================================================
-ACTIVATE
-حذف النسخ القديمة من Cache
-=========================================================
-*/
+/* ===============================
+   ACTIVATE
+================================ */
 
-self.addEventListener(
-    "activate",
-    event => {
+self.addEventListener("activate", event => {
 
-        event.waitUntil(
+    event.waitUntil(
 
-            caches.keys()
+        caches.keys()
+            .then(keys => {
 
-                .then(keys => {
+                return Promise.all(
 
-                    return Promise.all(
+                    keys.map(key => {
 
-                        keys.map(key => {
+                        if (key !== CACHE_NAME) {
 
-                            if (
-                                key !== CACHE_NAME
-                            ) {
+                            return caches.delete(key);
 
-                                return caches.delete(
-                                    key
-                                );
+                        }
 
-                            }
+                    })
 
-                            return null;
+                );
 
-                        })
+            })
 
-                    );
-
-                })
-
-                .then(() => {
-
-                    return self.clients.claim();
-
-                })
-
-        );
-
-    }
-);
-
-
-/*
-=========================================================
-FETCH
-التعامل مع طلبات الملفات
-=========================================================
-*/
-
-self.addEventListener(
-    "fetch",
-    event => {
-
-        const request =
-            event.request;
-
-        /*
-        لا نتعامل مع POST
-        */
-        if (
-            request.method !== "GET"
-        ) {
-
-            return;
-        }
-
-
-        const url =
-            new URL(
-                request.url
-            );
-
-
-        /*
-        مهم جدًا:
-
-        لا نخزن أو نعترض طلبات
-        Google Apps Script
-        */
-
-        if (
-            url.hostname.includes(
-                "script.google.com"
+            .then(() =>
+                self.clients.claim()
             )
-        ) {
 
-            return;
-        }
+    );
+
+});
 
 
-        /*
-        الطلبات الخاصة بالتطبيق نفسه
-        */
+/* ===============================
+   FETCH
+================================ */
+
+self.addEventListener("fetch", event => {
+
+    const request =
+        event.request;
+
+    if (
+        request.method !== "GET"
+    ) {
+        return;
+    }
+
+
+    const url =
+        new URL(
+            request.url
+        );
+
+
+    /*
+     * لا نتدخل إطلاقًا في
+     * Google Apps Script
+     */
+
+    if (
+        url.hostname.includes(
+            "script.google.com"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * index.html يجب أن يكون
+     * Network First.
+     *
+     * إذا كان الإنترنت موجودًا:
+     * نأخذ النسخة الجديدة.
+     *
+     * إذا لم يوجد الإنترنت:
+     * نستخدم النسخة المخزنة.
+     */
+
+    if (
+        url.origin ===
+        self.location.origin
+    ) {
 
         if (
-            url.origin ===
-            self.location.origin
+            url.pathname.endsWith(
+                "/index.html"
+            ) ||
+            url.pathname.endsWith("/")
         ) {
 
             event.respondWith(
 
                 fetch(request)
-
                     .then(response => {
-
-                        /*
-                        إذا نجح الاتصال
-                        نضع نسخة في Cache
-                        */
 
                         if (
                             response &&
@@ -178,29 +131,23 @@ self.addEventListener(
                             const copy =
                                 response.clone();
 
-                            caches
-                                .open(CACHE_NAME)
-                                .then(cache => {
+                            caches.open(
+                                CACHE_NAME
+                            ).then(cache => {
 
-                                    cache.put(
-                                        request,
-                                        copy
-                                    );
+                                cache.put(
+                                    request,
+                                    copy
+                                );
 
-                                });
+                            });
 
                         }
 
                         return response;
 
                     })
-
                     .catch(() => {
-
-                        /*
-                        إذا انقطع الإنترنت
-                        نستخدم النسخة المخزنة
-                        */
 
                         return caches.match(
                             request
@@ -210,17 +157,58 @@ self.addEventListener(
 
             );
 
+            return;
         }
 
+
+        /*
+         * باقي الملفات:
+         * Network First أيضًا.
+         */
+
+        event.respondWith(
+
+            fetch(request)
+                .then(response => {
+
+                    if (
+                        response &&
+                        response.ok
+                    ) {
+
+                        const copy =
+                            response.clone();
+
+                        caches.open(
+                            CACHE_NAME
+                        ).then(cache => {
+
+                            cache.put(
+                                request,
+                                copy
+                            );
+
+                        });
+
+                    }
+
+                    return response;
+
+                })
+                .catch(() =>
+                    caches.match(request)
+                )
+
+        );
+
     }
-);
+
+});
 
 
-/*
-=========================================================
-رسالة لتحديث Service Worker
-=========================================================
-*/
+/* ===============================
+   FORCE UPDATE
+================================ */
 
 self.addEventListener(
     "message",
