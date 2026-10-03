@@ -1,0 +1,13 @@
+{
+  "name": "نظام حضور الطلاب - جامعة تعز",
+  "short_name": "حضور الطلاب",
+  "description": "نظام إلكتروني لتسجيل حضور طلاب جامعة تعز",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1f5f9",
+  "theme_color": "#0d47a1"
+}
