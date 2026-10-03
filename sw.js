@@ -1,10 +1,11 @@
-const CACHE_NAME = "taiz-attendance-v6";
+const CACHE_NAME = "taiz-attendance-v7";
 
 const APP_FILES = [
   "./",
   "./index.html"
 ];
 
+// تثبيت النسخة الجديدة
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -13,27 +14,36 @@ self.addEventListener("install", event => {
   );
 });
 
+// تفعيل النسخة الجديدة وحذف جميع النسخ القديمة
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys()
       .then(keys => {
         return Promise.all(
-          keys.map(key => caches.delete(key))
+          keys.map(key => {
+            if (key !== CACHE_NAME) {
+              return caches.delete(key);
+            }
+          })
         );
       })
       .then(() => self.clients.claim())
   );
 });
 
+// التعامل مع طلبات الملفات
 self.addEventListener("fetch", event => {
 
+  // لا نتعامل مع POST أو الطلبات غير GET
   if (event.request.method !== "GET") {
     return;
   }
 
   event.respondWith(
 
+    // نحاول الحصول على النسخة الحديثة من الإنترنت أولاً
     fetch(event.request)
+
       .then(response => {
 
         if (response && response.ok) {
@@ -49,6 +59,7 @@ self.addEventListener("fetch", event => {
         return response;
       })
 
+      // إذا لم يوجد إنترنت نستخدم النسخة المخزنة
       .catch(() => {
         return caches.match(event.request);
       })
