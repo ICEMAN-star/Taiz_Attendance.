@@ -1,1440 +1,2075 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>لوحة تحكم المندوب</title>
+<title>لوحة إدارة الحضور</title>
 
 <style>
 
-* {
-  box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-
-  margin: 0;
-
-  font-family:
-    Tahoma,
-    Arial,
-    sans-serif;
-
-  background:
-    linear-gradient(
-      135deg,
-      #07111f,
-      #0d1b2f
-    );
-
-  color: #ffffff;
-
-  min-height: 100vh;
-
+body{
+    margin:0;
+    font-family:Tahoma,Arial,sans-serif;
+    background:#f3f6fa;
+    color:#17202a;
 }
 
-
-/* ================= HEADER ================= */
-
-.header {
-
-  padding: 25px 18px;
-
-  background:
-    rgba(10, 25, 45, 0.95);
-
-  border-bottom:
-    1px solid rgba(255,255,255,0.1);
-
-  text-align: center;
-
+header{
+    background:#123b63;
+    color:white;
+    padding:20px;
+    text-align:center;
 }
 
-.header h1 {
-
-  margin: 0;
-
-  font-size: 25px;
-
+header h1{
+    margin:0;
+    font-size:25px;
 }
 
-.header p {
-
-  margin:
-    8px 0 0;
-
-  color:
-    #a9bdd5;
-
+header p{
+    margin:7px 0 0;
+    opacity:.85;
 }
 
-
-/* ================= CONTAINER ================= */
-
-.container {
-
-  width: min(
-    1200px,
-    94%
-  );
-
-  margin:
-    25px auto;
-
+.container{
+    max-width:1300px;
+    margin:25px auto;
+    padding:0 15px;
 }
 
+/* LOGIN */
 
-/* ================= LOGIN ================= */
-
-.login {
-
-  max-width: 430px;
-
-  margin:
-    70px auto;
-
-  padding: 28px;
-
-  background:
-    rgba(255,255,255,0.06);
-
-  border:
-    1px solid rgba(255,255,255,0.1);
-
-  border-radius: 18px;
-
-  backdrop-filter:
-    blur(10px);
-
-  text-align: center;
-
+.login-box{
+    max-width:420px;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 25px rgba(0,0,0,.08);
+    text-align:center;
 }
 
-.login h2 {
-
-  margin-top: 0;
-
+.login-box h2{
+    margin-top:0;
 }
 
 input,
-select {
-
-  width: 100%;
-
-  padding: 13px;
-
-  margin:
-    7px 0;
-
-  border-radius: 10px;
-
-  border:
-    1px solid #314862;
-
-  background:
-    #101f33;
-
-  color: white;
-
-  font-size: 15px;
-
+select,
+button{
+    font-family:inherit;
 }
 
-button {
-
-  border: none;
-
-  border-radius: 10px;
-
-  padding:
-    12px 18px;
-
-  background:
-    #1683e8;
-
-  color: white;
-
-  cursor: pointer;
-
-  font-size: 15px;
-
-  font-weight: bold;
-
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccd6e0;
+    border-radius:8px;
+    margin:7px 0;
+    font-size:15px;
 }
 
-button:hover {
-
-  opacity: 0.88;
-
+button{
+    border:0;
+    border-radius:8px;
+    padding:11px 18px;
+    cursor:pointer;
+    font-size:15px;
 }
 
-button.secondary {
-
-  background:
-    #263b55;
-
+.btn-primary{
+    background:#1769aa;
+    color:white;
 }
 
-
-/* ================= STATUS ================= */
-
-.status {
-
-  padding: 13px;
-
-  border-radius: 12px;
-
-  margin-bottom: 18px;
-
-  background:
-    rgba(255,255,255,0.06);
-
-  color:
-    #c7d7e8;
-
+.btn-danger{
+    background:#c0392b;
+    color:white;
 }
 
-
-/* ================= CONTROLS ================= */
-
-.controls {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr auto;
-
-  gap: 10px;
-
-  margin-bottom: 20px;
-
+.btn-warning{
+    background:#d68910;
+    color:white;
 }
 
-
-/* ================= CARDS ================= */
-
-.cards {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 15px;
-
-  margin-bottom: 22px;
-
+.btn-dark{
+    background:#273746;
+    color:white;
 }
 
-.card {
-
-  padding: 20px;
-
-  border-radius: 16px;
-
-  background:
-    rgba(255,255,255,0.06);
-
-  border:
-    1px solid rgba(255,255,255,0.08);
-
+.error{
+    color:#c0392b;
+    margin-top:10px;
 }
 
-.card .title {
+/* NAV */
 
-  color:
-    #9db4cc;
-
-  font-size: 14px;
-
+.nav{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
 }
 
-.card .number {
-
-  font-size: 30px;
-
-  font-weight: bold;
-
-  margin-top: 8px;
-
+.nav button{
+    background:#dfe8f1;
+    color:#1b2631;
 }
 
-
-/* ================= LECTURE ================= */
-
-.lecture {
-
-  padding: 20px;
-
-  margin-bottom: 20px;
-
-  border-radius: 16px;
-
-  background:
-    rgba(255,255,255,0.06);
-
+.nav button.active{
+    background:#123b63;
+    color:white;
 }
 
-.lecture h2 {
+/* PANELS */
 
-  margin-top: 0;
-
+.panel{
+    display:none;
 }
 
-.lecture-info {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 10px;
-
+.panel.active{
+    display:block;
 }
 
-.info {
+/* FILTERS */
 
-  padding: 12px;
-
-  background:
-    rgba(0,0,0,0.18);
-
-  border-radius: 10px;
-
+.filters{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    margin-bottom:20px;
 }
 
-.info small {
-
-  display: block;
-
-  color:
-    #8fa7c0;
-
-  margin-bottom: 5px;
-
+.filter-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:10px;
 }
 
-
-/* ================= TABLE ================= */
-
-.table-container {
-
-  overflow-x: auto;
-
-  border-radius: 15px;
-
+.filter-buttons{
+    display:flex;
+    gap:8px;
+    align-items:end;
 }
 
-table {
+/* INFO */
 
-  width: 100%;
+.lecture-info{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
 
-  border-collapse: collapse;
+.lecture-info h3{
+    margin-top:0;
+}
 
-  background:
-    rgba(255,255,255,0.05);
+/* CARDS */
 
+.cards{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+
+.card-title{
+    color:#6c7a89;
+    font-size:14px;
+}
+
+.card-value{
+    font-size:30px;
+    font-weight:bold;
+    margin-top:8px;
+}
+
+/* TABLE */
+
+.table-container{
+    background:white;
+    border-radius:12px;
+    overflow:auto;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
 }
 
 th,
-td {
-
-  padding: 13px 10px;
-
-  border-bottom:
-    1px solid rgba(255,255,255,0.08);
-
-  text-align: right;
-
-  white-space: nowrap;
-
+td{
+    padding:12px;
+    border-bottom:1px solid #edf0f2;
+    text-align:center;
 }
 
-th {
-
-  background:
-    #132941;
-
+th{
+    background:#123b63;
+    color:white;
 }
 
-tr:hover {
-
-  background:
-    rgba(255,255,255,0.04);
-
+tr:hover{
+    background:#f8fafc;
 }
 
-
-/* ================= STATUS BADGES ================= */
-
-.badge {
-
-  display: inline-block;
-
-  padding:
-    5px 10px;
-
-  border-radius: 20px;
-
-  font-size: 13px;
-
+.present{
+    color:#148f3c;
+    font-weight:bold;
 }
 
-.present {
-
-  background:
-    rgba(35, 180, 100, 0.18);
-
-  color:
-    #55e39a;
-
+.absent{
+    color:#c0392b;
+    font-weight:bold;
 }
 
-.absent {
-
-  background:
-    rgba(230, 70, 70, 0.18);
-
-  color:
-    #ff7777;
-
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
 }
 
-
-/* ================= HIDDEN ================= */
-
-.hidden {
-
-  display: none !important;
-
+.badge-high{
+    background:#f8d7da;
+    color:#842029;
 }
 
+.badge-medium{
+    background:#fff3cd;
+    color:#856404;
+}
 
-/* ================= MOBILE ================= */
+.badge-low{
+    background:#d1e7dd;
+    color:#0f5132;
+}
 
-@media(max-width: 800px) {
+/* TAMPERING */
 
-  .cards {
-
+.tampering-summary{
+    display:grid;
     grid-template-columns:
-      repeat(2, 1fr);
-
-  }
-
-  .lecture-info {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
-  }
-
-  .controls {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
+        repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-bottom:20px;
 }
 
-@media(max-width: 480px) {
+.tampering-card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    border-right:5px solid #777;
+}
 
-  .cards {
+.tampering-card.high{
+    border-right-color:#c0392b;
+}
 
-    grid-template-columns:
-      1fr 1fr;
+.tampering-card.medium{
+    border-right-color:#d68910;
+}
 
-  }
+.tampering-card.low{
+    border-right-color:#148f3c;
+}
 
-  .header h1 {
+.tampering-number{
+    font-size:30px;
+    font-weight:bold;
+    margin-top:8px;
+}
 
-    font-size: 21px;
+.tampering-details{
+    max-width:300px;
+    white-space:normal;
+    word-break:break-word;
+}
 
-  }
+.status-review{
+    color:#d68910;
+    font-weight:bold;
+}
 
+.search-box{
+    margin-bottom:15px;
+}
+
+/* LOADING */
+
+.loading{
+    text-align:center;
+    padding:25px;
+    color:#667;
+}
+
+.message{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.success-message{
+    border-right:5px solid #148f3c;
+}
+
+.error-message{
+    border-right:5px solid #c0392b;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:20px;
+    }
+
+    .container{
+        padding:0 8px;
+    }
+
+    .filter-buttons{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .filter-buttons button{
+        width:100%;
+    }
 }
 
 </style>
-
 </head>
-
 
 <body>
 
+<header>
+    <h1>🎓 نظام حضور الطلاب</h1>
+    <p>لوحة الإدارة والمراقبة</p>
+</header>
 
-<!-- ================= LOGIN ================= -->
 
-<div id="loginPage"
-     class="login">
+<!-- LOGIN -->
 
-  <h2>🔐 لوحة تحكم المندوب</h2>
+<div id="loginSection">
 
-  <p>
-    أدخل رمز الدخول للوصول إلى بيانات الحضور.
-  </p>
+    <div class="login-box">
 
-  <input
-    id="pin"
-    type="password"
-    inputmode="numeric"
-    placeholder="رمز الدخول">
+        <h2>🔐 دخول الإدارة</h2>
 
-  <button
-    onclick="login()">
+        <p>أدخل الرقم السري للوصول إلى لوحة التحكم</p>
 
-    دخول
+        <input
+            type="password"
+            id="pinInput"
+            placeholder="الرقم السري"
+        >
 
-  </button>
+        <button
+            class="btn-primary"
+            onclick="login()"
+        >
+            دخول
+        </button>
 
-  <div
-    id="loginMessage"
-    style="margin-top:12px;color:#ff7777;">
-  </div>
+        <div
+            id="loginError"
+            class="error"
+        ></div>
+
+    </div>
 
 </div>
 
 
-<!-- ================= DASHBOARD ================= -->
+<!-- DASHBOARD -->
 
-<div id="dashboardPage"
-     class="hidden">
+<div
+    id="dashboardSection"
+    style="display:none;"
+>
 
+<div class="container">
 
-  <div class="header">
+    <!-- NAV -->
 
-    <h1>
-      📊 لوحة تحكم المندوب
-    </h1>
+    <div class="nav">
 
-    <p>
-      نظام حضور طلاب هندسة البرمجيات
-    </p>
+        <button
+            id="attendanceTab"
+            class="active"
+            onclick="showPanel('attendance')"
+        >
+            📋 الحضور
+        </button>
 
-  </div>
+        <button
+            id="tamperingTab"
+            onclick="showPanel('tampering')"
+        >
+            🛡️ كشف التلاعب
+        </button>
 
-
-  <div class="container">
-
-
-    <div
-      id="status"
-      class="status">
-
-      جاري التحميل...
-
-    </div>
-
-
-    <!-- ================= CONTROLS ================= -->
-
-    <div class="controls">
-
-      <input
-        id="date"
-        type="date">
-
-      <select
-        id="lecture">
-
-        <option value="">
-          اختر المحاضرة
-        </option>
-
-      </select>
-
-      <button
-        onclick="loadDashboard()">
-
-        🔄 تحديث
-
-      </button>
+        <button
+            class="btn-danger"
+            onclick="logout()"
+        >
+            خروج
+        </button>
 
     </div>
 
 
-    <!-- ================= LECTURE ================= -->
+    <!-- ============================= -->
+    <!-- ATTENDANCE PANEL -->
+    <!-- ============================= -->
 
-    <div
-      id="lectureBox"
-      class="lecture">
+    <section
+        id="attendancePanel"
+        class="panel active"
+    >
 
-      <h2>
-        📚 المحاضرة
-      </h2>
+        <div class="filters">
 
-      <div
-        class="lecture-info">
+            <h3>🔎 البحث في الحضور</h3>
 
-        <div class="info">
+            <div class="filter-grid">
 
-          <small>
-            المادة
-          </small>
+                <div>
+                    <label>التاريخ</label>
 
-          <span id="subject">
-            -
-          </span>
+                    <input
+                        type="date"
+                        id="attendanceDate"
+                    >
+                </div>
+
+                <div>
+
+                    <label>المحاضرة</label>
+
+                    <select
+                        id="lectureSelect"
+                    >
+                        <option value="">
+                            اختر المحاضرة
+                        </option>
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>بحث عن طالب</label>
+
+                    <input
+                        type="text"
+                        id="studentSearch"
+                        placeholder="رقم الطالب أو الاسم"
+                        oninput="filterStudents()"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="filter-buttons">
+
+                <button
+                    class="btn-primary"
+                    onclick="loadAttendance()"
+                >
+                    🔄 تحديث الحضور
+                </button>
+
+            </div>
 
         </div>
 
-        <div class="info">
-
-          <small>
-            الوقت
-          </small>
-
-          <span id="time">
-            -
-          </span>
-
-        </div>
-
-        <div class="info">
-
-          <small>
-            المجموعة
-          </small>
-
-          <span id="group">
-            -
-          </span>
-
-        </div>
-
-        <div class="info">
-
-          <small>
-            رقم المحاضرة
-          </small>
-
-          <span id="lectureId">
-            -
-          </span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- ================= CARDS ================= -->
-
-    <div class="cards">
-
-
-      <div class="card">
-
-        <div class="title">
-          إجمالي الطلاب
-        </div>
 
         <div
-          id="total"
-          class="number">
+            id="lectureInfo"
+            class="lecture-info"
+        >
+            اختر محاضرة لعرض البيانات
+        </div>
 
-          0
+
+        <div class="cards">
+
+            <div class="card">
+
+                <div class="card-title">
+                    إجمالي الطلاب
+                </div>
+
+                <div
+                    id="totalStudents"
+                    class="card-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    الحاضرون
+                </div>
+
+                <div
+                    id="presentStudents"
+                    class="card-value present"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    الغائبون
+                </div>
+
+                <div
+                    id="absentStudents"
+                    class="card-value absent"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    نسبة الحضور
+                </div>
+
+                <div
+                    id="attendancePercentage"
+                    class="card-value"
+                >
+                    0%
+                </div>
+
+            </div>
 
         </div>
 
-      </div>
-
-
-      <div class="card">
-
-        <div class="title">
-          الحاضرون
-        </div>
 
         <div
-          id="present"
-          class="number">
+            id="attendanceMessage"
+            class="message"
+            style="display:none;"
+        ></div>
 
-          0
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>رقم الطالب</th>
+                        <th>الاسم</th>
+                        <th>المجموعة</th>
+                        <th>الحالة</th>
+                        <th>وقت التسجيل</th>
+                        <th>دقة GPS</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="attendanceTable"
+                >
+
+                </tbody>
+
+            </table>
 
         </div>
 
-      </div>
+    </section>
 
 
-      <div class="card">
+    <!-- ============================= -->
+    <!-- TAMPERING PANEL -->
+    <!-- ============================= -->
 
-        <div class="title">
-          الغائبون
+    <section
+        id="tamperingPanel"
+        class="panel"
+    >
+
+        <div class="filters">
+
+            <h3>🛡️ كشف التلاعب</h3>
+
+            <p>
+                يعرض هذا القسم محاولات الحضور التي سجّلها النظام
+                على أنها مشبوهة أو مخالفة لقواعد الحضور.
+            </p>
+
+            <div class="filter-grid">
+
+                <div>
+
+                    <label>التاريخ</label>
+
+                    <input
+                        type="date"
+                        id="tamperingDate"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label>مستوى الخطورة</label>
+
+                    <select
+                        id="severitySelect"
+                    >
+
+                        <option value="الكل">
+                            جميع الحالات
+                        </option>
+
+                        <option value="عالي">
+                            🔴 عالي
+                        </option>
+
+                        <option value="متوسط">
+                            🟠 متوسط
+                        </option>
+
+                        <option value="منخفض">
+                            🟢 منخفض
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>بحث</label>
+
+                    <input
+                        type="text"
+                        id="tamperingSearch"
+                        placeholder="رقم الطالب أو الاسم أو السبب"
+                        oninput="filterTampering()"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-buttons">
+
+                <button
+                    class="btn-primary"
+                    onclick="loadTampering()"
+                >
+                    🔄 تحديث كشف التلاعب
+                </button>
+
+            </div>
+
         </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="tampering-summary">
+
+            <div class="tampering-card">
+
+                <div class="card-title">
+                    إجمالي الحالات
+                </div>
+
+                <div
+                    id="tamperingTotal"
+                    class="tampering-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="tampering-card high">
+
+                <div class="card-title">
+                    🔴 حالات عالية الخطورة
+                </div>
+
+                <div
+                    id="tamperingHigh"
+                    class="tampering-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="tampering-card medium">
+
+                <div class="card-title">
+                    🟠 حالات متوسطة
+                </div>
+
+                <div
+                    id="tamperingMedium"
+                    class="tampering-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="tampering-card low">
+
+                <div class="card-title">
+                    🟢 حالات منخفضة
+                </div>
+
+                <div
+                    id="tamperingLow"
+                    class="tampering-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
 
         <div
-          id="absent"
-          class="number">
+            id="tamperingMessage"
+            class="message"
+            style="display:none;"
+        ></div>
 
-          0
+
+        <!-- TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>التاريخ والوقت</th>
+                        <th>رقم الطالب</th>
+                        <th>الاسم</th>
+                        <th>المجموعة</th>
+                        <th>المحاضرة</th>
+                        <th>السبب</th>
+                        <th>التفاصيل</th>
+                        <th>الجهاز</th>
+                        <th>GPS</th>
+                        <th>الخطورة</th>
+                        <th>الحالة</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="tamperingTable"
+                >
+
+                </tbody>
+
+            </table>
 
         </div>
 
-      </div>
+    </section>
 
-
-      <div class="card">
-
-        <div class="title">
-          نسبة الحضور
-        </div>
-
-        <div
-          id="percentage"
-          class="number">
-
-          0%
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-    <!-- ================= SEARCH ================= -->
-
-    <input
-      id="search"
-      type="search"
-      placeholder="🔎 البحث برقم الطالب أو الاسم..."
-      oninput="filterTable()">
-
-
-    <br>
-    <br>
-
-
-    <!-- ================= TABLE ================= -->
-
-    <div class="table-container">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>
-              #
-            </th>
-
-            <th>
-              الرقم الجامعي
-            </th>
-
-            <th>
-              اسم الطالب
-            </th>
-
-            <th>
-              المجموعة
-            </th>
-
-            <th>
-              الحالة
-            </th>
-
-            <th>
-              وقت التسجيل
-            </th>
-
-            <th>
-              دقة GPS
-            </th>
-
-          </tr>
-
-        </thead>
-
-        <tbody
-          id="studentsTable">
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-
-  </div>
+</div>
 
 </div>
 
 
 <script>
 
-
-/* =========================================================
-   إعدادات
-   ========================================================= */
+/* =====================================================
+   API
+===================================================== */
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
+"https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
 
 
 let ADMIN_PIN = "";
 
-let dashboardData = null;
+let attendanceData = [];
+
+let tamperingData = [];
 
 
-/* =========================================================
-   التاريخ الحالي
-   ========================================================= */
+/* =====================================================
+   LOGIN
+===================================================== */
 
-function todayDate() {
+function login(){
 
-  const now =
-    new Date();
+    const pin =
+        document
+        .getElementById("pinInput")
+        .value
+        .trim();
 
-  const y =
-    now.getFullYear();
+    if(!pin){
 
-  const m =
-    String(
-      now.getMonth() + 1
-    ).padStart(2, "0");
-
-  const d =
-    String(
-      now.getDate()
-    ).padStart(2, "0");
-
-  return `${y}-${m}-${d}`;
-
-}
-
-
-/* =========================================================
-   تسجيل الدخول
-   ========================================================= */
-
-async function login() {
-
-  const pin =
-    document
-      .getElementById("pin")
-      .value
-      .trim();
-
-
-  if (!pin) {
-
-    document
-      .getElementById("loginMessage")
-      .textContent =
-        "أدخل رمز الدخول.";
-
-    return;
-
-  }
-
-
-  try {
-
-    const url =
-      API_URL +
-      "?action=dashboard" +
-      "&pin=" +
-      encodeURIComponent(pin);
-
-
-    const response =
-      await fetch(url);
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !data.success
-    ) {
-
-      document
-        .getElementById("loginMessage")
+        document
+        .getElementById("loginError")
         .textContent =
-          data.message ||
-          "رمز الدخول غير صحيح.";
-
-      return;
-
-    }
-
-
-    ADMIN_PIN =
-      pin;
-
-
-    document
-      .getElementById("loginPage")
-      .classList.add(
-        "hidden"
-      );
-
-
-    document
-      .getElementById("dashboardPage")
-      .classList.remove(
-        "hidden"
-      );
-
-
-    document
-      .getElementById("date")
-      .value =
-        todayDate();
-
-
-    await loadDashboard();
-
-
-  } catch (error) {
-
-    document
-      .getElementById("loginMessage")
-      .textContent =
-        "تعذر الاتصال بالخادم.";
-
-  }
-
-}
-
-
-/* =========================================================
-   تحميل لوحة التحكم
-   ========================================================= */
-
-async function loadDashboard() {
-
-  setStatus(
-    "جاري تحميل بيانات الحضور..."
-  );
-
-
-  try {
-
-    const date =
-      document
-        .getElementById("date")
-        .value;
-
-
-    const lectureId =
-      document
-        .getElementById("lecture")
-        .value;
-
-
-    let url =
-      API_URL +
-      "?action=dashboard" +
-      "&pin=" +
-      encodeURIComponent(
-        ADMIN_PIN
-      ) +
-      "&date=" +
-      encodeURIComponent(
-        date
-      );
-
-
-    if (lectureId) {
-
-      url +=
-        "&lectureId=" +
-        encodeURIComponent(
-          lectureId
-        );
-
-    }
-
-
-    const response =
-      await fetch(url);
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !data.success
-    ) {
-
-      if (
-        data.unauthorized
-      ) {
-
-        logout();
+            "أدخل الرقم السري.";
 
         return;
-
-      }
-
-
-      throw new Error(
-        data.message ||
-        "فشل تحميل البيانات."
-      );
-
     }
 
 
-    dashboardData =
-      data;
+    fetch(
+        API_URL +
+        "?action=dashboard" +
+        "&pin=" +
+        encodeURIComponent(pin) +
+        "&date=" +
+        getToday() +
+        "&lectureId=TEST"
+    )
+
+    .then(r => r.json())
+
+    .then(data => {
+
+        /*
+         * إذا كان PIN صحيحًا سيعيد API
+         * رسالة مختلفة عن PIN غير صحيح.
+         */
+        if(
+            data.message ===
+            "PIN غير صحيح"
+        ){
+
+            document
+            .getElementById("loginError")
+            .textContent =
+                "الرقم السري غير صحيح.";
+
+            return;
+        }
 
 
-    fillLectures(
-      data
-    );
+        ADMIN_PIN = pin;
+
+        document
+        .getElementById("loginSection")
+        .style.display =
+            "none";
+
+        document
+        .getElementById("dashboardSection")
+        .style.display =
+            "block";
+
+        initializeDashboard();
+
+    })
+
+    .catch(error => {
+
+        document
+        .getElementById("loginError")
+        .textContent =
+            "تعذر الاتصال بالخادم.";
+
+        console.error(error);
+
+    });
+}
 
 
-    showLecture(
-      data.selectedLecture
-    );
+/* =====================================================
+   LOGOUT
+===================================================== */
 
+function logout(){
 
-    showSummary(
-      data.summary
-    );
+    ADMIN_PIN = "";
 
+    document
+    .getElementById("dashboardSection")
+    .style.display =
+        "none";
 
-    showStudents(
-      data.students
-    );
+    document
+    .getElementById("loginSection")
+    .style.display =
+        "block";
 
-
-    setStatus(
-      "تم تحديث بيانات الحضور بنجاح."
-    );
-
-
-  } catch (error) {
-
-    setStatus(
-      error.message ||
-      "حدث خطأ أثناء تحميل البيانات."
-    );
-
-  }
+    document
+    .getElementById("pinInput")
+    .value =
+        "";
 
 }
 
 
-/* =========================================================
-   تعبئة قائمة المحاضرات
-   ========================================================= */
+/* =====================================================
+   INITIALIZE
+===================================================== */
 
-function fillLectures(data) {
+function initializeDashboard(){
 
-  const select =
+    const today =
+        getToday();
+
     document
-      .getElementById("lecture");
+    .getElementById("attendanceDate")
+    .value =
+        today;
+
+    document
+    .getElementById("tamperingDate")
+    .value =
+        today;
+
+    loadLectures();
+
+    loadTampering();
+
+}
 
 
-  const current =
-    select.value;
+/* =====================================================
+   TABS
+===================================================== */
+
+function showPanel(panel){
+
+    document
+    .querySelectorAll(".panel")
+    .forEach(p =>
+        p.classList.remove("active")
+    );
 
 
-  select.innerHTML =
-    '<option value="">اختر المحاضرة</option>';
+    document
+    .querySelectorAll(".nav button")
+    .forEach(b =>
+        b.classList.remove("active")
+    );
 
 
-  data.lectures.forEach(
-    function(lecture) {
+    if(panel === "attendance"){
 
-      const option =
-        document.createElement(
-          "option"
+        document
+        .getElementById("attendancePanel")
+        .classList.add("active");
+
+        document
+        .getElementById("attendanceTab")
+        .classList.add("active");
+
+    }
+
+
+    if(panel === "tampering"){
+
+        document
+        .getElementById("tamperingPanel")
+        .classList.add("active");
+
+        document
+        .getElementById("tamperingTab")
+        .classList.add("active");
+
+        loadTampering();
+
+    }
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function getToday(){
+
+    const now =
+        new Date();
+
+    const y =
+        now.getFullYear();
+
+    const m =
+        String(
+            now.getMonth()+1
+        ).padStart(2,"0");
+
+    const d =
+        String(
+            now.getDate()
+        ).padStart(2,"0");
+
+    return y + "-" + m + "-" + d;
+}
+
+
+/* =====================================================
+   LOAD LECTURES
+===================================================== */
+
+function loadLectures(){
+
+    fetch(
+        API_URL +
+        "?action=lectures"
+    )
+
+    .then(r => r.json())
+
+    .then(data => {
+
+        const select =
+            document
+            .getElementById(
+                "lectureSelect"
+            );
+
+        select.innerHTML =
+            '<option value="">اختر المحاضرة</option>';
+
+
+        if(
+            !data.success ||
+            !data.lectures
+        ){
+            return;
+        }
+
+
+        data.lectures.forEach(
+            lecture => {
+
+                const option =
+                    document
+                    .createElement(
+                        "option"
+                    );
+
+                option.value =
+                    lecture.lectureId;
+
+                option.textContent =
+                    lecture.lectureId +
+                    " — " +
+                    lecture.subject +
+                    " — " +
+                    lecture.group +
+                    " — " +
+                    lecture.day +
+                    " " +
+                    lecture.start +
+                    "-" +
+                    lecture.end;
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    })
+
+    .catch(error => {
+
+        console.error(
+            "Lecture error:",
+            error
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   LOAD ATTENDANCE
+===================================================== */
+
+function loadAttendance(){
+
+    const date =
+        document
+        .getElementById(
+            "attendanceDate"
+        )
+        .value;
+
+    const lectureId =
+        document
+        .getElementById(
+            "lectureSelect"
+        )
+        .value;
+
+
+    if(!date){
+
+        showMessage(
+            "attendanceMessage",
+            "يرجى اختيار التاريخ.",
+            true
+        );
+
+        return;
+    }
+
+
+    if(!lectureId){
+
+        showMessage(
+            "attendanceMessage",
+            "يرجى اختيار المحاضرة.",
+            true
+        );
+
+        return;
+    }
+
+
+    document
+    .getElementById(
+        "attendanceTable"
+    )
+    .innerHTML =
+        '<tr><td colspan="7" class="loading">جاري تحميل البيانات...</td></tr>';
+
+
+    const url =
+        API_URL +
+        "?action=dashboard" +
+        "&pin=" +
+        encodeURIComponent(
+            ADMIN_PIN
+        ) +
+        "&date=" +
+        encodeURIComponent(date) +
+        "&lectureId=" +
+        encodeURIComponent(lectureId);
+
+
+    fetch(url)
+
+    .then(r => r.json())
+
+    .then(data => {
+
+        if(!data.success){
+
+            showMessage(
+                "attendanceMessage",
+                data.message ||
+                "تعذر تحميل البيانات.",
+                true
+            );
+
+            return;
+        }
+
+
+        attendanceData =
+            data.students || [];
+
+
+        document
+        .getElementById(
+            "totalStudents"
+        )
+        .textContent =
+            data.total;
+
+
+        document
+        .getElementById(
+            "presentStudents"
+        )
+        .textContent =
+            data.present;
+
+
+        document
+        .getElementById(
+            "absentStudents"
+        )
+        .textContent =
+            data.absent;
+
+
+        document
+        .getElementById(
+            "attendancePercentage"
+        )
+        .textContent =
+            data.percentage +
+            "%";
+
+
+        const lecture =
+            data.lecture;
+
+
+        document
+        .getElementById(
+            "lectureInfo"
+        )
+        .innerHTML = `
+
+            <h3>
+                📚 ${escapeHtml(
+                    lecture.subject
+                )}
+            </h3>
+
+            <p>
+                <strong>رقم المحاضرة:</strong>
+                ${escapeHtml(
+                    lecture.lectureId
+                )}
+            </p>
+
+            <p>
+                <strong>اليوم:</strong>
+                ${escapeHtml(
+                    lecture.day
+                )}
+            </p>
+
+            <p>
+                <strong>الوقت:</strong>
+                ${escapeHtml(
+                    lecture.start
+                )}
+                -
+                ${escapeHtml(
+                    lecture.end
+                )}
+            </p>
+
+            <p>
+                <strong>المجموعة:</strong>
+                ${escapeHtml(
+                    lecture.group
+                )}
+            </p>
+
+        `;
+
+
+        renderAttendance(
+            attendanceData
+        );
+
+        hideMessage(
+            "attendanceMessage"
+        );
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        showMessage(
+            "attendanceMessage",
+            "حدث خطأ أثناء الاتصال بالخادم.",
+            true
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   RENDER ATTENDANCE
+===================================================== */
+
+function renderAttendance(data){
+
+    const tbody =
+        document
+        .getElementById(
+            "attendanceTable"
+        );
+
+    tbody.innerHTML = "";
+
+
+    if(!data.length){
+
+        tbody.innerHTML =
+            '<tr><td colspan="7">لا توجد بيانات.</td></tr>';
+
+        return;
+    }
+
+
+    data.forEach(
+        (student,index) => {
+
+            const tr =
+                document
+                .createElement("tr");
+
+
+            const status =
+                student.status;
+
+
+            const statusClass =
+                status === "حاضر"
+                ? "present"
+                : "absent";
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        student.studentId
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        student.name
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        student.group
+                    )}
+                </td>
+
+                <td class="${statusClass}">
+                    ${escapeHtml(
+                        status
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        formatDateTime(
+                            student.timestamp
+                        )
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        student.accuracy || "-"
+                    )}
+                </td>
+
+            `;
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FILTER STUDENTS
+===================================================== */
+
+function filterStudents(){
+
+    const search =
+        document
+        .getElementById(
+            "studentSearch"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        attendanceData.filter(
+            student => {
+
+                const id =
+                    String(
+                        student.studentId || ""
+                    ).toLowerCase();
+
+                const name =
+                    String(
+                        student.name || ""
+                    ).toLowerCase();
+
+                return (
+                    id.includes(search) ||
+                    name.includes(search)
+                );
+
+            }
         );
 
 
-      option.value =
-        lecture.lectureId;
+    renderAttendance(filtered);
+
+}
 
 
-      option.textContent =
-        lecture.lectureId +
-        " — " +
-        lecture.subject +
-        " — " +
-        lecture.day +
-        " " +
-        lecture.start +
-        "-" +
-        lecture.end +
-        " — مجموعة " +
-        lecture.group;
+/* =====================================================
+   LOAD TAMPERING
+===================================================== */
 
+function loadTampering(){
 
-      select.appendChild(
-        option
-      );
-
+    if(!ADMIN_PIN){
+        return;
     }
-  );
 
 
-  if (current) {
-
-    select.value =
-      current;
-
-  }
-  else if (
-    data.selectedLecture
-  ) {
-
-    select.value =
-      data.selectedLecture
-        .lectureId;
-
-  }
-
-}
+    const date =
+        document
+        .getElementById(
+            "tamperingDate"
+        )
+        .value ||
+        getToday();
 
 
-/* =========================================================
-   عرض المحاضرة
-   ========================================================= */
+    const severity =
+        document
+        .getElementById(
+            "severitySelect"
+        )
+        .value ||
+        "الكل";
 
-function showLecture(lecture) {
-
-  if (!lecture) {
 
     document
-      .getElementById("subject")
-      .textContent =
-        "لا توجد محاضرة محددة";
-
-    document
-      .getElementById("time")
-      .textContent =
-        "-";
-
-    document
-      .getElementById("group")
-      .textContent =
-        "-";
-
-    document
-      .getElementById("lectureId")
-      .textContent =
-        "-";
-
-    return;
-
-  }
+    .getElementById(
+        "tamperingTable"
+    )
+    .innerHTML =
+        '<tr><td colspan="12" class="loading">جاري تحميل كشف التلاعب...</td></tr>';
 
 
-  document
-    .getElementById("subject")
-    .textContent =
-      lecture.subject;
+    const url =
+        API_URL +
+        "?action=tampering" +
+        "&pin=" +
+        encodeURIComponent(
+            ADMIN_PIN
+        ) +
+        "&date=" +
+        encodeURIComponent(date) +
+        "&severity=" +
+        encodeURIComponent(severity);
 
 
-  document
-    .getElementById("time")
-    .textContent =
-      lecture.start +
-      " - " +
-      lecture.end;
+    fetch(url)
+
+    .then(r => r.json())
+
+    .then(data => {
+
+        if(!data.success){
+
+            showMessage(
+                "tamperingMessage",
+                data.message ||
+                "تعذر تحميل كشف التلاعب.",
+                true
+            );
+
+            return;
+        }
 
 
-  document
-    .getElementById("group")
-    .textContent =
-      lecture.group;
+        tamperingData =
+            data.records || [];
 
 
-  document
-    .getElementById("lectureId")
-    .textContent =
-      lecture.lectureId;
-
-}
-
-
-/* =========================================================
-   عرض الإحصائيات
-   ========================================================= */
-
-function showSummary(summary) {
-
-  document
-    .getElementById("total")
-    .textContent =
-      summary.total;
+        document
+        .getElementById(
+            "tamperingTotal"
+        )
+        .textContent =
+            data.total || 0;
 
 
-  document
-    .getElementById("present")
-    .textContent =
-      summary.present;
+        document
+        .getElementById(
+            "tamperingHigh"
+        )
+        .textContent =
+            data.high || 0;
 
 
-  document
-    .getElementById("absent")
-    .textContent =
-      summary.absent;
+        document
+        .getElementById(
+            "tamperingMedium"
+        )
+        .textContent =
+            data.medium || 0;
 
 
-  document
-    .getElementById("percentage")
-    .textContent =
-      summary.percentage +
-      "%";
-
-}
-
-
-/* =========================================================
-   عرض الطلاب
-   ========================================================= */
-
-function showStudents(students) {
-
-  const table =
-    document
-      .getElementById(
-        "studentsTable"
-      );
+        document
+        .getElementById(
+            "tamperingLow"
+        )
+        .textContent =
+            data.low || 0;
 
 
-  table.innerHTML = "";
-
-
-  students.forEach(
-    function(student, index) {
-
-      const tr =
-        document.createElement(
-          "tr"
+        renderTampering(
+            tamperingData
         );
 
 
-      const status =
-        student.status ===
-        "Present";
+        hideMessage(
+            "tamperingMessage"
+        );
 
+    })
 
-      tr.innerHTML = `
+    .catch(error => {
 
-        <td>
-          ${index + 1}
-        </td>
+        console.error(error);
 
-        <td>
-          ${escapeHtml(
-            student.studentId
-          )}
-        </td>
+        showMessage(
+            "tamperingMessage",
+            "حدث خطأ أثناء تحميل كشف التلاعب.",
+            true
+        );
 
-        <td>
-          ${escapeHtml(
-            student.name
-          )}
-        </td>
-
-        <td>
-          ${escapeHtml(
-            student.group
-          )}
-        </td>
-
-        <td>
-
-          <span class="
-            badge
-            ${status
-              ? "present"
-              : "absent"}
-          ">
-
-            ${status
-              ? "حاضر ✓"
-              : "غائب"}
-
-          </span>
-
-        </td>
-
-        <td>
-          ${student.time || "-"}
-        </td>
-
-        <td>
-          ${student.accuracy
-            ? student.accuracy + " m"
-            : "-"}
-        </td>
-
-      `;
-
-
-      table.appendChild(
-        tr
-      );
-
-    }
-  );
+    });
 
 }
 
 
-/* =========================================================
-   البحث
-   ========================================================= */
+/* =====================================================
+   RENDER TAMPERING
+===================================================== */
 
-function filterTable() {
+function renderTampering(data){
 
-  const query =
-    document
-      .getElementById("search")
-      .value
-      .trim()
-      .toLowerCase();
+    const tbody =
+        document
+        .getElementById(
+            "tamperingTable"
+        );
 
-
-  const rows =
-    document
-      .querySelectorAll(
-        "#studentsTable tr"
-      );
+    tbody.innerHTML = "";
 
 
-  rows.forEach(
-    function(row) {
+    if(!data.length){
 
-      const text =
-        row.textContent
-          .toLowerCase();
+        tbody.innerHTML = `
 
+            <tr>
 
-      row.style.display =
-        text.includes(query)
-          ? ""
-          : "none";
+                <td colspan="12">
 
+                    🟢 لا توجد حالات تلاعب مسجلة
+                    في الفترة المحددة.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
     }
-  );
-
-}
 
 
-/* =========================================================
-   تنظيف HTML
-   ========================================================= */
+    data.forEach(
+        (item,index) => {
 
-function escapeHtml(value) {
+            const tr =
+                document
+                .createElement("tr");
 
-  return String(
-    value ?? ""
-  )
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
+            let badgeClass =
+                "badge-low";
 
-    .replace(
-      /</g,
-      "&lt;"
-    )
 
-    .replace(
-      />/g,
-      "&gt;"
-    )
+            let icon =
+                "🟢";
 
-    .replace(
-      /"/g,
-      "&quot;"
-    )
 
-    .replace(
-      /'/g,
-      "&#039;"
+            if(
+                item.severity ===
+                "عالي"
+            ){
+
+                badgeClass =
+                    "badge-high";
+
+                icon =
+                    "🔴";
+
+            }
+            else if(
+                item.severity ===
+                "متوسط"
+            ){
+
+                badgeClass =
+                    "badge-medium";
+
+                icon =
+                    "🟠";
+
+            }
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        formatDateTime(
+                            item.timestamp
+                        )
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.studentId
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.name
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.group
+                    )}
+                </td>
+
+                <td>
+
+                    <strong>
+                        ${escapeHtml(
+                            item.lectureId
+                        )}
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        ${escapeHtml(
+                            item.subject
+                        )}
+                    </small>
+
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.reason
+                    )}
+                </td>
+
+                <td class="tampering-details">
+                    ${escapeHtml(
+                        item.details
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.deviceId
+                    )}
+                </td>
+
+                <td>
+
+                    ${
+                        item.accuracy
+                        ? escapeHtml(
+                            item.accuracy +
+                            " m"
+                        )
+                        : "-"
+                    }
+
+                    ${
+                        item.latitude &&
+                        item.longitude
+                        ? `<br>
+                           <small>
+                           ${escapeHtml(
+                               item.latitude
+                           )},
+                           ${escapeHtml(
+                               item.longitude
+                           )}
+                           </small>`
+                        : ""
+                    }
+
+                </td>
+
+                <td>
+
+                    <span
+                        class="badge ${badgeClass}"
+                    >
+                        ${icon}
+                        ${escapeHtml(
+                            item.severity
+                        )}
+                    </span>
+
+                </td>
+
+                <td class="status-review">
+
+                    ${escapeHtml(
+                        item.status ||
+                        "مراجعة"
+                    )}
+
+                </td>
+
+            `;
+
+            tbody.appendChild(tr);
+
+        }
     );
 
 }
 
 
-/* =========================================================
-   الحالة
-   ========================================================= */
+/* =====================================================
+   FILTER TAMPERING
+===================================================== */
 
-function setStatus(message) {
+function filterTampering(){
 
-  document
-    .getElementById("status")
-    .textContent =
-      message;
+    const search =
+        document
+        .getElementById(
+            "tamperingSearch"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        tamperingData.filter(
+            item => {
+
+                const values = [
+
+                    item.studentId,
+                    item.name,
+                    item.reason,
+                    item.details,
+                    item.deviceId,
+                    item.lectureId,
+                    item.subject,
+                    item.group
+
+                ];
+
+
+                return values.some(
+                    value =>
+                        String(
+                            value || ""
+                        )
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+            }
+        );
+
+
+    renderTampering(
+        filtered
+    );
 
 }
 
 
-/* =========================================================
-   تسجيل الخروج
-   ========================================================= */
+/* =====================================================
+   HELPERS
+===================================================== */
 
-function logout() {
+function showMessage(
+    elementId,
+    message,
+    isError
+){
 
-  ADMIN_PIN = "";
+    const element =
+        document
+        .getElementById(
+            elementId
+        );
 
-  location.reload();
+
+    element.style.display =
+        "block";
+
+
+    element.className =
+        "message " +
+        (
+            isError
+            ? "error-message"
+            : "success-message"
+        );
+
+
+    element.textContent =
+        message;
 
 }
 
 
-/* =========================================================
-   الأحداث
-   ========================================================= */
+function hideMessage(elementId){
+
+    document
+    .getElementById(
+        elementId
+    )
+    .style.display =
+        "none";
+
+}
+
+
+function formatDateTime(value){
+
+    if(!value){
+        return "-";
+    }
+
+    try{
+
+        const date =
+            new Date(value);
+
+        if(
+            isNaN(
+                date.getTime()
+            )
+        ){
+
+            return String(value);
+
+        }
+
+        return date
+            .toLocaleString(
+                "ar-YE",
+                {
+                    dateStyle:"short",
+                    timeStyle:"medium"
+                }
+            );
+
+    }
+    catch(e){
+
+        return String(value);
+
+    }
+
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value == null
+        ? ""
+        : value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   EVENTS
+===================================================== */
 
 document
-  .getElementById("lecture")
-  .addEventListener(
+.getElementById(
+    "lectureSelect"
+)
+.addEventListener(
     "change",
-    loadDashboard
-  );
+    loadAttendance
+);
 
 
 document
-  .getElementById("date")
-  .addEventListener(
+.getElementById(
+    "severitySelect"
+)
+.addEventListener(
     "change",
-    loadDashboard
-  );
+    loadTampering
+);
 
 
 document
-  .getElementById("pin")
-  .addEventListener(
+.getElementById(
+    "tamperingDate"
+)
+.addEventListener(
+    "change",
+    loadTampering
+);
+
+
+document
+.getElementById(
+    "attendanceDate"
+)
+.addEventListener(
+    "change",
+    function(){
+
+        if(
+            document
+            .getElementById(
+                "lectureSelect"
+            )
+            .value
+        ){
+            loadAttendance();
+        }
+
+    }
+);
+
+
+/* ENTER LOGIN */
+
+document
+.getElementById(
+    "pinInput"
+)
+.addEventListener(
     "keydown",
-    function(event) {
+    function(event){
 
-      if (
-        event.key === "Enter"
-      ) {
+        if(
+            event.key ===
+            "Enter"
+        ){
 
-        login();
+            login();
 
-      }
+        }
 
     }
-  );
-
+);
 
 </script>
 
 </body>
-
 </html>
