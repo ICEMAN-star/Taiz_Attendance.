@@ -1,68 +1,180 @@
-const CACHE_NAME = "taiz-attendance-v7";
+const CACHE_NAME =
+  "taiz-attendance-v10";
+
 
 const APP_FILES = [
   "./",
-  "./index.html"
+  "./index.html",
+  "./admin.html",
+  "./manifest.json"
 ];
 
-// تثبيت النسخة الجديدة
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_FILES))
-      .then(() => self.skipWaiting())
-  );
-});
 
-// تفعيل النسخة الجديدة وحذف جميع النسخ القديمة
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => {
-        return Promise.all(
-          keys.map(key => {
-            if (key !== CACHE_NAME) {
-              return caches.delete(key);
-            }
-          })
-        );
-      })
-      .then(() => self.clients.claim())
-  );
-});
+/* =====================================================
+   INSTALL
+   ===================================================== */
 
-// التعامل مع طلبات الملفات
-self.addEventListener("fetch", event => {
+self.addEventListener(
+  "install",
+  event => {
 
-  // لا نتعامل مع POST أو الطلبات غير GET
-  if (event.request.method !== "GET") {
-    return;
+    event.waitUntil(
+
+      caches
+        .open(
+          CACHE_NAME
+        )
+        .then(
+          cache =>
+            cache.addAll(
+              APP_FILES
+            )
+        )
+        .then(
+          () =>
+            self.skipWaiting()
+        )
+
+    );
+
   }
+);
 
-  event.respondWith(
 
-    // نحاول الحصول على النسخة الحديثة من الإنترنت أولاً
-    fetch(event.request)
+/* =====================================================
+   ACTIVATE
+   ===================================================== */
 
-      .then(response => {
+self.addEventListener(
+  "activate",
+  event => {
 
-        if (response && response.ok) {
+    event.waitUntil(
 
-          const copy = response.clone();
+      caches
+        .keys()
+        .then(
+          keys =>
 
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, copy);
-            });
-        }
+            Promise.all(
 
-        return response;
-      })
+              keys.map(
+                key => {
 
-      // إذا لم يوجد إنترنت نستخدم النسخة المخزنة
-      .catch(() => {
-        return caches.match(event.request);
-      })
+                  if (
+                    key !==
+                    CACHE_NAME
+                  ) {
 
-  );
-});
+                    return caches.delete(
+                      key
+                    );
+
+                  }
+
+                }
+              )
+
+            )
+
+        )
+        .then(
+          () =>
+            self.clients.claim()
+        )
+
+    );
+
+  }
+);
+
+
+/* =====================================================
+   FETCH
+   ===================================================== */
+
+self.addEventListener(
+  "fetch",
+  event => {
+
+    const request =
+      event.request;
+
+
+    /*
+     * لا نعترض POST.
+     */
+
+    if (
+      request.method !==
+      "GET"
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * Google Apps Script
+     * يذهب مباشرة إلى الشبكة.
+     */
+
+    if (
+      request.url.includes(
+        "script.google.com"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    event.respondWith(
+
+      fetch(request)
+
+        .then(
+          response => {
+
+            if (
+              response &&
+              response.ok
+            ) {
+
+              const copy =
+                response.clone();
+
+
+              caches
+                .open(
+                  CACHE_NAME
+                )
+                .then(
+                  cache =>
+                    cache.put(
+                      request,
+                      copy
+                    )
+                );
+
+            }
+
+
+            return response;
+
+          }
+        )
+
+        .catch(
+          () =>
+            caches.match(
+              request
+            )
+        )
+
+    );
+
+  }
+);
