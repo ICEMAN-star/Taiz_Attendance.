@@ -1,921 +1,716 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
-    <meta name="theme-color" content="#0d47a1">
-    <meta name="description"
-          content="نظام حضور الطلاب - جامعة تعز">
-
-    <link rel="manifest" href="./manifest.json">
-
-    <title>نظام حضور الطلاب - جامعة تعز</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family:
-                Tahoma,
-                Arial,
-                sans-serif;
-            background:
-                linear-gradient(135deg, #eef4ff, #f8fafc);
-            color: #172033;
-        }
-
-        button,
-        input {
-            font-family: inherit;
-        }
-
-        .container {
-            width: min(100% - 24px, 720px);
-            margin: auto;
-            padding-bottom: 40px;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .header {
-            margin-top: 15px;
-            background:
-                linear-gradient(135deg, #0d47a1, #1565c0);
-            color: white;
-            border-radius: 22px;
-            padding: 24px 18px;
-            box-shadow:
-                0 12px 30px rgba(13, 71, 161, .20);
-            text-align: center;
-        }
-
-        .logo {
-            width: 68px;
-            height: 68px;
-            margin: auto;
-            border-radius: 50%;
-            background: rgba(255,255,255,.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            border: 2px solid rgba(255,255,255,.3);
-        }
-
-        .header h1 {
-            margin: 12px 0 5px;
-            font-size: 24px;
-        }
-
-        .header p {
-            margin: 0;
-            opacity: .9;
-            font-size: 14px;
-        }
-
-        /* =========================
-           CONNECTION BAR
-        ========================= */
-
-        .connection {
-            margin-top: 12px;
-            background: white;
-            border-radius: 15px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            box-shadow: 0 5px 18px rgba(0,0,0,.06);
-        }
-
-        .connection-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .status-dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            background: #9ca3af;
-        }
-
-        .status-online {
-            background: #16a34a;
-        }
-
-        .status-offline {
-            background: #dc2626;
-        }
-
-        .status-testing {
-            background: #f59e0b;
-        }
-
-        .mini-btn {
-            border: 0;
-            background: #edf4ff;
-            color: #0d47a1;
-            padding: 8px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .card {
-            background: white;
-            margin-top: 14px;
-            padding: 18px;
-            border-radius: 20px;
-            box-shadow: 0 7px 25px rgba(0,0,0,.06);
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            margin-bottom: 15px;
-            font-size: 17px;
-            font-weight: bold;
-            color: #0d47a1;
-        }
-
-        /* =========================
-           SEARCH
-        ========================= */
-
-        .search-box {
-            display: flex;
-            gap: 9px;
-        }
-
-        .search-box input {
-            flex: 1;
-            min-width: 0;
-            padding: 14px;
-            border: 1px solid #d7deea;
-            border-radius: 13px;
-            outline: none;
-            font-size: 16px;
-            background: #fbfdff;
-        }
-
-        .search-box input:focus {
-            border-color: #1565c0;
-            box-shadow: 0 0 0 3px rgba(21,101,192,.10);
-        }
-
-        .primary-btn {
-            border: 0;
-            background: #0d47a1;
-            color: white;
-            padding: 0 18px;
-            border-radius: 13px;
-            cursor: pointer;
-            font-weight: bold;
-            min-width: 90px;
-        }
-
-        .primary-btn:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-        }
-
-        /* =========================
-           STUDENT
-        ========================= */
-
-        .student-info {
-            display: none;
-        }
-
-        .student-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .info-item {
-            background: #f6f8fc;
-            border-radius: 13px;
-            padding: 12px;
-        }
-
-        .info-label {
-            color: #64748b;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 15px;
-            font-weight: bold;
-            word-break: break-word;
-        }
-
-        /* =========================
-           LECTURE
-        ========================= */
-
-        .lecture-box {
-            background:
-                linear-gradient(135deg, #eff6ff, #f8fbff);
-            border: 1px solid #dbeafe;
-            border-radius: 16px;
-            padding: 15px;
-        }
-
-        .lecture-subject {
-            font-size: 19px;
-            font-weight: bold;
-            color: #0d47a1;
-            margin-bottom: 12px;
-        }
-
-        .lecture-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-        }
-
-        .lecture-item {
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .lecture-item small {
-            display: block;
-            color: #64748b;
-            margin-bottom: 4px;
-        }
-
-        .lecture-item strong {
-            font-size: 14px;
-        }
-
-        /* =========================
-           GPS
-        ========================= */
-
-        .gps-status {
-            padding: 13px;
-            border-radius: 13px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 12px;
-        }
-
-        .gps-line {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin: 7px 0;
-            font-size: 14px;
-        }
-
-        .gps-good {
-            color: #15803d;
-        }
-
-        .gps-bad {
-            color: #b91c1c;
-        }
-
-        .gps-warn {
-            color: #b45309;
-        }
-
-        .gps-btn {
-            width: 100%;
-            border: 0;
-            padding: 14px;
-            border-radius: 13px;
-            background: #1565c0;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* =========================
-           ATTENDANCE
-        ========================= */
-
-        .attendance-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 16px;
-            border: 0;
-            border-radius: 15px;
-            background:
-                linear-gradient(135deg, #0d47a1, #1976d2);
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 7px 18px rgba(13,71,161,.18);
-        }
-
-        .attendance-btn:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-        }
-
-        /* =========================
-           RESULT
-        ========================= */
-
-        .result {
-            display: none;
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 14px;
-            line-height: 1.8;
-        }
-
-        .result-success {
-            background: #ecfdf5;
-            color: #166534;
-            border: 1px solid #bbf7d0;
-        }
-
-        .result-error {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
-
-        .result-warning {
-            background: #fffbeb;
-            color: #92400e;
-            border: 1px solid #fde68a;
-        }
-
-        .result-info {
-            background: #eff6ff;
-            color: #1e40af;
-            border: 1px solid #bfdbfe;
-        }
-
-        /* =========================
-           SYNC
-        ========================= */
-
-        .sync-summary {
-            display: grid;
-            grid-template-columns: repeat(3,1fr);
-            gap: 8px;
-            margin-bottom: 13px;
-        }
-
-        .sync-number {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 11px;
-            text-align: center;
-        }
-
-        .sync-number strong {
-            display: block;
-            font-size: 20px;
-            color: #0d47a1;
-        }
-
-        .sync-number span {
-            font-size: 11px;
-            color: #64748b;
-        }
-
-        .sync-actions {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .sync-btn {
-            flex: 1;
-            border: 0;
-            padding: 12px;
-            border-radius: 12px;
-            background: #0d47a1;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .sync-btn.secondary {
-            background: #e8eef8;
-            color: #0d47a1;
-        }
-
-        .sync-log {
-            max-height: 330px;
-            overflow-y: auto;
-        }
-
-        .sync-item {
-            border: 1px solid #e2e8f0;
-            border-radius: 13px;
-            padding: 12px;
-            margin-bottom: 8px;
-            background: #fafcff;
-        }
-
-        .sync-item-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .sync-status {
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .sync-pending {
-            color: #b45309;
-        }
-
-        .sync-error {
-            color: #b91c1c;
-        }
-
-        .sync-item small {
-            display: block;
-            color: #64748b;
-            margin-top: 5px;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           DIAGNOSTICS
-        ========================= */
-
-        .diagnostic {
-            display: none;
-            margin-top: 12px;
-            padding: 12px;
-            border-radius: 12px;
-            background: #111827;
-            color: #e5e7eb;
-            direction: ltr;
-            text-align: left;
-            font-family: monospace;
-            font-size: 12px;
-            line-height: 1.7;
-            word-break: break-word;
-            max-height: 230px;
-            overflow: auto;
-        }
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        .footer {
-            text-align: center;
-            color: #64748b;
-            font-size: 12px;
-            padding: 22px 0;
-        }
-
-        .device-id {
-            direction: ltr;
-            font-family: monospace;
-            word-break: break-all;
-        }
-
-        /* =========================
-           LOADING
-        ========================= */
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 15px;
-            color: #475569;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #dbeafe;
-            border-top-color: #1565c0;
-            border-radius: 50%;
-            animation: spin .8s linear infinite;
-            vertical-align: middle;
-            margin-left: 7px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media(max-width: 520px) {
-            .student-grid,
-            .lecture-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .search-box {
-                flex-direction: column;
-            }
-
-            .primary-btn {
-                padding: 13px;
-            }
-
-            .sync-summary {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta name="theme-color" content="#0d47a1">
+
+<meta name="description"
+      content="نظام حضور الطلاب - جامعة تعز">
+
+<link rel="manifest" href="./manifest.json">
+
+<title>نظام حضور الطلاب - جامعة تعز</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef4ff,
+            #f8fafc
+        );
+
+    color: #172033;
+}
+
+.container {
+    width: min(96%, 650px);
+    margin: auto;
+    padding: 15px 0 40px;
+}
+
+.header {
+    background: #0d47a1;
+    color: white;
+    padding: 22px 18px;
+    border-radius: 0 0 22px 22px;
+    text-align: center;
+    box-shadow:
+        0 5px 18px rgba(0,0,0,.15);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 23px;
+}
+
+.header p {
+    margin: 7px 0 0;
+    opacity: .9;
+    font-size: 13px;
+}
+
+.status-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    font-size: 12px;
+}
+
+.online {
+    color: #087f23;
+}
+
+.offline {
+    color: #b42318;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 15px;
+    box-shadow:
+        0 4px 18px rgba(15,23,42,.08);
+}
+
+.card h2 {
+    margin: 0 0 15px;
+    font-size: 18px;
+    color: #0d47a1;
+}
+
+.input-group {
+    margin-bottom: 12px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccd5e1;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #0d47a1;
+    box-shadow: 0 0 0 3px rgba(13,71,161,.08);
+}
+
+button {
+    width: 100%;
+    border: 0;
+    border-radius: 13px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.primary {
+    background: #0d47a1;
+    color: white;
+}
+
+.secondary {
+    background: #e8eef8;
+    color: #0d47a1;
+}
+
+.success-btn {
+    background: #16803c;
+    color: white;
+}
+
+.warning-btn {
+    background: #b45309;
+    color: white;
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #edf0f4;
+    padding: 9px 0;
+}
+
+.info-row:last-child {
+    border-bottom: 0;
+}
+
+.info-label {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.info-value {
+    font-weight: bold;
+    text-align: left;
+    max-width: 65%;
+    word-break: break-word;
+}
+
+.gps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.gps-box {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.gps-box small {
+    display: block;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.gps-box strong {
+    font-size: 14px;
+}
+
+.result {
+    padding: 13px;
+    border-radius: 12px;
+    margin-top: 12px;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.result.info {
+    background: #e8f1ff;
+    color: #174ea6;
+}
+
+.result.success {
+    background: #e9f8ef;
+    color: #126b30;
+}
+
+.result.error {
+    background: #fff0f0;
+    color: #a61b1b;
+}
+
+.result.warning {
+    background: #fff7e6;
+    color: #8a5100;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.sync-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.sync-box {
+    background: #f8fafc;
+    padding: 12px 5px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.sync-box strong {
+    display: block;
+    font-size: 20px;
+    color: #0d47a1;
+}
+
+.sync-box span {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.log {
+    background: #0f172a;
+    color: #dbeafe;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 11px;
+    max-height: 220px;
+    overflow: auto;
+    direction: ltr;
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+.footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 11px;
+    padding: 15px;
+}
+
+.offline-alert {
+    background: #fff7e6;
+    color: #7c4a03;
+    border: 1px solid #f0c36d;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.online-alert {
+    background: #eaf8ee;
+    color: #166534;
+    border: 1px solid #a7d8b5;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+@media (max-width: 450px) {
+
+    .container {
+        width: 94%;
+    }
+
+    .gps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sync-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
+<div class="header">
+
+    <h1>نظام حضور الطلاب</h1>
+
+    <p>
+        جامعة تعز - نظام الحضور الإلكتروني
+    </p>
+
+</div>
+
+
 <div class="container">
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="logo">🎓</div>
 
-        <h1>نظام حضور الطلاب</h1>
+    <!-- حالة الاتصال -->
 
-        <p>جامعة تعز — كلية الهندسة وتقنية المعلومات</p>
-    </header>
+    <div class="status-bar">
 
-    <!-- CONNECTION -->
-    <section class="connection">
-
-        <div class="connection-status">
-            <span id="statusDot" class="status-dot"></span>
-            <span id="connectionText">جاري فحص الاتصال...</span>
+        <div id="netState"
+             class="badge offline">
+            🔴 غير متصل
         </div>
 
-        <button class="mini-btn" id="testConnectionBtn">
-            فحص الاتصال
-        </button>
-
-    </section>
-
-
-    <!-- SEARCH -->
-    <section class="card">
-
-        <div class="card-title">
-            🔎 البحث عن الطالب
+        <div id="deviceView"
+             class="badge">
+            الجهاز: ...
         </div>
 
-        <div class="search-box">
+        <div id="swState"
+             class="badge">
+            التطبيق: ...
+        </div>
+
+    </div>
+
+
+    <div id="connectionAlert"></div>
+
+
+    <!-- الطالب -->
+
+    <div class="card">
+
+        <h2>👨‍🎓 بيانات الطالب</h2>
+
+        <div class="input-group">
+
+            <label>
+                الرقم الجامعي
+            </label>
 
             <input
                 id="studentIdInput"
                 type="text"
                 inputmode="numeric"
+                placeholder="أدخل الرقم الجامعي"
                 autocomplete="off"
-                placeholder="أدخل رقم الطالب">
-
-            <button
-                id="searchBtn"
-                class="primary-btn">
-                بحث
-            </button>
+            >
 
         </div>
 
-        <div id="searchLoading" class="loading">
-            <span class="spinner"></span>
-            جاري البحث...
-        </div>
-
-        <div id="searchResult"
-             class="result">
-        </div>
-
-    </section>
+        <button
+            id="searchBtn"
+            class="primary">
+            🔎 البحث عن الطالب
+        </button>
 
 
-    <!-- STUDENT -->
-    <section
-        id="studentCard"
-        class="card student-info">
+        <div id="studentResult"></div>
 
-        <div class="card-title">
-            👨‍🎓 بيانات الطالب
-        </div>
 
-        <div class="student-grid">
+        <div id="studentData"
+             class="hidden">
 
-            <div class="info-item">
-                <div class="info-label">
-                    رقم الطالب
-                </div>
+            <div class="info-row">
 
-                <div
+                <span class="info-label">
+                    الرقم الجامعي
+                </span>
+
+                <span
                     id="studentIdView"
                     class="info-value">
                     —
-                </div>
+                </span>
+
             </div>
 
 
-            <div class="info-item">
-                <div class="info-label">
-                    اسم الطالب
-                </div>
+            <div class="info-row">
 
-                <div
+                <span class="info-label">
+                    الاسم
+                </span>
+
+                <span
                     id="studentNameView"
                     class="info-value">
                     —
-                </div>
+                </span>
+
             </div>
 
 
-            <div class="info-item">
-                <div class="info-label">
-                    المجموعة
-                </div>
+            <div class="info-row">
 
-                <div
+                <span class="info-label">
+                    المجموعة
+                </span>
+
+                <span
                     id="studentGroupView"
                     class="info-value">
                     —
-                </div>
+                </span>
+
             </div>
 
+        </div>
 
-            <div class="info-item">
-                <div class="info-label">
-                    الجهاز
-                </div>
+    </div>
 
-                <div
-                    id="deviceView"
-                    class="info-value device-id">
+
+    <!-- المحاضرة -->
+
+    <div class="card">
+
+        <h2>📚 المحاضرة الحالية</h2>
+
+
+        <div id="lectureResult"
+             class="result info">
+
+            جاري التحقق من المحاضرة...
+            
+        </div>
+
+
+        <div id="lectureData"
+             class="hidden">
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    المادة
+                </span>
+
+                <span
+                    id="subject"
+                    class="info-value">
                     —
-                </div>
+                </span>
+
             </div>
 
-        </div>
 
-    </section>
+            <div class="info-row">
 
+                <span class="info-label">
+                    رقم المحاضرة
+                </span>
 
-    <!-- LECTURE -->
-    <section class="card">
+                <span
+                    id="lectureId"
+                    class="info-value">
+                    —
+                </span>
 
-        <div class="card-title">
-            📚 المحاضرة الحالية
-        </div>
-
-        <div id="lectureLoading" class="loading">
-            <span class="spinner"></span>
-            جاري جلب المحاضرة...
-        </div>
-
-        <div
-            id="lectureEmpty"
-            class="result result-info">
-
-            لم يتم تحميل محاضرة حالية بعد.
-            ابحث عن الطالب أولاً.
-
-        </div>
-
-        <div
-            id="lectureBox"
-            class="lecture-box"
-            style="display:none;">
-
-            <div
-                id="lectureSubject"
-                class="lecture-subject">
-                —
             </div>
 
-            <div class="lecture-grid">
 
-                <div class="lecture-item">
+            <div class="info-row">
 
-                    <small>رقم المحاضرة</small>
+                <span class="info-label">
+                    اليوم
+                </span>
 
-                    <strong id="lectureId">
-                        —
-                    </strong>
+                <span
+                    id="lectureDay"
+                    class="info-value">
+                    —
+                </span>
 
-                </div>
-
-
-                <div class="lecture-item">
-
-                    <small>اليوم</small>
-
-                    <strong id="lectureDay">
-                        —
-                    </strong>
-
-                </div>
+            </div>
 
 
-                <div class="lecture-item">
+            <div class="info-row">
 
-                    <small>وقت البداية</small>
+                <span class="info-label">
+                    الوقت
+                </span>
 
-                    <strong id="lectureStart">
-                        —
-                    </strong>
+                <span
+                    id="lectureTime"
+                    class="info-value">
+                    —
+                </span>
 
-                </div>
-
-
-                <div class="lecture-item">
-
-                    <small>وقت النهاية</small>
-
-                    <strong id="lectureEnd">
-                        —
-                    </strong>
-
-                </div>
+            </div>
 
 
-                <div class="lecture-item">
+            <div class="info-row">
 
-                    <small>مجموعة المحاضرة</small>
+                <span class="info-label">
+                    المجموعات
+                </span>
 
-                    <strong id="lectureGroup">
-                        —
-                    </strong>
+                <span
+                    id="lectureGroups"
+                    class="info-value">
+                    —
+                </span>
 
-                </div>
+            </div>
 
 
-                <div class="lecture-item">
+            <div class="info-row">
 
-                    <small>التاريخ</small>
+                <span class="info-label">
+                    التاريخ
+                </span>
 
-                    <strong id="lectureDate">
-                        —
-                    </strong>
-
-                </div>
+                <span
+                    id="lectureDate"
+                    class="info-value">
+                    —
+                </span>
 
             </div>
 
         </div>
 
-    </section>
+    </div>
 
 
     <!-- GPS -->
-    <section class="card">
 
-        <div class="card-title">
-            📍 التحقق من الموقع
-        </div>
+    <div class="card">
 
-        <div class="gps-status">
+        <h2>📍 التحقق من الموقع</h2>
 
-            <div class="gps-line">
-                <span>حالة GPS</span>
-                <strong id="gpsState">
-                    لم يتم الفحص
-                </strong>
-            </div>
+        <div id="gpsState"
+             class="result info">
 
-            <div class="gps-line">
-                <span>خط العرض</span>
-                <strong id="gpsLat">
-                    —
-                </strong>
-            </div>
-
-            <div class="gps-line">
-                <span>خط الطول</span>
-                <strong id="gpsLng">
-                    —
-                </strong>
-            </div>
-
-            <div class="gps-line">
-                <span>الدقة</span>
-                <strong id="gpsAccuracy">
-                    —
-                </strong>
-            </div>
-
-            <div class="gps-line">
-                <span>المسافة</span>
-                <strong id="gpsDistance">
-                    —
-                </strong>
-            </div>
+            لم يتم التحقق من الموقع بعد.
 
         </div>
+
 
         <button
             id="gpsBtn"
-            class="gps-btn">
+            class="secondary">
 
-            📍 تحديد موقعي
+            📍 التحقق من موقعي
 
         </button>
 
-    </section>
-
-
-    <!-- ATTENDANCE -->
-    <section class="card">
-
-        <div class="card-title">
-            ✅ تسجيل الحضور
-        </div>
 
         <div
-            id="attendanceHint"
-            class="result result-info"
-            style="display:block;">
+            id="gpsData"
+            class="gps-grid"
+            style="margin-top:12px;">
 
-            ابحث عن الطالب، ثم حدد موقعك الجغرافي قبل تسجيل الحضور.
+            <div class="gps-box">
+
+                <small>
+                    خط العرض
+                </small>
+
+                <strong id="gpsLat">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="gps-box">
+
+                <small>
+                    خط الطول
+                </small>
+
+                <strong id="gpsLng">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="gps-box">
+
+                <small>
+                    دقة GPS
+                </small>
+
+                <strong id="gpsAccuracy">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="gps-box">
+
+                <small>
+                    المسافة
+                </small>
+
+                <strong id="gpsDistance">
+                    —
+                </strong>
+
+            </div>
 
         </div>
+
+    </div>
+
+
+    <!-- الحضور -->
+
+    <div class="card">
+
+        <h2>✅ تسجيل الحضور</h2>
+
+        <div
+            id="attendanceResult"
+            class="result info">
+
+            أدخل الرقم الجامعي ثم تحقق من المحاضرة والموقع.
+
+        </div>
+
 
         <button
             id="attendanceBtn"
-            class="attendance-btn"
+            class="success-btn"
             disabled>
 
             تسجيل الحضور
 
         </button>
 
-        <div
-            id="attendanceResult"
-            class="result">
-        </div>
-
-    </section>
+    </div>
 
 
-    <!-- SYNC -->
-    <section class="card">
+    <!-- المزامنة -->
 
-        <div class="card-title">
-            🔄 سجل المزامنة
-        </div>
+    <div class="card">
 
-        <div class="sync-summary">
+        <h2>🔄 المزامنة</h2>
 
-            <div class="sync-number">
+        <div class="sync-grid">
+
+            <div class="sync-box">
 
                 <strong id="pendingCount">
                     0
                 </strong>
 
                 <span>
-                    معلقة
+                    قيد الانتظار
                 </span>
 
             </div>
 
 
-            <div class="sync-number">
+            <div class="sync-box">
 
-                <strong id="syncSuccessCount">
+                <strong id="completedCount">
                     0
                 </strong>
 
                 <span>
-                    تمت
+                    مكتمل
                 </span>
 
             </div>
 
 
-            <div class="sync-number">
+            <div class="sync-box">
 
-                <strong id="syncErrorCount">
+                <strong id="errorCount">
                     0
                 </strong>
 
@@ -928,72 +723,51 @@
         </div>
 
 
-        <div class="sync-actions">
+        <button
+            id="syncBtn"
+            class="secondary">
 
-            <button
-                id="syncBtn"
-                class="sync-btn">
+            🔄 مزامنة الحضور الآن
 
-                🔄 مزامنة الآن
+        </button>
 
-            </button>
+    </div>
 
-            <button
-                id="clearSyncBtn"
-                class="sync-btn secondary">
 
-                مسح السجل
+    <!-- التشخيص -->
 
-            </button>
+    <div class="card">
 
-        </div>
+        <h2>🔧 التشخيص</h2>
+
+        <button
+            id="testBtn"
+            class="secondary">
+
+            اختبار النظام
+
+        </button>
 
 
         <div
-            id="syncLog"
-            class="sync-log">
+            id="testLog"
+            class="log"
+            style="margin-top:12px;">
 
-            <div
-                style="
-                    text-align:center;
-                    color:#64748b;
-                    padding:15px;
-                ">
-
-                لا توجد عمليات معلقة.
-
-            </div>
+            جاهز.
 
         </div>
 
-    </section>
+    </div>
 
 
-    <!-- DIAGNOSTICS -->
-    <section class="card">
-
-        <div class="card-title">
-            🛠️ تشخيص الاتصال
-        </div>
-
-        <div
-            id="diagnostic"
-            class="diagnostic">
-        </div>
-
-    </section>
-
-
-    <!-- FOOTER -->
     <div class="footer">
 
-        نظام حضور الطلاب © جامعة تعز
+        نظام حضور الطلاب - جامعة تعز
 
         <br>
 
-        <span id="lastServerContact">
-            آخر اتصال بالخادم: —
-        </span>
+        يعمل Online / Offline
 
     </div>
 
@@ -1001,205 +775,368 @@
 
 
 <script>
-"use strict";
 
-/* =========================================================
-   CONFIGURATION
-========================================================= */
+/* =====================================================
+   إعدادات النظام
+===================================================== */
 
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
-
-const SEMESTER_START =
-    "2026-10-04";
-
-const TARGET_LAT =
-    13.571698;
-
-const TARGET_LNG =
-    43.981730;
-
-const MAX_DISTANCE_METERS =
-    150;
-
-const MAX_GPS_ACCURACY_METERS =
-    150;
-
-const DB_NAME =
-    "TaizAttendanceDB";
-
-const DB_VERSION =
-    5;
+"https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
 
 
-/* =========================================================
-   GLOBAL STATE
-========================================================= */
+const TARGET_LAT = 13.571698;
+const TARGET_LNG = 43.981730;
+
+const MAX_DISTANCE_METERS = 150;
+const MAX_GPS_ACCURACY_METERS = 150;
+
+const SEMESTER_START = "2026-10-04";
+
+
+/* =====================================================
+   قاعدة البيانات المحلية
+===================================================== */
+
+const DB_NAME = "TaizAttendanceDB";
+
+const DB_VERSION = 6;
 
 let db = null;
 
-let currentStudent = null;
 
-let currentLecture = null;
+/* =====================================================
+   جدول المحاضرات المحلي
+===================================================== */
 
-let currentGPS = null;
+const LOCAL_LECTURES = [
 
-let deviceId = null;
+    {
+        lectureId:"SUN-01",
+        day:0,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي قواعد البيانات",
+        groups:["1"]
+    },
 
-let syncing = false;
+    {
+        lectureId:"SUN-02",
+        day:0,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي هياكل البيانات",
+        groups:["2"]
+    },
+
+    {
+        lectureId:"SUN-03",
+        day:0,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي هياكل البيانات",
+        groups:["3"]
+    },
+
+    {
+        lectureId:"SUN-04",
+        day:0,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي تحليل وتصميم النظم",
+        groups:["4"]
+    },
+
+    {
+        lectureId:"SUN-05",
+        day:0,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي تصميم الشبكات",
+        groups:["1"]
+    },
+
+    {
+        lectureId:"SUN-06",
+        day:0,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي هياكل البيانات",
+        groups:["2"]
+    },
+
+    {
+        lectureId:"SUN-07",
+        day:0,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي قواعد البيانات",
+        groups:["3"]
+    },
+
+    {
+        lectureId:"SUN-08",
+        day:0,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي تحليل وتصميم النظم",
+        groups:["4"]
+    },
+
+    {
+        lectureId:"SUN-10",
+        day:0,
+        start:"12:00",
+        end:"15:00",
+        subject:"متطلبات هندسة البرمجيات",
+        groups:["1","2"]
+    },
 
 
-/* =========================================================
-   DOM
-========================================================= */
+    {
+        lectureId:"MON-01",
+        day:1,
+        start:"08:00",
+        end:"10:00",
+        subject:"تصميم المنطق الرقمي",
+        groups:["1","2"]
+    },
+
+    {
+        lectureId:"MON-02",
+        day:1,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي هياكل البيانات",
+        groups:["3"]
+    },
+
+    {
+        lectureId:"MON-03",
+        day:1,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي هياكل البيانات",
+        groups:["1"]
+    },
+
+    {
+        lectureId:"MON-04",
+        day:1,
+        start:"10:00",
+        end:"12:00",
+        subject:"تصميم المنطق الرقمي",
+        groups:["3","4"]
+    },
+
+    {
+        lectureId:"MON-05",
+        day:1,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي هياكل البيانات",
+        groups:["2"]
+    },
+
+    {
+        lectureId:"MON-06",
+        day:1,
+        start:"12:00",
+        end:"15:00",
+        subject:"متطلبات هندسة البرمجيات",
+        groups:["3","4"]
+    },
+
+
+    {
+        lectureId:"TUE-01",
+        day:2,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي الاحتمالات والإحصاء",
+        groups:["2","3"]
+    },
+
+    {
+        lectureId:"TUE-02",
+        day:2,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي تحليل وتصميم النظم",
+        groups:["1"]
+    },
+
+    {
+        lectureId:"TUE-03",
+        day:2,
+        start:"08:00",
+        end:"10:00",
+        subject:"عملي قواعد البيانات",
+        groups:["4"]
+    },
+
+    {
+        lectureId:"TUE-04",
+        day:2,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي قواعد البيانات",
+        groups:["2"]
+    },
+
+    {
+        lectureId:"TUE-05",
+        day:2,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي تحليل وتصميم النظم",
+        groups:["3"]
+    },
+
+    {
+        lectureId:"TUE-06",
+        day:2,
+        start:"10:00",
+        end:"12:00",
+        subject:"عملي الاحتمالات والإحصاء",
+        groups:["1","4"]
+    },
+
+
+    {
+        lectureId:"WED-01",
+        day:3,
+        start:"08:00",
+        end:"10:00",
+        subject:"تحليل وتصميم النظم",
+        groups:["1","2"]
+    },
+
+    {
+        lectureId:"WED-02",
+        day:3,
+        start:"08:00",
+        end:"10:00",
+        subject:"هياكل البيانات والخوارزميات",
+        groups:["3","4"]
+    },
+
+    {
+        lectureId:"WED-03",
+        day:3,
+        start:"10:00",
+        end:"12:00",
+        subject:"تحليل وتصميم النظم",
+        groups:["3","4"]
+    },
+
+    {
+        lectureId:"WED-04",
+        day:3,
+        start:"10:00",
+        end:"12:00",
+        subject:"هياكل البيانات والخوارزميات",
+        groups:["1","2"]
+    },
+
+
+    {
+        lectureId:"THU-01",
+        day:4,
+        start:"08:00",
+        end:"10:00",
+        subject:"الاحتمالات والإحصاء",
+        groups:["1","2"]
+    },
+
+    {
+        lectureId:"THU-02",
+        day:4,
+        start:"08:00",
+        end:"10:00",
+        subject:"قواعد البيانات",
+        groups:["3","4"]
+    },
+
+    {
+        lectureId:"THU-03",
+        day:4,
+        start:"10:00",
+        end:"12:00",
+        subject:"قواعد البيانات",
+        groups:["1","2"]
+    },
+
+    {
+        lectureId:"THU-04",
+        day:4,
+        start:"12:00",
+        end:"14:00",
+        subject:"الاحتمالات والإحصاء",
+        groups:["3","4"]
+    }
+
+];
+
+
+/* =====================================================
+   أسماء الأيام
+===================================================== */
+
+const DAYS = [
+    "الأحد",
+    "الاثنين",
+    "الثلاثاء",
+    "الأربعاء",
+    "الخميس",
+    "الجمعة",
+    "السبت"
+];
+
+
+/* =====================================================
+   Device ID
+===================================================== */
+
+function getDeviceId() {
+
+    let id =
+        localStorage.getItem("taiz_device_id");
+
+    if (!id) {
+
+        id =
+            "DEV-" +
+            Date.now().toString(36) +
+            "-" +
+            Math.random()
+                .toString(36)
+                .substring(2,10);
+
+        localStorage.setItem(
+            "taiz_device_id",
+            id
+        );
+    }
+
+    return id;
+}
+
+
+/* =====================================================
+   عناصر الصفحة
+===================================================== */
 
 const $ = id =>
     document.getElementById(id);
 
 
-/* =========================================================
-   START
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", async () => {
-
-    try {
-
-        deviceId =
-            await getDeviceId();
-
-        $("deviceView").textContent =
-            deviceId;
-
-        await openDatabase();
-
-        setupEvents();
-
-        updateConnectionUI();
-
-        await renderSyncLog();
-
-        await testServerConnection(false);
-
-        registerServiceWorker();
-
-        window.addEventListener(
-            "online",
-            async () => {
-
-                updateConnectionUI();
-
-                showResult(
-                    "attendanceResult",
-                    "عاد الاتصال بالإنترنت. جاري فحص الخادم...",
-                    "info"
-                );
-
-                await testServerConnection(false);
-
-                await syncPending();
-
-            }
-        );
-
-
-        window.addEventListener(
-            "offline",
-            () => {
-
-                updateConnectionUI();
-
-                showResult(
-                    "attendanceResult",
-                    "تم فقد الاتصال بالإنترنت. يمكنك الاستمرار، وسيتم حفظ العملية محليًا.",
-                    "warning"
-                );
-
-            }
-        );
-
-    } catch (error) {
-
-        showDiagnostic(
-            "خطأ عند تشغيل الصفحة:\n" +
-            error.message
-        );
-
-    }
-
-});
-
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-function setupEvents() {
-
-    $("searchBtn")
-        .addEventListener(
-            "click",
-            loadStudent
-        );
-
-
-    $("studentIdInput")
-        .addEventListener(
-            "keydown",
-            event => {
-
-                if (event.key === "Enter") {
-                    loadStudent();
-                }
-
-            }
-        );
-
-
-    $("gpsBtn")
-        .addEventListener(
-            "click",
-            getGPS
-        );
-
-
-    $("attendanceBtn")
-        .addEventListener(
-            "click",
-            recordAttendance
-        );
-
-
-    $("syncBtn")
-        .addEventListener(
-            "click",
-            syncPending
-        );
-
-
-    $("clearSyncBtn")
-        .addEventListener(
-            "click",
-            clearSyncLog
-        );
-
-
-    $("testConnectionBtn")
-        .addEventListener(
-            "click",
-            () => testServerConnection(true)
-        );
-
-}
-
-
-/* =========================================================
-   INDEXED DB
-========================================================= */
+/* =====================================================
+   فتح IndexedDB
+===================================================== */
 
 function openDatabase() {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve,reject) => {
 
         const request =
             indexedDB.open(
@@ -1209,1476 +1146,436 @@ function openDatabase() {
 
 
         request.onupgradeneeded =
-            event => {
+        event => {
 
-                const database =
-                    event.target.result;
-
-
-                if (
-                    !database.objectStoreNames.contains(
-                        "pendingAttendance"
-                    )
-                ) {
-
-                    database.createObjectStore(
-                        "pendingAttendance",
-                        {
-                            keyPath: "id"
-                        }
-                    );
-
-                }
+            const database =
+                event.target.result;
 
 
-                if (
-                    !database.objectStoreNames.contains(
-                        "studentCache"
-                    )
-                ) {
+            if (
+                !database.objectStoreNames
+                .contains("pendingAttendance")
+            ) {
 
-                    database.createObjectStore(
-                        "studentCache",
-                        {
-                            keyPath: "studentId"
-                        }
-                    );
-
-                }
+                database.createObjectStore(
+                    "pendingAttendance",
+                    {keyPath:"id"}
+                );
+            }
 
 
-                if (
-                    !database.objectStoreNames.contains(
-                        "meta"
-                    )
-                ) {
+            if (
+                !database.objectStoreNames
+                .contains("studentCache")
+            ) {
 
-                    database.createObjectStore(
-                        "meta",
-                        {
-                            keyPath: "key"
-                        }
-                    );
+                database.createObjectStore(
+                    "studentCache",
+                    {keyPath:"studentId"}
+                );
+            }
 
-                }
 
-            };
+            if (
+                !database.objectStoreNames
+                .contains("meta")
+            ) {
+
+                database.createObjectStore(
+                    "meta",
+                    {keyPath:"key"}
+                );
+            }
+
+
+            if (
+                !database.objectStoreNames
+                .contains("lectures")
+            ) {
+
+                database.createObjectStore(
+                    "lectures",
+                    {keyPath:"lectureId"}
+                );
+            }
+
+        };
 
 
         request.onsuccess =
-            event => {
+        async event => {
 
-                db =
-                    event.target.result;
+            db =
+                event.target.result;
+
+            try {
+
+                await saveLocalLectures();
 
                 resolve(db);
 
-            };
+            } catch(error) {
+
+                reject(error);
+
+            }
+
+        };
 
 
         request.onerror =
-            () => {
+        () => {
 
-                reject(
-                    request.error ||
-                    new Error(
-                        "تعذر فتح قاعدة البيانات المحلية"
-                    )
-                );
+            reject(
+                request.error
+            );
 
-            };
+        };
 
     });
-
 }
 
 
-/* =========================================================
-   DEVICE ID
-========================================================= */
+/* =====================================================
+   حفظ المحاضرات محليًا
+===================================================== */
 
-async function getDeviceId() {
+function saveLocalLectures() {
 
-    const saved =
-        localStorage.getItem(
-            "TAIZ_DEVICE_ID"
-        );
+    return new Promise((resolve,reject) => {
 
+        if (!db) {
 
-    if (saved) {
-        return saved;
-    }
+            resolve();
 
-
-    let id;
+            return;
+        }
 
 
-    if (
-        window.crypto &&
-        crypto.randomUUID
-    ) {
-
-        id =
-            "WEB-" +
-            crypto.randomUUID();
-
-    } else {
-
-        id =
-            "WEB-" +
-            Date.now() +
-            "-" +
-            Math.random()
-                .toString(36)
-                .substring(2, 10);
-
-    }
+        const tx =
+            db.transaction(
+                "lectures",
+                "readwrite"
+            );
 
 
-    localStorage.setItem(
-        "TAIZ_DEVICE_ID",
-        id
-    );
+        const store =
+            tx.objectStore(
+                "lectures"
+            );
 
 
-    return id;
+        LOCAL_LECTURES.forEach(
+            lecture => {
 
-}
-
-
-/* =========================================================
-   API
-========================================================= */
-
-function buildURL(params) {
-
-    const url =
-        new URL(API_URL);
-
-
-    Object.entries(params)
-        .forEach(
-            ([key, value]) => {
-
-                if (
-                    value !== undefined &&
-                    value !== null
-                ) {
-
-                    url.searchParams.set(
-                        key,
-                        String(value)
-                    );
-
-                }
+                store.put(lecture);
 
             }
         );
 
 
-    return url.toString();
+        tx.oncomplete =
+            () => resolve();
 
+
+        tx.onerror =
+            () => reject(tx.error);
+
+    });
 }
 
 
-/* ---------------------------------------------------------
-   GET
---------------------------------------------------------- */
+/* =====================================================
+   حفظ بيانات الطالب
+===================================================== */
 
-async function apiGet(
-    params,
-    timeout = 15000
+function saveStudentLocal(student) {
+
+    return new Promise((resolve,reject) => {
+
+        const tx =
+            db.transaction(
+                "studentCache",
+                "readwrite"
+            );
+
+
+        tx.objectStore(
+            "studentCache"
+        ).put(student);
+
+
+        tx.oncomplete =
+            () => resolve();
+
+
+        tx.onerror =
+            () => reject(tx.error);
+
+    });
+}
+
+
+/* =====================================================
+   قراءة الطالب محليًا
+===================================================== */
+
+function getStudentLocal(studentId) {
+
+    return new Promise((resolve,reject) => {
+
+        const tx =
+            db.transaction(
+                "studentCache",
+                "readonly"
+            );
+
+
+        const request =
+            tx.objectStore(
+                "studentCache"
+            ).get(studentId);
+
+
+        request.onsuccess =
+            () => resolve(
+                request.result || null
+            );
+
+
+        request.onerror =
+            () => reject(
+                request.error
+            );
+
+    });
+}
+
+
+/* =====================================================
+   حفظ الحضور المحلي
+===================================================== */
+
+function savePendingAttendance(attendance) {
+
+    return new Promise((resolve,reject) => {
+
+        const tx =
+            db.transaction(
+                "pendingAttendance",
+                "readwrite"
+            );
+
+
+        tx.objectStore(
+            "pendingAttendance"
+        ).put(attendance);
+
+
+        tx.oncomplete =
+            () => resolve();
+
+
+        tx.onerror =
+            () => reject(tx.error);
+
+    });
+}
+
+
+/* =====================================================
+   قراءة كل الحضور المنتظر
+===================================================== */
+
+function getPendingAttendance() {
+
+    return new Promise((resolve,reject) => {
+
+        const tx =
+            db.transaction(
+                "pendingAttendance",
+                "readonly"
+            );
+
+
+        const request =
+            tx.objectStore(
+                "pendingAttendance"
+            ).getAll();
+
+
+        request.onsuccess =
+            () => resolve(
+                request.result || []
+            );
+
+
+        request.onerror =
+            () => reject(
+                request.error
+            );
+
+    });
+}
+
+
+/* =====================================================
+   حذف حضور بعد نجاح المزامنة
+===================================================== */
+
+function deletePendingAttendance(id) {
+
+    return new Promise((resolve,reject) => {
+
+        const tx =
+            db.transaction(
+                "pendingAttendance",
+                "readwrite"
+            );
+
+
+        tx.objectStore(
+            "pendingAttendance"
+        ).delete(id);
+
+
+        tx.oncomplete =
+            () => resolve();
+
+
+        tx.onerror =
+            () => reject(tx.error);
+
+    });
+}
+
+
+/* =====================================================
+   الوقت
+===================================================== */
+
+function timeToMinutes(time) {
+
+    const parts =
+        time.split(":").map(Number);
+
+    return (
+        parts[0] * 60 +
+        parts[1]
+    );
+}
+
+
+/* =====================================================
+   التحقق من الفصل
+===================================================== */
+
+function isSemesterDateValid() {
+
+    const now =
+        new Date();
+
+    const current =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        );
+
+
+    const start =
+        new Date(
+            2026,
+            9,
+            4
+        );
+
+
+    return current >= start;
+}
+
+
+/* =====================================================
+   المحاضرة الحالية Offline
+===================================================== */
+
+function getLocalCurrentLecture(
+    studentGroup = null
 ) {
-
-    const url =
-        buildURL(params);
-
-
-    const controller =
-        new AbortController();
-
-
-    const timer =
-        setTimeout(
-            () => controller.abort(),
-            timeout
-        );
-
-
-    try {
-
-        const response =
-            await fetch(
-                url,
-                {
-                    method: "GET",
-                    mode: "cors",
-                    cache: "no-store",
-                    redirect: "follow",
-                    signal: controller.signal
-                }
-            );
-
-
-        const text =
-            await response.text();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " +
-                response.status +
-                " - " +
-                text.substring(0, 300)
-            );
-
-        }
-
-
-        return parseJSONResponse(
-            text
-        );
-
-    } catch (error) {
-
-        if (
-            error.name ===
-            "AbortError"
-        ) {
-
-            throw new Error(
-                "انتهت مهلة الاتصال بالخادم."
-            );
-
-        }
-
-        throw error;
-
-    } finally {
-
-        clearTimeout(timer);
-
-    }
-
-}
-
-
-/* ---------------------------------------------------------
-   POST
---------------------------------------------------------- */
-
-async function apiPost(
-    data,
-    timeout = 20000
-) {
-
-    const controller =
-        new AbortController();
-
-
-    const timer =
-        setTimeout(
-            () => controller.abort(),
-            timeout
-        );
-
-
-    try {
-
-        /*
-         * نستخدم text/plain بدل
-         * application/json لتقليل مشاكل
-         * CORS مع Google Apps Script.
-         */
-
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-                    mode: "cors",
-                    redirect: "follow",
-                    cache: "no-store",
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-                    body:
-                        JSON.stringify(data),
-                    signal:
-                        controller.signal
-                }
-            );
-
-
-        const text =
-            await response.text();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " +
-                response.status +
-                " - " +
-                text.substring(0, 300)
-            );
-
-        }
-
-
-        return parseJSONResponse(
-            text
-        );
-
-    } catch (error) {
-
-        if (
-            error.name ===
-            "AbortError"
-        ) {
-
-            throw new Error(
-                "انتهت مهلة الاتصال بالخادم."
-            );
-
-        }
-
-        throw error;
-
-    } finally {
-
-        clearTimeout(timer);
-
-    }
-
-}
-
-
-/* =========================================================
-   JSON PARSER
-========================================================= */
-
-function parseJSONResponse(text) {
-
-    const clean =
-        String(text || "")
-            .trim();
-
-
-    if (!clean) {
-
-        throw new Error(
-            "الخادم أعاد استجابة فارغة."
-        );
-
-    }
-
-
-    try {
-
-        return JSON.parse(
-            clean
-        );
-
-    } catch {
-
-        /*
-         * أحيانًا قد تعود استجابة
-         * Google Apps Script بشكل يحتوي
-         * على نص إضافي.
-         */
-
-        const first =
-            clean.indexOf("{");
-
-        const last =
-            clean.lastIndexOf("}");
-
-
-        if (
-            first >= 0 &&
-            last > first
-        ) {
-
-            const possibleJSON =
-                clean.substring(
-                    first,
-                    last + 1
-                );
-
-
-            try {
-
-                return JSON.parse(
-                    possibleJSON
-                );
-
-            } catch {}
-
-        }
-
-
-        throw new Error(
-            "استجابة الخادم ليست JSON صحيحة:\n" +
-            clean.substring(0, 500)
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SERVER CONNECTION
-========================================================= */
-
-async function testServerConnection(
-    showMessage = true
-) {
-
-    setConnectionTesting();
-
-
-    try {
-
-        const result =
-            await apiGet(
-                {
-                    action:
-                        "testConnection"
-                }
-            );
-
-
-        markServerOnline();
-
-
-        setLastServerContact();
-
-
-        showDiagnostic(
-            JSON.stringify(
-                result,
-                null,
-                2
-            )
-        );
-
-
-        if (showMessage) {
-
-            showResult(
-                "attendanceResult",
-                "تم الاتصال بالخادم بنجاح.",
-                "success"
-            );
-
-        }
-
-
-        return true;
-
-    } catch (error) {
-
-        /*
-         * إذا كان الإنترنت موجودًا لكن
-         * Apps Script لم يستجب، نفرق بينهما.
-         */
-
-        if (navigator.onLine) {
-
-            setConnectionProblem();
-
-        } else {
-
-            setOfflineUI();
-
-        }
-
-
-        showDiagnostic(
-            "فشل الاتصال بالخادم:\n\n" +
-            error.message +
-            "\n\nAPI:\n" +
-            API_URL
-        );
-
-
-        if (showMessage) {
-
-            showResult(
-                "attendanceResult",
-                "تعذر الاتصال بخادم النظام. راجع قسم تشخيص الاتصال أسفل الصفحة.",
-                "error"
-            );
-
-        }
-
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   CONNECTION UI
-========================================================= */
-
-function updateConnectionUI() {
-
-    if (
-        !navigator.onLine
-    ) {
-
-        setOfflineUI();
-
-    } else {
-
-        setConnectionTesting();
-
-    }
-
-}
-
-
-function setConnectionTesting() {
-
-    $("statusDot")
-        .className =
-        "status-dot status-testing";
-
-    $("connectionText")
-        .textContent =
-        "جاري الاتصال بالخادم...";
-
-}
-
-
-function markServerOnline() {
-
-    $("statusDot")
-        .className =
-        "status-dot status-online";
-
-    $("connectionText")
-        .textContent =
-        "متصل بالخادم";
-
-}
-
-
-function setConnectionProblem() {
-
-    $("statusDot")
-        .className =
-        "status-dot status-offline";
-
-    $("connectionText")
-        .textContent =
-        "الإنترنت موجود لكن الخادم لا يستجيب";
-
-}
-
-
-function setOfflineUI() {
-
-    $("statusDot")
-        .className =
-        "status-dot status-offline";
-
-    $("connectionText")
-        .textContent =
-        "غير متصل بالإنترنت";
-
-}
-
-
-function setLastServerContact() {
 
     const now =
         new Date();
 
 
-    $("lastServerContact")
-        .textContent =
-        "آخر اتصال بالخادم: " +
-        now.toLocaleTimeString(
-            "ar-YE"
-        );
-
-}
+    const day =
+        now.getDay();
 
 
-/* =========================================================
-   STUDENT
-========================================================= */
-
-async function loadStudent() {
-
-    const studentId =
-        $("studentIdInput")
-            .value
-            .trim();
+    const currentMinutes =
+        now.getHours() * 60 +
+        now.getMinutes();
 
 
-    if (!studentId) {
+    const matches =
+        LOCAL_LECTURES.filter(
+            lecture => {
 
-        showResult(
-            "searchResult",
-            "أدخل رقم الطالب أولاً.",
-            "warning"
-        );
-
-        return;
-
-    }
-
-
-    setLoading(
-        "searchLoading",
-        true
-    );
-
-
-    hideElement(
-        "studentCard"
-    );
-
-
-    currentStudent =
-        null;
-
-    currentLecture =
-        null;
-
-    currentGPS =
-        null;
-
-
-    resetLecture();
-
-    resetGPS();
-
-    updateAttendanceButton();
-
-
-    try {
-
-        /*
-         * أولاً نحاول الخادم.
-         */
-
-        const result =
-            await apiGet(
-                {
-                    action:
-                        "student",
-                    studentId:
-                        studentId
+                if (
+                    lecture.day !== day
+                ) {
+                    return false;
                 }
-            );
 
 
-        if (
-            !result ||
-            result.success === false
-        ) {
-
-            throw new Error(
-                result &&
-                result.message
-                    ? result.message
-                    : "الطالب غير موجود."
-            );
-
-        }
-
-
-        const student =
-            normalizeStudent(
-                result.student ||
-                result.data ||
-                result
-            );
-
-
-        if (
-            !student.studentId ||
-            !student.name
-        ) {
-
-            throw new Error(
-                "الخادم أعاد بيانات طالب غير مكتملة."
-            );
-
-        }
-
-
-        currentStudent =
-            student;
-
-
-        await cacheStudent(
-            currentStudent
-        );
-
-
-        showStudent();
-
-
-        showResult(
-            "searchResult",
-            "تم العثور على الطالب بنجاح.",
-            "success"
-        );
-
-
-        markServerOnline();
-
-        setLastServerContact();
-
-
-        await loadCurrentLecture();
-
-
-    } catch (error) {
-
-        /*
-         * إذا كان هناك طالب مخزن محليًا،
-         * يمكن استخدامه في حالة انقطاع الخادم.
-         */
-
-        const cached =
-            await getCachedStudent(
-                studentId
-            );
-
-
-        if (cached) {
-
-            currentStudent =
-                cached;
-
-
-            showStudent();
-
-
-            showResult(
-                "searchResult",
-                "تعذر الاتصال بالخادم، تم استخدام بيانات الطالب المحفوظة على هذا الجهاز.",
-                "warning"
-            );
-
-
-            await loadCurrentLectureOffline();
-
-        } else {
-
-            showResult(
-                "searchResult",
-                error.message ||
-                "تعذر البحث عن الطالب.",
-                "error"
-            );
-
-
-            showDiagnostic(
-                "خطأ البحث عن الطالب:\n" +
-                error.message
-            );
-
-        }
-
-    } finally {
-
-        setLoading(
-            "searchLoading",
-            false
-        );
-
-        updateAttendanceButton();
-
-    }
-
-}
-
-
-/* =========================================================
-   NORMALIZE STUDENT
-========================================================= */
-
-function normalizeStudent(data) {
-
-    return {
-
-        studentId:
-            String(
-                data.studentId ??
-                data.StudentID ??
-                data.id ??
-                data.ID ??
-                ""
-            ).trim(),
-
-        name:
-            String(
-                data.name ??
-                data.Name ??
-                data.studentName ??
-                data.StudentName ??
-                ""
-            ).trim(),
-
-        group:
-            String(
-                data.group ??
-                data.Group ??
-                data.studentGroup ??
-                data.StudentGroup ??
-                ""
-            ).trim()
-
-    };
-
-}
-
-
-/* =========================================================
-   SHOW STUDENT
-========================================================= */
-
-function showStudent() {
-
-    $("studentIdView")
-        .textContent =
-        currentStudent.studentId;
-
-
-    $("studentNameView")
-        .textContent =
-        currentStudent.name;
-
-
-    $("studentGroupView")
-        .textContent =
-        currentStudent.group ||
-        "—";
-
-
-    $("deviceView")
-        .textContent =
-        deviceId;
-
-
-    $("studentCard")
-        .style.display =
-        "block";
-
-}
-
-
-/* =========================================================
-   CACHE STUDENT
-========================================================= */
-
-function cacheStudent(student) {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            if (!db) {
-                resolve();
-                return;
-            }
-
-
-            const transaction =
-                db.transaction(
-                    "studentCache",
-                    "readwrite"
-                );
-
-
-            transaction.objectStore(
-                "studentCache"
-            ).put(
-                student
-            );
-
-
-            transaction.oncomplete =
-                () => resolve();
-
-
-            transaction.onerror =
-                () => reject(
-                    transaction.error
-                );
-
-        }
-    );
-
-}
-
-
-function getCachedStudent(
-    studentId
-) {
-
-    return new Promise(
-        resolve => {
-
-            if (!db) {
-                resolve(null);
-                return;
-            }
-
-
-            const transaction =
-                db.transaction(
-                    "studentCache",
-                    "readonly"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        "studentCache"
-                    )
-                    .get(
-                        studentId
+                const start =
+                    timeToMinutes(
+                        lecture.start
                     );
 
 
-            request.onsuccess =
-                () => {
-
-                    resolve(
-                        request.result ||
-                        null
+                const end =
+                    timeToMinutes(
+                        lecture.end
                     );
 
-                };
 
+                if (
+                    currentMinutes < start ||
+                    currentMinutes >= end
+                ) {
 
-            request.onerror =
-                () => resolve(null);
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CURRENT LECTURE
-========================================================= */
-
-async function loadCurrentLecture() {
-
-    if (!currentStudent) {
-        return;
-    }
-
-
-    setLoading(
-        "lectureLoading",
-        true
-    );
-
-
-    hideElement(
-        "lectureEmpty"
-    );
-
-
-    try {
-
-        const result =
-            await apiGet(
-                {
-                    action:
-                        "currentLecture",
-
-                    studentId:
-                        currentStudent.studentId
+                    return false;
                 }
-            );
 
 
-        if (
-            !result ||
-            result.success === false
-        ) {
+                if (
+                    studentGroup !== null
+                ) {
 
-            throw new Error(
-                result &&
-                result.message
-                    ? result.message
-                    : "لا توجد محاضرة حالية."
-            );
+                    return lecture.groups
+                        .map(String)
+                        .includes(
+                            String(studentGroup)
+                        );
 
-        }
+                }
 
 
-        const lecture =
-            normalizeLecture(
-                result.lecture ||
-                result.data ||
-                result
-            );
-
-
-        if (
-            !lecture.lectureId
-        ) {
-
-            throw new Error(
-                "لا توجد محاضرة حالية لهذا الطالب."
-            );
-
-        }
-
-
-        currentLecture =
-            lecture;
-
-
-        showLecture();
-
-
-        markServerOnline();
-
-        setLastServerContact();
-
-
-    } catch (error) {
-
-        resetLecture();
-
-
-        showResult(
-            "attendanceResult",
-            error.message ||
-            "لا توجد محاضرة حالية.",
-            "warning"
-        );
-
-    } finally {
-
-        setLoading(
-            "lectureLoading",
-            false
-        );
-
-        updateAttendanceButton();
-
-    }
-
-}
-
-
-/* =========================================================
-   OFFLINE LECTURE
-========================================================= */
-
-async function loadCurrentLectureOffline() {
-
-    /*
-     * لا نخمن المحاضرة أو وقتها من ساعة الهاتف.
-     * في وضع عدم الاتصال نطلب من المستخدم
-     * إعادة المحاولة عند توفر الخادم.
-     */
-
-    resetLecture();
-
-
-    showResult(
-        "attendanceResult",
-        "بيانات الطالب متاحة محليًا، لكن لا يمكن التحقق من المحاضرة الحالية دون الاتصال بالخادم.",
-        "warning"
-    );
-
-
-    updateAttendanceButton();
-
-}
-
-
-/* =========================================================
-   NORMALIZE LECTURE
-========================================================= */
-
-function normalizeLecture(data) {
-
-    return {
-
-        lectureId:
-            String(
-                data.lectureId ??
-                data.LectureID ??
-                data.id ??
-                data.ID ??
-                ""
-            ).trim(),
-
-        day:
-            String(
-                data.day ??
-                data.Day ??
-                ""
-            ).trim(),
-
-        start:
-            String(
-                data.start ??
-                data.Start ??
-                ""
-            ).trim(),
-
-        end:
-            String(
-                data.end ??
-                data.End ??
-                ""
-            ).trim(),
-
-        subject:
-            String(
-                data.subject ??
-                data.Subject ??
-                ""
-            ).trim(),
-
-        group:
-            String(
-                data.group ??
-                data.Group ??
-                ""
-            ).trim(),
-
-        date:
-            String(
-                data.date ??
-                data.Date ??
-                data.sessionDate ??
-                data.SessionDate ??
-                ""
-            ).trim()
-
-    };
-
-}
-
-
-/* =========================================================
-   SHOW LECTURE
-========================================================= */
-
-function showLecture() {
-
-    $("lectureEmpty")
-        .style.display =
-        "none";
-
-
-    $("lectureBox")
-        .style.display =
-        "block";
-
-
-    $("lectureSubject")
-        .textContent =
-        currentLecture.subject ||
-        "—";
-
-
-    $("lectureId")
-        .textContent =
-        currentLecture.lectureId ||
-        "—";
-
-
-    $("lectureDay")
-        .textContent =
-        currentLecture.day ||
-        "—";
-
-
-    $("lectureStart")
-        .textContent =
-        currentLecture.start ||
-        "—";
-
-
-    $("lectureEnd")
-        .textContent =
-        currentLecture.end ||
-        "—";
-
-
-    $("lectureGroup")
-        .textContent =
-        currentLecture.group ||
-        currentStudent.group ||
-        "—";
-
-
-    $("lectureDate")
-        .textContent =
-        currentLecture.date ||
-        "اليوم";
-
-}
-
-
-/* =========================================================
-   RESET LECTURE
-========================================================= */
-
-function resetLecture() {
-
-    $("lectureBox")
-        .style.display =
-        "none";
-
-
-    $("lectureEmpty")
-        .style.display =
-        "block";
-
-
-    $("lectureEmpty")
-        .textContent =
-        "لم يتم تحميل محاضرة حالية بعد.";
-
-}
-
-
-/* =========================================================
-   GPS
-========================================================= */
-
-function getGPS() {
-
-    if (!navigator.geolocation) {
-
-        showGPSState(
-            "المتصفح لا يدعم GPS.",
-            "bad"
-        );
-
-        return;
-
-    }
-
-
-    showGPSState(
-        "جاري تحديد الموقع...",
-        "warn"
-    );
-
-
-    $("gpsBtn")
-        .disabled =
-        true;
-
-
-    navigator.geolocation.getCurrentPosition(
-
-        position => {
-
-            const latitude =
-                position.coords.latitude;
-
-            const longitude =
-                position.coords.longitude;
-
-            const accuracy =
-                position.coords.accuracy;
-
-
-            const distance =
-                calculateDistance(
-                    latitude,
-                    longitude,
-                    TARGET_LAT,
-                    TARGET_LNG
-                );
-
-
-            currentGPS = {
-
-                latitude,
-                longitude,
-                accuracy,
-                distance
-
-            };
-
-
-            $("gpsLat")
-                .textContent =
-                latitude.toFixed(6);
-
-
-            $("gpsLng")
-                .textContent =
-                longitude.toFixed(6);
-
-
-            $("gpsAccuracy")
-                .textContent =
-                Math.round(
-                    accuracy
-                ) +
-                " متر";
-
-
-            $("gpsDistance")
-                .textContent =
-                Math.round(
-                    distance
-                ) +
-                " متر";
-
-
-            if (
-                accuracy >
-                MAX_GPS_ACCURACY_METERS
-            ) {
-
-                showGPSState(
-                    "دقة GPS ضعيفة",
-                    "bad"
-                );
-
-            } else if (
-                distance >
-                MAX_DISTANCE_METERS
-            ) {
-
-                showGPSState(
-                    "أنت خارج نطاق الحضور",
-                    "bad"
-                );
-
-            } else {
-
-                showGPSState(
-                    "الموقع صالح للتسجيل",
-                    "good"
-                );
+                return true;
 
             }
+        );
 
 
-            updateAttendanceButton();
-
-            $("gpsBtn")
-                .disabled =
-                false;
-
-        },
-
-        error => {
-
-            currentGPS =
-                null;
-
-
-            let message =
-                "تعذر تحديد الموقع.";
-
-
-            if (
-                error.code ===
-                error.PERMISSION_DENIED
-            ) {
-
-                message =
-                    "تم رفض صلاحية الموقع. فعّل إذن الموقع للمتصفح.";
-
-            } else if (
-                error.code ===
-                error.POSITION_UNAVAILABLE
-            ) {
-
-                message =
-                    "موقع GPS غير متاح حاليًا.";
-
-            } else if (
-                error.code ===
-                error.TIMEOUT
-            ) {
-
-                message =
-                    "انتهت مهلة تحديد الموقع.";
-
-            }
-
-
-            showGPSState(
-                message,
-                "bad"
-            );
-
-
-            $("gpsBtn")
-                .disabled =
-                false;
-
-
-            updateAttendanceButton();
-
-        },
-
-        {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0
-        }
-
-    );
-
+    return matches.length
+        ? matches[0]
+        : null;
 }
 
 
-/* =========================================================
-   GPS STATE
-========================================================= */
-
-function showGPSState(
-    text,
-    type
-) {
-
-    const element =
-        $("gpsState");
-
-
-    element.textContent =
-        text;
-
-
-    element.className =
-        type === "good"
-            ? "gps-good"
-            : type === "bad"
-                ? "gps-bad"
-                : "gps-warn";
-
-}
-
-
-/* =========================================================
-   DISTANCE
-========================================================= */
+/* =====================================================
+   حساب المسافة
+===================================================== */
 
 function calculateDistance(
     lat1,
@@ -2687,37 +1584,30 @@ function calculateDistance(
     lon2
 ) {
 
-    const R =
-        6371000;
-
-
-    const toRad =
-        value =>
-            value *
-            Math.PI /
-            180;
+    const R = 6371000;
 
 
     const dLat =
-        toRad(
-            lat2 - lat1
-        );
+        (lat2 - lat1) *
+        Math.PI / 180;
 
 
     const dLon =
-        toRad(
-            lon2 - lon1
-        );
+        (lon2 - lon1) *
+        Math.PI / 180;
 
 
     const a =
         Math.sin(dLat / 2) ** 2 +
+
         Math.cos(
-            toRad(lat1)
+            lat1 * Math.PI / 180
         ) *
+
         Math.cos(
-            toRad(lat2)
+            lat2 * Math.PI / 180
         ) *
+
         Math.sin(dLon / 2) ** 2;
 
 
@@ -2730,144 +1620,918 @@ function calculateDistance(
 
 
     return R * c;
+}
+
+
+/* =====================================================
+   GPS Offline
+===================================================== */
+
+function getCurrentLocation() {
+
+    return new Promise(
+        (resolve,reject) => {
+
+            if (
+                !navigator.geolocation
+            ) {
+
+                reject(
+                    new Error(
+                        "هذا الجهاز لا يدعم GPS"
+                    )
+                );
+
+                return;
+            }
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                position => {
+
+                    const lat =
+                        position.coords.latitude;
+
+                    const lng =
+                        position.coords.longitude;
+
+                    const accuracy =
+                        position.coords.accuracy;
+
+
+                    const distance =
+                        calculateDistance(
+                            lat,
+                            lng,
+                            TARGET_LAT,
+                            TARGET_LNG
+                        );
+
+
+                    resolve({
+
+                        latitude:lat,
+
+                        longitude:lng,
+
+                        accuracy,
+
+                        distance,
+
+                        inside:
+
+                            distance <=
+                            MAX_DISTANCE_METERS &&
+
+                            accuracy <=
+                            MAX_GPS_ACCURACY_METERS
+
+                    });
+
+                },
+
+
+                error => {
+
+                    let message =
+                        "تعذر تحديد الموقع";
+
+
+                    if (
+                        error.code === 1
+                    ) {
+
+                        message =
+                            "تم رفض إذن الموقع";
+
+                    }
+
+
+                    if (
+                        error.code === 2
+                    ) {
+
+                        message =
+                            "تعذر تحديد موقع GPS";
+
+                    }
+
+
+                    if (
+                        error.code === 3
+                    ) {
+
+                        message =
+                            "انتهت مهلة تحديد الموقع";
+
+                    }
+
+
+                    reject(
+                        new Error(message)
+                    );
+
+                },
+
+
+                {
+
+                    enableHighAccuracy:true,
+
+                    timeout:15000,
+
+                    maximumAge:0
+
+                }
+
+            );
+
+        }
+    );
+}
+
+
+/* =====================================================
+   عرض المحاضرة
+===================================================== */
+
+function displayLecture(
+    lecture
+) {
+
+    if (!lecture) {
+
+        $("lectureData")
+            .classList
+            .add("hidden");
+
+        $("lectureResult").className =
+            "result warning";
+
+        $("lectureResult").textContent =
+            "لا توجد محاضرة حالية.";
+
+        $("attendanceBtn").disabled =
+            true;
+
+        return;
+    }
+
+
+    $("lectureData")
+        .classList
+        .remove("hidden");
+
+
+    $("subject").textContent =
+        lecture.subject;
+
+
+    $("lectureId").textContent =
+        lecture.lectureId;
+
+
+    $("lectureDay").textContent =
+        DAYS[lecture.day];
+
+
+    $("lectureTime").textContent =
+        lecture.start +
+        " - " +
+        lecture.end;
+
+
+    $("lectureGroups").textContent =
+        lecture.groups.join(" ، ");
+
+
+    $("lectureDate").textContent =
+        formatDate(
+            new Date()
+        );
+
+
+    $("lectureResult").className =
+        "result success";
+
+
+    $("lectureResult").textContent =
+        "تم التحقق من المحاضرة محليًا بدون الحاجة إلى الإنترنت.";
 
 }
 
 
-/* =========================================================
-   ATTENDANCE BUTTON
-========================================================= */
+/* =====================================================
+   التحقق من المحاضرة
+===================================================== */
+
+function checkCurrentLecture() {
+
+    if (!isSemesterDateValid()) {
+
+        $("lectureResult").className =
+            "result warning";
+
+        $("lectureResult").textContent =
+            "التاريخ الحالي خارج فترة الفصل الدراسي.";
+
+        return null;
+    }
+
+
+    const student =
+        window.currentStudent;
+
+
+    const group =
+        student
+            ? (
+                student.group ||
+                student.Group ||
+                ""
+            )
+            : null;
+
+
+    const lecture =
+        getLocalCurrentLecture(
+            group || null
+        );
+
+
+    displayLecture(
+        lecture
+    );
+
+
+    return lecture;
+}
+
+
+/* =====================================================
+   التحقق من GPS وعرضه
+===================================================== */
+
+async function checkGPS() {
+
+    $("gpsState").className =
+        "result info";
+
+    $("gpsState").textContent =
+        "جاري الحصول على موقع GPS...";
+
+
+    try {
+
+        const location =
+            await getCurrentLocation();
+
+
+        $("gpsLat").textContent =
+            location.latitude.toFixed(6);
+
+
+        $("gpsLng").textContent =
+            location.longitude.toFixed(6);
+
+
+        $("gpsAccuracy").textContent =
+            Math.round(
+                location.accuracy
+            ) +
+            " متر";
+
+
+        $("gpsDistance").textContent =
+            Math.round(
+                location.distance
+            ) +
+            " متر";
+
+
+        window.currentLocation =
+            location;
+
+
+        if (
+            location.accuracy >
+            MAX_GPS_ACCURACY_METERS
+        ) {
+
+            $("gpsState").className =
+                "result warning";
+
+            $("gpsState").textContent =
+                "دقة GPS ضعيفة. الدقة الحالية: " +
+                Math.round(location.accuracy) +
+                " متر.";
+
+            $("attendanceBtn").disabled =
+                true;
+
+            return false;
+        }
+
+
+        if (
+            location.distance >
+            MAX_DISTANCE_METERS
+        ) {
+
+            $("gpsState").className =
+                "result error";
+
+            $("gpsState").textContent =
+                "أنت خارج النطاق المسموح. المسافة: " +
+                Math.round(location.distance) +
+                " متر.";
+
+            $("attendanceBtn").disabled =
+                true;
+
+            return false;
+        }
+
+
+        $("gpsState").className =
+            "result success";
+
+        $("gpsState").textContent =
+            "تم التحقق من الموقع بنجاح. أنت داخل النطاق المسموح.";
+
+
+        updateAttendanceButton();
+
+
+        return true;
+
+    } catch(error) {
+
+        $("gpsState").className =
+            "result error";
+
+        $("gpsState").textContent =
+            error.message;
+
+
+        $("attendanceBtn").disabled =
+            true;
+
+
+        return false;
+    }
+}
+
+
+/* =====================================================
+   توحيد بيانات الطالب
+===================================================== */
+
+function normalizeStudent(data) {
+
+    if (!data) {
+        return null;
+    }
+
+
+    const raw =
+        data.student ||
+        data.data ||
+        data;
+
+
+    if (
+        raw.success === false
+    ) {
+        return null;
+    }
+
+
+    return {
+
+        studentId:
+            String(
+                raw.studentId ??
+                raw.StudentID ??
+                raw.id ??
+                ""
+            ).trim(),
+
+
+        name:
+            String(
+                raw.name ??
+                raw.Name ??
+                ""
+            ).trim(),
+
+
+        group:
+            String(
+                raw.group ??
+                raw.Group ??
+                ""
+            ).trim()
+
+    };
+}
+
+
+/* =====================================================
+   البحث عن الطالب من الخادم
+===================================================== */
+
+async function searchStudentOnline(
+    studentId
+) {
+
+    const url =
+        API_URL +
+        "?action=student&studentId=" +
+        encodeURIComponent(
+            studentId
+        );
+
+
+    const response =
+        await fetch(
+            url,
+            {
+                method:"GET",
+                mode:"cors",
+                cache:"no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "تعذر الاتصال بالخادم"
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    const student =
+        normalizeStudent(
+            data
+        );
+
+
+    if (
+        !student ||
+        !student.studentId
+    ) {
+
+        throw new Error(
+            "لم يتم العثور على الطالب"
+        );
+
+    }
+
+
+    return student;
+}
+
+
+/* =====================================================
+   عرض بيانات الطالب
+===================================================== */
+
+function displayStudent(
+    student
+) {
+
+    window.currentStudent =
+        student;
+
+
+    $("studentData")
+        .classList
+        .remove("hidden");
+
+
+    $("studentIdView").textContent =
+        student.studentId;
+
+
+    $("studentNameView").textContent =
+        student.name;
+
+
+    $("studentGroupView").textContent =
+        student.group;
+
+
+    $("studentResult").className =
+        "result success";
+
+
+    $("studentResult").textContent =
+        "تم العثور على بيانات الطالب.";
+
+    checkCurrentLecture();
+
+    updateAttendanceButton();
+}
+
+
+/* =====================================================
+   البحث
+===================================================== */
+
+async function searchStudent() {
+
+    const studentId =
+        $("studentIdInput")
+            .value
+            .trim();
+
+
+    if (!studentId) {
+
+        $("studentResult").className =
+            "result warning";
+
+        $("studentResult").textContent =
+            "أدخل الرقم الجامعي أولًا.";
+
+        return;
+    }
+
+
+    $("studentResult").className =
+        "result info";
+
+    $("studentResult").textContent =
+        "جاري البحث...";
+
+
+    try {
+
+        let student = null;
+
+
+        /*
+         * أولًا:
+         * إذا كان الإنترنت موجودًا
+         * نتحقق من الخادم ونحدث النسخة المحلية.
+         */
+
+        if (
+            navigator.onLine
+        ) {
+
+            try {
+
+                student =
+                    await searchStudentOnline(
+                        studentId
+                    );
+
+
+                await saveStudentLocal(
+                    student
+                );
+
+
+                addLog(
+                    "تم جلب الطالب من الخادم وحفظه محليًا."
+                );
+
+            } catch(error) {
+
+                addLog(
+                    "تعذر الخادم، سيتم استخدام النسخة المحلية."
+                );
+
+            }
+
+        }
+
+
+        /*
+         * ثانيًا:
+         * البحث المحلي
+         */
+
+        if (!student) {
+
+            student =
+                await getStudentLocal(
+                    studentId
+                );
+
+        }
+
+
+        if (!student) {
+
+            throw new Error(
+                "بيانات هذا الطالب غير موجودة محليًا. اتصل بالإنترنت مرة واحدة للبحث عنه."
+            );
+
+        }
+
+
+        displayStudent(
+            student
+        );
+
+
+        /*
+         * إذا كان Offline:
+         * نعتمد بالكامل على البيانات المحلية.
+         */
+
+        if (
+            !navigator.onLine
+        ) {
+
+            $("studentResult").className =
+                "result success";
+
+            $("studentResult").textContent =
+                "تم العثور على بيانات الطالب محليًا. الوضع Offline فعال.";
+
+        }
+
+
+    } catch(error) {
+
+        $("studentResult").className =
+            "result error";
+
+        $("studentResult").textContent =
+            error.message;
+
+    }
+
+}
+
+
+/* =====================================================
+   زر البحث
+===================================================== */
+
+$("searchBtn")
+    .addEventListener(
+        "click",
+        searchStudent
+    );
+
+
+$("studentIdInput")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                searchStudent();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   زر GPS
+===================================================== */
+
+$("gpsBtn")
+    .addEventListener(
+        "click",
+        checkGPS
+    );
+
+
+/* =====================================================
+   تحديث زر الحضور
+===================================================== */
 
 function updateAttendanceButton() {
 
-    const button =
-        $("attendanceBtn");
+    const student =
+        window.currentStudent;
+
+    const lecture =
+        getLocalCurrentLecture(
+            student
+                ? student.group
+                : null
+        );
 
 
-    const ready =
-        !!currentStudent &&
-        !!currentLecture &&
-        !!currentGPS &&
-        currentGPS.accuracy <=
-            MAX_GPS_ACCURACY_METERS &&
-        currentGPS.distance <=
-            MAX_DISTANCE_METERS;
+    const location =
+        window.currentLocation;
 
 
-    button.disabled =
-        !ready;
+    $("attendanceBtn").disabled =
+        !student ||
+        !lecture ||
+        !location ||
+        !location.inside;
 
 }
 
 
-/* =========================================================
-   RECORD ATTENDANCE
-========================================================= */
+/* =====================================================
+   تسجيل الحضور
+===================================================== */
 
-async function recordAttendance() {
+async function registerAttendance() {
 
-    if (!currentStudent) {
+    const student =
+        window.currentStudent;
 
-        showAttendanceError(
-            "ابحث عن الطالب أولاً."
+
+    if (!student) {
+
+        showAttendance(
+            "لم يتم تحديد الطالب.",
+            "error"
         );
 
         return;
-
     }
 
 
-    if (!currentLecture) {
+    /*
+     * المحاضرة يتم التحقق منها محليًا
+     */
 
-        showAttendanceError(
-            "لا توجد محاضرة حالية."
+    const lecture =
+        getLocalCurrentLecture(
+            student.group
+        );
+
+
+    if (!lecture) {
+
+        showAttendance(
+            "لا توجد محاضرة حالية لهذه المجموعة.",
+            "error"
         );
 
         return;
-
     }
 
 
-    if (!currentGPS) {
+    /*
+     * GPS
+     */
 
-        showAttendanceError(
-            "حدد موقعك أولاً."
-        );
-
-        return;
-
-    }
+    let location =
+        window.currentLocation;
 
 
     if (
-        currentGPS.accuracy >
-        MAX_GPS_ACCURACY_METERS
+        !location ||
+        !location.inside
     ) {
 
-        showAttendanceError(
-            "دقة GPS ضعيفة. حاول الوقوف في مكان مفتوح ثم أعد تحديد الموقع."
-        );
+        const valid =
+            await checkGPS();
 
-        return;
 
+        if (!valid) {
+
+            showAttendance(
+                "يجب أن تكون داخل نطاق الجامعة.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        location =
+            window.currentLocation;
     }
 
 
-    if (
-        currentGPS.distance >
-        MAX_DISTANCE_METERS
-    ) {
+    /*
+     * SessionKey لمنع تكرار نفس الحضور
+     */
 
-        showAttendanceError(
-            "أنت خارج نطاق تسجيل الحضور."
+    const today =
+        getDateKey();
+
+
+    const sessionKey =
+        student.studentId +
+        "_" +
+        lecture.lectureId +
+        "_" +
+        today;
+
+
+    /*
+     * فحص التكرار المحلي
+     */
+
+    const pending =
+        await getPendingAttendance();
+
+
+    const alreadyPending =
+        pending.some(
+            item =>
+                item.sessionKey ===
+                sessionKey
+        );
+
+
+    if (alreadyPending) {
+
+        showAttendance(
+            "تم تسجيل حضورك لهذه المحاضرة مسبقًا على هذا الجهاز.",
+            "warning"
         );
 
         return;
-
     }
 
 
-    $("attendanceBtn")
-        .disabled =
-        true;
-
-
-    $("attendanceBtn")
-        .textContent =
-        "جاري التسجيل...";
-
+    /*
+     * إنشاء سجل الحضور
+     */
 
     const attendance = {
 
         id:
-            createLocalOperationId(),
+            createId(),
 
-        action:
-            "attendance",
 
         studentId:
-            currentStudent.studentId,
+            student.studentId,
+
+
+        name:
+            student.name,
+
+
+        group:
+            student.group,
+
 
         lectureId:
-            currentLecture.lectureId,
+            lecture.lectureId,
+
+
+        subject:
+            lecture.subject,
+
 
         latitude:
-            currentGPS.latitude,
+            location.latitude,
+
 
         longitude:
-            currentGPS.longitude,
+            location.longitude,
+
 
         accuracy:
-            currentGPS.accuracy,
+            location.accuracy,
+
+
+        distance:
+            location.distance,
+
 
         deviceId:
-            deviceId,
+            getDeviceId(),
+
 
         createdAt:
             new Date().toISOString(),
 
+
+        sessionDate:
+            today,
+
+
+        sessionKey:
+            sessionKey,
+
+
+        status:
+            "PENDING",
+
+
         attempts:
             0,
+
 
         lastError:
             ""
@@ -2875,1132 +2539,790 @@ async function recordAttendance() {
     };
 
 
-    try {
+    /*
+     * الحفظ المحلي أولًا
+     */
 
-        if (!navigator.onLine) {
-
-            await savePending(
-                attendance
-            );
-
-
-            showAttendanceWarning(
-                "لا يوجد اتصال بالإنترنت. تم حفظ الحضور على الجهاز وسيتم مزامنته تلقائيًا عند عودة الاتصال."
-            );
+    await savePendingAttendance(
+        attendance
+    );
 
 
-            return;
-
-        }
-
-
-        const result =
-            await apiPost(
-                attendance
-            );
+    showAttendance(
+        "تم تسجيل الحضور محليًا بنجاح. سيتم إرساله إلى الخادم عند توفر الإنترنت.",
+        "success"
+    );
 
 
-        if (
-            !result ||
-            result.success === false
-        ) {
-
-            throw new Error(
-                result &&
-                result.message
-                    ? result.message
-                    : "رفض الخادم تسجيل الحضور."
-            );
-
-        }
+    await updateSyncStats();
 
 
-        markServerOnline();
+    /*
+     * إذا كان الإنترنت موجودًا:
+     * حاول المزامنة فورًا.
+     */
 
-        setLastServerContact();
+    if (
+        navigator.onLine
+    ) {
 
-
-        showAttendanceSuccess(
-            result.message ||
-            "تم تسجيل الحضور بنجاح."
-        );
-
-
-        /*
-         * نضيف العملية إلى سجل المزامنة
-         * على أنها تمت بنجاح.
-         */
-
-        await saveCompletedLog(
-            attendance,
-            result
-        );
-
-
-        await renderSyncLog();
-
-
-    } catch (error) {
-
-        /*
-         * إذا فشل الاتصال نحتفظ بالعملية.
-         */
-
-        attendance.lastError =
-            error.message ||
-            "خطأ غير معروف";
-
-
-        attendance.attempts =
-            1;
-
-
-        await savePending(
-            attendance
-        );
-
-
-        showAttendanceWarning(
-            "تعذر إرسال الحضور إلى الخادم. تم حفظ العملية على الجهاز للمزامنة لاحقًا."
-        );
-
-
-        showDiagnostic(
-            "فشل تسجيل الحضور:\n" +
-            error.message
-        );
-
-
-        await renderSyncLog();
-
-    } finally {
-
-        $("attendanceBtn")
-            .disabled =
-            false;
-
-
-        $("attendanceBtn")
-            .textContent =
-            "تسجيل الحضور";
-
-        updateAttendanceButton();
+        syncPendingAttendance();
 
     }
 
 }
 
 
-/* =========================================================
-   LOCAL OPERATION ID
-========================================================= */
+/* =====================================================
+   زر الحضور
+===================================================== */
 
-function createLocalOperationId() {
-
-    return (
-        "ATT-" +
-        Date.now() +
-        "-" +
-        Math.random()
-            .toString(36)
-            .substring(2, 10)
+$("attendanceBtn")
+    .addEventListener(
+        "click",
+        registerAttendance
     );
 
-}
 
+/* =====================================================
+   عرض نتيجة الحضور
+===================================================== */
 
-/* =========================================================
-   SAVE PENDING
-========================================================= */
-
-function savePending(
-    item
+function showAttendance(
+    message,
+    type
 ) {
 
-    return new Promise(
-        (resolve, reject) => {
-
-            if (!db) {
-
-                reject(
-                    new Error(
-                        "قاعدة البيانات المحلية غير متاحة."
-                    )
-                );
-
-                return;
-
-            }
+    $("attendanceResult")
+        .className =
+        "result " + type;
 
 
-            const transaction =
-                db.transaction(
-                    "pendingAttendance",
-                    "readwrite"
-                );
-
-
-            transaction
-                .objectStore(
-                    "pendingAttendance"
-                )
-                .put(item);
-
-
-            transaction.oncomplete =
-                () => resolve();
-
-
-            transaction.onerror =
-                () => reject(
-                    transaction.error
-                );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   GET PENDING
-========================================================= */
-
-function getPending() {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const transaction =
-                db.transaction(
-                    "pendingAttendance",
-                    "readonly"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        "pendingAttendance"
-                    )
-                    .getAll();
-
-
-            request.onsuccess =
-                () => resolve(
-                    request.result || []
-                );
-
-
-            request.onerror =
-                () => reject(
-                    request.error
-                );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   DELETE PENDING
-========================================================= */
-
-function deletePending(
-    id
-) {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const transaction =
-                db.transaction(
-                    "pendingAttendance",
-                    "readwrite"
-                );
-
-
-            transaction
-                .objectStore(
-                    "pendingAttendance"
-                )
-                .delete(id);
-
-
-            transaction.oncomplete =
-                () => resolve();
-
-
-            transaction.onerror =
-                () => reject(
-                    transaction.error
-                );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SYNC
-========================================================= */
-
-async function syncPending() {
-
-    if (syncing) {
-        return;
-    }
-
-
-    if (!navigator.onLine) {
-
-        showResult(
-            "attendanceResult",
-            "لا يمكن المزامنة حاليًا لأن الجهاز غير متصل بالإنترنت.",
-            "warning"
-        );
-
-        return;
-
-    }
-
-
-    syncing =
-        true;
-
-
-    $("syncBtn")
-        .disabled =
-        true;
-
-
-    $("syncBtn")
+    $("attendanceResult")
         .textContent =
-        "جاري المزامنة...";
-
-
-    try {
-
-        const pending =
-            await getPending();
-
-
-        if (
-            pending.length === 0
-        ) {
-
-            showResult(
-                "attendanceResult",
-                "لا توجد عمليات معلقة للمزامنة.",
-                "info"
-            );
-
-            return;
-
-        }
-
-
-        let success =
-            0;
-
-        let failed =
-            0;
-
-
-        for (
-            const item of pending
-        ) {
-
-            try {
-
-                const result =
-                    await apiPost(
-                        item
-                    );
-
-
-                if (
-                    !result ||
-                    result.success === false
-                ) {
-
-                    throw new Error(
-                        result &&
-                        result.message
-                            ? result.message
-                            : "رفض الخادم العملية."
-                    );
-
-                }
-
-
-                await deletePending(
-                    item.id
-                );
-
-
-                await saveCompletedLog(
-                    item,
-                    result
-                );
-
-
-                success++;
-
-
-            } catch (error) {
-
-                failed++;
-
-
-                item.attempts =
-                    Number(
-                        item.attempts ||
-                        0
-                    ) + 1;
-
-
-                item.lastError =
-                    error.message ||
-                    "خطأ غير معروف";
-
-
-                await savePending(
-                    item
-                );
-
-            }
-
-        }
-
-
-        markServerOnline();
-
-        setLastServerContact();
-
-
-        showResult(
-            "attendanceResult",
-            `انتهت المزامنة: ${success} تمت بنجاح، ${failed} ما زالت معلقة.`,
-            failed === 0
-                ? "success"
-                : "warning"
-        );
-
-
-    } catch (error) {
-
-        showDiagnostic(
-            "خطأ المزامنة:\n" +
-            error.message
-        );
-
-
-    } finally {
-
-        syncing =
-            false;
-
-
-        $("syncBtn")
-            .disabled =
-            false;
-
-
-        $("syncBtn")
-            .textContent =
-            "🔄 مزامنة الآن";
-
-
-        await renderSyncLog();
-
-    }
+        message;
 
 }
 
 
-/* =========================================================
-   COMPLETED LOG
-========================================================= */
+/* =====================================================
+   المزامنة
+===================================================== */
 
-function saveCompletedLog(
-    item,
-    result
-) {
+async function syncPendingAttendance() {
 
-    return new Promise(
-        async resolve => {
+    if (
+        !navigator.onLine
+    ) {
 
-            /*
-             * لا نحتاج Store مستقل.
-             * نخزن سجل آخر العمليات في meta.
-             */
+        addLog(
+            "لا توجد شبكة. تم تأجيل المزامنة."
+        );
 
-            const logs =
-                await getMeta(
-                    "completedLogs"
-                ) || [];
-
-
-            logs.unshift({
-
-                id:
-                    item.id,
-
-                studentId:
-                    item.studentId,
-
-                lectureId:
-                    item.lectureId,
-
-                createdAt:
-                    item.createdAt,
-
-                syncedAt:
-                    new Date().toISOString(),
-
-                status:
-                    "success",
-
-                message:
-                    result &&
-                    result.message
-                        ? result.message
-                        : "تمت المزامنة"
-
-            });
-
-
-            /*
-             * نحتفظ بآخر 50 عملية فقط.
-             */
-
-            logs.splice(
-                50
-            );
-
-
-            await setMeta(
-                "completedLogs",
-                logs
-            );
-
-
-            resolve();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SYNC LOG UI
-========================================================= */
-
-async function renderSyncLog() {
-
-    if (!db) {
         return;
+
     }
 
 
     const pending =
-        await getPending();
+        await getPendingAttendance();
 
 
-    const completed =
-        await getMeta(
-            "completedLogs"
-        ) || [];
+    if (
+        pending.length === 0
+    ) {
+
+        addLog(
+            "لا توجد سجلات تحتاج إلى مزامنة."
+        );
+
+        await updateSyncStats();
+
+        return;
+
+    }
+
+
+    addLog(
+        "بدء مزامنة " +
+        pending.length +
+        " سجل..."
+    );
+
+
+    for (
+        const item of pending
+    ) {
+
+        try {
+
+            item.attempts =
+                Number(
+                    item.attempts || 0
+                ) + 1;
+
+
+            const response =
+                await fetch(
+                    API_URL,
+                    {
+                        method:"POST",
+
+                        mode:"cors",
+
+                        redirect:"follow",
+
+                        cache:"no-store",
+
+                        headers:{
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                id:
+                                    item.id,
+
+                                action:
+                                    "attendance",
+
+                                studentId:
+                                    item.studentId,
+
+                                name:
+                                    item.name,
+
+                                group:
+                                    item.group,
+
+                                lectureId:
+                                    item.lectureId,
+
+                                subject:
+                                    item.subject,
+
+                                latitude:
+                                    item.latitude,
+
+                                longitude:
+                                    item.longitude,
+
+                                accuracy:
+                                    item.accuracy,
+
+                                deviceId:
+                                    item.deviceId,
+
+                                createdAt:
+                                    item.createdAt,
+
+                                sessionDate:
+                                    item.sessionDate,
+
+                                sessionKey:
+                                    item.sessionKey,
+
+                                attempts:
+                                    item.attempts,
+
+                                lastError:
+                                    item.lastError
+
+                            })
+                    }
+                );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.success === false
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "رفض الخادم عملية الحضور"
+                );
+
+            }
+
+
+            /*
+             * نجحت المزامنة
+             */
+
+            await deletePendingAttendance(
+                item.id
+            );
+
+
+            addLog(
+                "✓ تمت مزامنة: " +
+                item.studentId +
+                " / " +
+                item.lectureId
+            );
+
+
+        } catch(error) {
+
+            item.lastError =
+                error.message;
+
+
+            await savePendingAttendance(
+                item
+            );
+
+
+            addLog(
+                "✗ فشل إرسال " +
+                item.studentId +
+                ": " +
+                error.message
+            );
+
+        }
+
+    }
+
+
+    await updateSyncStats();
+
+}
+
+
+/* =====================================================
+   زر المزامنة
+===================================================== */
+
+$("syncBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !navigator.onLine
+            ) {
+
+                addLog(
+                    "الجهاز غير متصل بالإنترنت."
+                );
+
+                return;
+            }
+
+
+            await syncPendingAttendance();
+
+        }
+    );
+
+
+/* =====================================================
+   إحصائيات المزامنة
+===================================================== */
+
+async function updateSyncStats() {
+
+    const pending =
+        await getPendingAttendance();
+
+
+    $("pendingCount").textContent =
+        pending.length;
 
 
     const errors =
         pending.filter(
             item =>
                 item.lastError
+        ).length;
+
+
+    $("errorCount").textContent =
+        errors;
+
+
+    const completed =
+        Number(
+            localStorage.getItem(
+                "completedAttendanceCount"
+            ) || 0
         );
 
 
-    $("pendingCount")
-        .textContent =
-        pending.length;
+    $("completedCount").textContent =
+        completed;
+
+}
 
 
-    $("syncSuccessCount")
-        .textContent =
-        completed.length;
+/* =====================================================
+   الاتصال
+===================================================== */
 
-
-    $("syncErrorCount")
-        .textContent =
-        errors.length;
-
-
-    const container =
-        $("syncLog");
-
-
-    container.innerHTML =
-        "";
-
+function updateNetworkStatus() {
 
     if (
-        pending.length === 0 &&
-        completed.length === 0
+        navigator.onLine
     ) {
 
-        container.innerHTML = `
-            <div style="
-                text-align:center;
-                color:#64748b;
-                padding:15px;
-            ">
-                لا توجد عمليات في سجل المزامنة.
-            </div>
-        `;
+        $("netState").textContent =
+            "🟢 متصل";
 
-        return;
+        $("netState").className =
+            "badge online";
+
+
+        $("connectionAlert")
+            .innerHTML =
+            `<div class="online-alert">
+                🟢 الإنترنت متوفر.
+                سيتم مزامنة أي حضور محفوظ محليًا.
+             </div>`;
+
+
+        syncPendingAttendance();
+
+    } else {
+
+        $("netState").textContent =
+            "🔴 غير متصل - Offline";
+
+        $("netState").className =
+            "badge offline";
+
+
+        $("connectionAlert")
+            .innerHTML =
+            `<div class="offline-alert">
+                🔴 لا يوجد إنترنت.
+                <br>
+                يمكنك مع ذلك التحقق من المحاضرة وGPS وتسجيل الحضور محليًا.
+             </div>`;
+
+    }
+
+}
+
+
+window.addEventListener(
+    "online",
+    updateNetworkStatus
+);
+
+
+window.addEventListener(
+    "offline",
+    updateNetworkStatus
+);
+
+
+/* =====================================================
+   التاريخ
+===================================================== */
+
+function formatDate(
+    date
+) {
+
+    return date
+        .toLocaleDateString(
+            "ar-YE"
+        );
+
+}
+
+
+function getDateKey() {
+
+    const now =
+        new Date();
+
+
+    const y =
+        now.getFullYear();
+
+
+    const m =
+        String(
+            now.getMonth() + 1
+        ).padStart(2,"0");
+
+
+    const d =
+        String(
+            now.getDate()
+        ).padStart(2,"0");
+
+
+    return (
+        y +
+        "-" +
+        m +
+        "-" +
+        d
+    );
+
+}
+
+
+/* =====================================================
+   إنشاء ID
+===================================================== */
+
+function createId() {
+
+    if (
+        window.crypto &&
+        crypto.randomUUID
+    ) {
+
+        return crypto.randomUUID();
 
     }
 
 
-    pending.forEach(
-        item => {
+    return (
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .substring(2)
+    );
 
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                "sync-item";
+}
 
 
-            element.innerHTML = `
-                <div class="sync-item-top">
+/* =====================================================
+   سجل التشخيص
+===================================================== */
 
-                    <strong>
-                        ${escapeHTML(
-                            item.studentId
-                        )}
-                    </strong>
+function addLog(
+    message
+) {
 
-                    <span class="sync-status sync-pending">
-                        معلقة
-                    </span>
-
-                </div>
-
-                <small>
-                    المحاضرة:
-                    ${escapeHTML(
-                        item.lectureId
-                    )}
-                </small>
-
-                <small>
-                    وقت الحفظ:
-                    ${formatDate(
-                        item.createdAt
-                    )}
-                </small>
-
-                <small>
-                    المحاولات:
-                    ${item.attempts || 0}
-                </small>
-
-                ${
-                    item.lastError
-                    ? `
-                        <small style="color:#b91c1c">
-                            آخر خطأ:
-                            ${escapeHTML(
-                                item.lastError
-                            )}
-                        </small>
-                    `
-                    : ""
-                }
-
-            `;
+    const time =
+        new Date()
+            .toLocaleTimeString(
+                "ar-YE"
+            );
 
 
-            container.appendChild(
-                element
+    $("testLog").textContent +=
+        "\n[" +
+        time +
+        "] " +
+        message;
+
+
+    $("testLog").scrollTop =
+        $("testLog").scrollHeight;
+
+}
+
+
+/* =====================================================
+   اختبار النظام
+===================================================== */
+
+$("testBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            addLog(
+                "===== بدء اختبار النظام ====="
+            );
+
+
+            addLog(
+                "Internet: " +
+                (
+                    navigator.onLine
+                        ? "ONLINE"
+                        : "OFFLINE"
+                )
+            );
+
+
+            addLog(
+                "DeviceID: " +
+                getDeviceId()
+            );
+
+
+            addLog(
+                "IndexedDB: " +
+                (
+                    db
+                        ? "جاهز"
+                        : "غير جاهز"
+                )
+            );
+
+
+            const lecture =
+                checkCurrentLecture();
+
+
+            addLog(
+                "المحاضرة الحالية: " +
+                (
+                    lecture
+                        ? lecture.lectureId +
+                          " - " +
+                          lecture.subject
+                        : "لا توجد"
+                )
+            );
+
+
+            const pending =
+                await getPendingAttendance();
+
+
+            addLog(
+                "السجلات المحلية: " +
+                pending.length
+            );
+
+
+            addLog(
+                "GPS: يمكن اختباره من زر التحقق من موقعي."
+            );
+
+
+            addLog(
+                "===== انتهاء الاختبار ====="
             );
 
         }
     );
 
 
-    completed
-        .slice(0, 20)
-        .forEach(
-            item => {
+/* =====================================================
+   Service Worker
+===================================================== */
 
-                const element =
-                    document.createElement(
-                        "div"
-                    );
+async function registerServiceWorker() {
 
+    if (
+        !("serviceWorker" in navigator)
+    ) {
 
-                element.className =
-                    "sync-item";
+        $("swState").textContent =
+            "SW: غير مدعوم";
 
-
-                element.innerHTML = `
-                    <div class="sync-item-top">
-
-                        <strong>
-                            ${escapeHTML(
-                                item.studentId
-                            )}
-                        </strong>
-
-                        <span
-                            class="sync-status"
-                            style="color:#15803d">
-                            تمت
-                        </span>
-
-                    </div>
-
-                    <small>
-                        المحاضرة:
-                        ${escapeHTML(
-                            item.lectureId
-                        )}
-                    </small>
-
-                    <small>
-                        تمت المزامنة:
-                        ${formatDate(
-                            item.syncedAt
-                        )}
-                    </small>
-                `;
+        return;
+    }
 
 
-                container.appendChild(
-                    element
+    try {
+
+        const registration =
+            await navigator.serviceWorker.register(
+                "./sw.js?v=11",
+                {
+                    updateViaCache:"none"
+                }
+            );
+
+
+        $("swState").textContent =
+            "🟢 التطبيق Offline جاهز";
+
+
+        /*
+         * إذا كانت هناك نسخة جديدة تنتظر
+         */
+
+        if (
+            registration.waiting
+        ) {
+
+            registration.waiting.postMessage({
+                type:"SKIP_WAITING"
+            });
+
+        }
+
+
+        registration.addEventListener(
+            "updatefound",
+            () => {
+
+                const worker =
+                    registration.installing;
+
+
+                if (!worker) return;
+
+
+                worker.addEventListener(
+                    "statechange",
+                    () => {
+
+                        if (
+                            worker.state ===
+                            "installed"
+                        ) {
+
+                            if (
+                                navigator.serviceWorker.controller
+                            ) {
+
+                                worker.postMessage({
+                                    type:
+                                        "SKIP_WAITING"
+                                });
+
+                            }
+
+                        }
+
+                    }
                 );
 
             }
         );
 
-}
 
+        navigator.serviceWorker.addEventListener(
+            "controllerchange",
+            () => {
 
-/* =========================================================
-   CLEAR SYNC LOG
-========================================================= */
-
-async function clearSyncLog() {
-
-    const pending =
-        await getPending();
-
-
-    if (
-        pending.length > 0
-    ) {
-
-        const confirmed =
-            confirm(
-                "توجد عمليات حضور لم تتم مزامنتها. لا يُنصح بمسح السجل الآن.\n\nهل تريد المتابعة؟"
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-    }
-
-
-    await setMeta(
-        "completedLogs",
-        []
-    );
-
-
-    /*
-     * لا نحذف pending تلقائيًا.
-     * لأن حذفها قد يؤدي إلى فقدان حضور الطلاب.
-     */
-
-    await renderSyncLog();
-
-
-    showResult(
-        "attendanceResult",
-        "تم مسح سجل العمليات المكتملة. العمليات المعلقة بقيت محفوظة.",
-        "info"
-    );
-
-}
-
-
-/* =========================================================
-   META
-========================================================= */
-
-function getMeta(key) {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const transaction =
-                db.transaction(
-                    "meta",
-                    "readonly"
-                );
-
-
-            const request =
-                transaction
-                    .objectStore(
-                        "meta"
+                if (
+                    !sessionStorage.getItem(
+                        "swReloaded"
                     )
-                    .get(key);
+                ) {
 
-
-            request.onsuccess =
-                () => {
-
-                    resolve(
-                        request.result
-                            ? request.result.value
-                            : null
+                    sessionStorage.setItem(
+                        "swReloaded",
+                        "1"
                     );
 
-                };
+                    location.reload();
 
+                }
 
-            request.onerror =
-                () => reject(
-                    request.error
-                );
-
-        }
-    );
-
-}
-
-
-function setMeta(
-    key,
-    value
-) {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const transaction =
-                db.transaction(
-                    "meta",
-                    "readwrite"
-                );
-
-
-            transaction
-                .objectStore(
-                    "meta"
-                )
-                .put({
-                    key,
-                    value
-                });
-
-
-            transaction.oncomplete =
-                () => resolve();
-
-
-            transaction.onerror =
-                () => reject(
-                    transaction.error
-                );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   UI HELPERS
-========================================================= */
-
-function setLoading(
-    id,
-    visible
-) {
-
-    $(id).style.display =
-        visible
-            ? "block"
-            : "none";
-
-}
-
-
-function hideElement(id) {
-
-    $(id).style.display =
-        "none";
-
-}
-
-
-function showResult(
-    id,
-    message,
-    type
-) {
-
-    const element =
-        $(id);
-
-
-    element.style.display =
-        "block";
-
-
-    element.className =
-        "result " +
-        (
-            type === "success"
-                ? "result-success"
-                : type === "error"
-                    ? "result-error"
-                    : type === "warning"
-                        ? "result-warning"
-                        : "result-info"
+            }
         );
 
 
-    element.textContent =
-        message;
+    } catch(error) {
 
-}
-
-
-function showAttendanceSuccess(
-    message
-) {
-
-    showResult(
-        "attendanceResult",
-        "✓ " + message,
-        "success"
-    );
-
-}
+        $("swState").textContent =
+            "🟠 تعذر تشغيل Offline";
 
 
-function showAttendanceWarning(
-    message
-) {
-
-    showResult(
-        "attendanceResult",
-        "⚠ " + message,
-        "warning"
-    );
-
-}
-
-
-function showAttendanceError(
-    message
-) {
-
-    showResult(
-        "attendanceResult",
-        "✕ " + message,
-        "error"
-    );
-
-}
-
-
-function showDiagnostic(
-    text
-) {
-
-    const element =
-        $("diagnostic");
-
-
-    element.style.display =
-        "block";
-
-
-    element.textContent =
-        text;
-
-}
-
-
-function resetGPS() {
-
-    currentGPS =
-        null;
-
-
-    $("gpsState")
-        .textContent =
-        "لم يتم الفحص";
-
-
-    $("gpsState")
-        .className =
-        "gps-warn";
-
-
-    $("gpsLat")
-        .textContent =
-        "—";
-
-
-    $("gpsLng")
-        .textContent =
-        "—";
-
-
-    $("gpsAccuracy")
-        .textContent =
-        "—";
-
-
-    $("gpsDistance")
-        .textContent =
-        "—";
-
-}
-
-
-/* =========================================================
-   DATE
-========================================================= */
-
-function formatDate(
-    value
-) {
-
-    if (!value) {
-        return "—";
-    }
-
-
-    const date =
-        new Date(value);
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return String(value);
-
-    }
-
-
-    return date.toLocaleString(
-        "ar-YE",
-        {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
+        addLog(
+            "Service Worker Error: " +
+            error.message
         );
 
+    }
+
 }
 
 
-/* =========================================================
-   SERVICE WORKER
-========================================================= */
+/* =====================================================
+   تحديث المحاضرة تلقائيًا
+===================================================== */
 
-function registerServiceWorker() {
+function startLectureClock() {
 
-    if (
-        "serviceWorker" in navigator
-    ) {
+    checkCurrentLecture();
 
-        navigator.serviceWorker
-            .register(
-                "./sw.js"
-            )
-            .then(
-                registration => {
 
-                    console.log(
-                        "Service Worker registered:",
-                        registration.scope
-                    );
+    setInterval(
+        () => {
 
-                }
-            )
-            .catch(
-                error => {
+            checkCurrentLecture();
 
-                    console.warn(
-                        "Service Worker error:",
-                        error
-                    );
+            updateAttendanceButton();
 
-                }
-            );
+        },
+        30000
+    );
+
+}
+
+
+/* =====================================================
+   التشغيل
+===================================================== */
+
+async function init() {
+
+    $("deviceView").textContent =
+        "الجهاز: " +
+        getDeviceId();
+
+
+    try {
+
+        await openDatabase();
+
+
+        await updateSyncStats();
+
+
+        updateNetworkStatus();
+
+
+        startLectureClock();
+
+
+        registerServiceWorker();
+
+
+        addLog(
+            "تم تشغيل النظام بنجاح."
+        );
+
+
+        addLog(
+            "جدول المحاضرات متاح محليًا."
+        );
+
+
+        addLog(
+            "التحقق من GPS يعمل بدون إنترنت."
+        );
+
+
+    } catch(error) {
+
+        addLog(
+            "خطأ في بدء النظام: " +
+            error.message
+        );
 
     }
 
 }
+
+
+init();
 
 </script>
 
