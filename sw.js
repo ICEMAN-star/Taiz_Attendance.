@@ -1,180 +1,240 @@
-const CACHE_NAME =
-  "taiz-attendance-v10";
+const CACHE_NAME = "taiz-attendance-v9";
 
+
+/*
+=========================================================
+ملفات التطبيق التي سيتم تخزينها محليًا
+=========================================================
+*/
 
 const APP_FILES = [
-  "./",
-  "./index.html",
-  "./admin.html",
-  "./manifest.json"
+    "./",
+    "./index.html",
+    "./admin.html",
+    "./manifest.json"
 ];
 
 
-/* =====================================================
-   INSTALL
-   ===================================================== */
+/*
+=========================================================
+INSTALL
+يحدث عند تثبيت Service Worker
+=========================================================
+*/
 
 self.addEventListener(
-  "install",
-  event => {
+    "install",
+    event => {
 
-    event.waitUntil(
+        event.waitUntil(
 
-      caches
-        .open(
-          CACHE_NAME
-        )
-        .then(
-          cache =>
-            cache.addAll(
-              APP_FILES
-            )
-        )
-        .then(
-          () =>
-            self.skipWaiting()
-        )
+            caches
+                .open(CACHE_NAME)
 
-    );
+                .then(cache => {
 
-  }
-);
-
-
-/* =====================================================
-   ACTIVATE
-   ===================================================== */
-
-self.addEventListener(
-  "activate",
-  event => {
-
-    event.waitUntil(
-
-      caches
-        .keys()
-        .then(
-          keys =>
-
-            Promise.all(
-
-              keys.map(
-                key => {
-
-                  if (
-                    key !==
-                    CACHE_NAME
-                  ) {
-
-                    return caches.delete(
-                      key
+                    return cache.addAll(
+                        APP_FILES
                     );
 
-                  }
+                })
 
-                }
-              )
+                .then(() => {
 
-            )
+                    return self.skipWaiting();
 
-        )
-        .then(
-          () =>
-            self.clients.claim()
-        )
+                })
 
-    );
+        );
 
-  }
+    }
 );
 
 
-/* =====================================================
-   FETCH
-   ===================================================== */
+/*
+=========================================================
+ACTIVATE
+حذف النسخ القديمة من Cache
+=========================================================
+*/
 
 self.addEventListener(
-  "fetch",
-  event => {
+    "activate",
+    event => {
 
-    const request =
-      event.request;
+        event.waitUntil(
 
+            caches.keys()
 
-    /*
-     * لا نعترض POST.
-     */
+                .then(keys => {
 
-    if (
-      request.method !==
-      "GET"
-    ) {
+                    return Promise.all(
 
-      return;
+                        keys.map(key => {
+
+                            if (
+                                key !== CACHE_NAME
+                            ) {
+
+                                return caches.delete(
+                                    key
+                                );
+
+                            }
+
+                            return null;
+
+                        })
+
+                    );
+
+                })
+
+                .then(() => {
+
+                    return self.clients.claim();
+
+                })
+
+        );
 
     }
+);
 
 
-    /*
-     * Google Apps Script
-     * يذهب مباشرة إلى الشبكة.
-     */
+/*
+=========================================================
+FETCH
+التعامل مع طلبات الملفات
+=========================================================
+*/
 
-    if (
-      request.url.includes(
-        "script.google.com"
-      )
-    ) {
+self.addEventListener(
+    "fetch",
+    event => {
 
-      return;
+        const request =
+            event.request;
 
-    }
+        /*
+        لا نتعامل مع POST
+        */
+        if (
+            request.method !== "GET"
+        ) {
 
-
-    event.respondWith(
-
-      fetch(request)
-
-        .then(
-          response => {
-
-            if (
-              response &&
-              response.ok
-            ) {
-
-              const copy =
-                response.clone();
+            return;
+        }
 
 
-              caches
-                .open(
-                  CACHE_NAME
-                )
-                .then(
-                  cache =>
-                    cache.put(
-                      request,
-                      copy
-                    )
-                );
-
-            }
+        const url =
+            new URL(
+                request.url
+            );
 
 
-            return response;
+        /*
+        مهم جدًا:
 
-          }
-        )
+        لا نخزن أو نعترض طلبات
+        Google Apps Script
+        */
 
-        .catch(
-          () =>
-            caches.match(
-              request
+        if (
+            url.hostname.includes(
+                "script.google.com"
             )
-        )
+        ) {
 
-    );
+            return;
+        }
 
-  }
+
+        /*
+        الطلبات الخاصة بالتطبيق نفسه
+        */
+
+        if (
+            url.origin ===
+            self.location.origin
+        ) {
+
+            event.respondWith(
+
+                fetch(request)
+
+                    .then(response => {
+
+                        /*
+                        إذا نجح الاتصال
+                        نضع نسخة في Cache
+                        */
+
+                        if (
+                            response &&
+                            response.ok
+                        ) {
+
+                            const copy =
+                                response.clone();
+
+                            caches
+                                .open(CACHE_NAME)
+                                .then(cache => {
+
+                                    cache.put(
+                                        request,
+                                        copy
+                                    );
+
+                                });
+
+                        }
+
+                        return response;
+
+                    })
+
+                    .catch(() => {
+
+                        /*
+                        إذا انقطع الإنترنت
+                        نستخدم النسخة المخزنة
+                        */
+
+                        return caches.match(
+                            request
+                        );
+
+                    })
+
+            );
+
+        }
+
+    }
+);
+
+
+/*
+=========================================================
+رسالة لتحديث Service Worker
+=========================================================
+*/
+
+self.addEventListener(
+    "message",
+    event => {
+
+        if (
+            event.data &&
+            event.data.type ===
+            "SKIP_WAITING"
+        ) {
+
+            self.skipWaiting();
+
+        }
+
+    }
 );
