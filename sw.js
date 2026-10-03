@@ -1,42 +1,46 @@
-const CACHE_NAME = "taiz-attendance-v10";
+const CACHE_NAME = "taiz-attendance-v11";
 
 const APP_FILES = [
     "./",
+    "./index.html",
     "./manifest.json"
 ];
 
 
-/* ===============================
-   INSTALL
-================================ */
-
 self.addEventListener("install", event => {
 
     event.waitUntil(
+
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(APP_FILES))
-            .then(() => self.skipWaiting())
+            .then(cache =>
+                cache.addAll(APP_FILES)
+            )
+            .then(() =>
+                self.skipWaiting()
+            )
+
     );
 
 });
 
-
-/* ===============================
-   ACTIVATE
-================================ */
 
 self.addEventListener("activate", event => {
 
     event.waitUntil(
 
         caches.keys()
-            .then(keys => {
+            .then(keys =>
 
-                return Promise.all(
+                Promise.all(
 
                     keys.map(key => {
 
-                        if (key !== CACHE_NAME) {
+                        if (
+                            key.startsWith(
+                                "taiz-attendance-"
+                            ) &&
+                            key !== CACHE_NAME
+                        ) {
 
                             return caches.delete(key);
 
@@ -44,10 +48,9 @@ self.addEventListener("activate", event => {
 
                     })
 
-                );
+                )
 
-            })
-
+            )
             .then(() =>
                 self.clients.claim()
             )
@@ -57,14 +60,11 @@ self.addEventListener("activate", event => {
 });
 
 
-/* ===============================
-   FETCH
-================================ */
-
 self.addEventListener("fetch", event => {
 
     const request =
         event.request;
+
 
     if (
         request.method !== "GET"
@@ -80,8 +80,7 @@ self.addEventListener("fetch", event => {
 
 
     /*
-     * لا نتدخل إطلاقًا في
-     * Google Apps Script
+     * لا نخزن Google Apps Script
      */
 
     if (
@@ -95,76 +94,29 @@ self.addEventListener("fetch", event => {
     }
 
 
-    /*
-     * index.html يجب أن يكون
-     * Network First.
-     *
-     * إذا كان الإنترنت موجودًا:
-     * نأخذ النسخة الجديدة.
-     *
-     * إذا لم يوجد الإنترنت:
-     * نستخدم النسخة المخزنة.
-     */
-
     if (
-        url.origin ===
+        url.origin !==
         self.location.origin
     ) {
 
-        if (
-            url.pathname.endsWith(
-                "/index.html"
-            ) ||
-            url.pathname.endsWith("/")
-        ) {
+        return;
 
-            event.respondWith(
-
-                fetch(request)
-                    .then(response => {
-
-                        if (
-                            response &&
-                            response.ok
-                        ) {
-
-                            const copy =
-                                response.clone();
-
-                            caches.open(
-                                CACHE_NAME
-                            ).then(cache => {
-
-                                cache.put(
-                                    request,
-                                    copy
-                                );
-
-                            });
-
-                        }
-
-                        return response;
-
-                    })
-                    .catch(() => {
-
-                        return caches.match(
-                            request
-                        );
-
-                    })
-
-            );
-
-            return;
-        }
+    }
 
 
-        /*
-         * باقي الملفات:
-         * Network First أيضًا.
-         */
+    /*
+     * الصفحة الرئيسية:
+     * Network First
+     *
+     * حتى لا نعرض نسخة قديمة عند توفر الإنترنت.
+     */
+
+    if (
+        url.pathname.endsWith(
+            "/index.html"
+        ) ||
+        url.pathname.endsWith("/")
+    ) {
 
         event.respondWith(
 
@@ -179,6 +131,7 @@ self.addEventListener("fetch", event => {
                         const copy =
                             response.clone();
 
+
                         caches.open(
                             CACHE_NAME
                         ).then(cache => {
@@ -192,23 +145,73 @@ self.addEventListener("fetch", event => {
 
                     }
 
+
                     return response;
 
                 })
                 .catch(() =>
-                    caches.match(request)
+
+                    caches.match(
+                        request
+                    )
+
                 )
 
         );
 
+        return;
+
     }
+
+
+    /*
+     * بقية الملفات:
+     * Network First
+     */
+
+    event.respondWith(
+
+        fetch(request)
+            .then(response => {
+
+                if (
+                    response &&
+                    response.ok
+                ) {
+
+                    const copy =
+                        response.clone();
+
+
+                    caches.open(
+                        CACHE_NAME
+                    ).then(cache => {
+
+                        cache.put(
+                            request,
+                            copy
+                        );
+
+                    });
+
+                }
+
+
+                return response;
+
+            })
+            .catch(() =>
+
+                caches.match(
+                    request
+                )
+
+            )
+
+    );
 
 });
 
-
-/* ===============================
-   FORCE UPDATE
-================================ */
 
 self.addEventListener(
     "message",
