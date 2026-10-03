@@ -1,1773 +1,1590 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b3d91">
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+      content="#0d47a1">
+
 <title>نظام حضور الطلاب</title>
 
+<link rel="manifest"
+      href="manifest.json">
+
 <style>
-:root{
---p:#0b3d91;
---b:#f4f7fb;
---c:#fff;
---t:#172033;
---m:#667085;
---ok:#137333;
---bad:#b3261e;
---w:#946200;
---bd:#dbe3ec
+
+* {
+  box-sizing: border-box;
 }
 
-*{
-box-sizing:border-box
+body {
+  margin: 0;
+  font-family: Arial, Tahoma, sans-serif;
+  background: #f1f5f9;
+  color: #172033;
 }
 
-body{
-margin:0;
-background:var(--b);
-color:var(--t);
-font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif
+.container {
+  width: 94%;
+  max-width: 650px;
+  margin: 25px auto;
 }
 
-header{
-background:linear-gradient(135deg,#0b3d91,#1565c0);
-color:#fff;
-text-align:center;
-padding:22px 15px
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.08);
 }
 
-h1{
-font-size:24px;
-margin:0 0 5px
+.header {
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    #0d47a1,
+    #1976d2
+  );
+  color: white;
 }
 
-header p{
-margin:0;
-font-size:14px
+.logo {
+  font-size: 45px;
 }
 
-main{
-max-width:720px;
-margin:16px auto;
-padding:0 13px 40px
+h1 {
+  margin: 5px 0;
+  font-size: 25px;
 }
 
-.card{
-background:var(--c);
-border:1px solid var(--bd);
-border-radius:18px;
-padding:17px;
-margin:12px 0;
-box-shadow:0 5px 18px #0b3d9110
+h2 {
+  font-size: 19px;
 }
 
-h3{
-margin:0 0 13px
-}
-
-label{
-display:block;
-font-weight:800;
-margin-bottom:7px
+label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: bold;
 }
 
 input,
-button{
-width:100%;
-padding:12px;
-border-radius:12px;
-font:inherit
+select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 14px;
 }
 
-input{
-border:1px solid var(--bd)
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 11px;
+  padding: 14px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 5px;
 }
 
-button{
-border:0;
-background:var(--p);
-color:#fff;
-font-weight:800;
-margin-top:9px;
-cursor:pointer
+.primary {
+  background: #0d47a1;
+  color: white;
 }
 
-button.secondary{
-background:#edf3fa;
-color:var(--p);
-border:1px solid #cbd8e6
+.secondary {
+  background: #e2e8f0;
+  color: #172033;
 }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px
+.success {
+  background: #16a34a;
+  color: white;
 }
 
-.row{
-display:flex;
-justify-content:space-between;
-gap:12px;
-padding:9px 0;
-border-bottom:1px solid #edf0f3
+.danger {
+  background: #dc2626;
+  color: white;
 }
 
-.row:last-child{
-border:0
+.info {
+  background: #e0f2fe;
+  border-right: 5px solid #0284c7;
+  padding: 13px;
+  border-radius: 10px;
+  margin: 10px 0;
 }
 
-.status{
-padding:11px 13px;
-border-radius:12px;
-background:#edf3fa;
-font-weight:700
+.warning {
+  background: #fff7ed;
+  border-right: 5px solid #f97316;
+  padding: 13px;
+  border-radius: 10px;
+  margin: 10px 0;
 }
 
-.status.ok{
-background:#e9f7ef;
-color:var(--ok)
+.result {
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
 }
 
-.status.bad{
-background:#fdeceb;
-color:var(--bad)
+.hidden {
+  display: none !important;
 }
 
-.status.warn{
-background:#fff6dc;
-color:var(--w)
+.student-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-.hidden{
-display:none!important
+.info-box {
+  background: #f8fafc;
+  padding: 13px;
+  border-radius: 10px;
 }
 
-.pill{
-padding:4px 9px;
-border-radius:999px;
-background:#edf3fa;
-font-size:12px;
-font-weight:800
+.info-box small {
+  display: block;
+  color: #64748b;
+  margin-bottom: 4px;
 }
 
-.small{
-font-size:12px;
-color:var(--m);
-line-height:1.65
+.info-box strong {
+  font-size: 16px;
 }
 
-footer{
-text-align:center;
-color:var(--m);
-font-size:12px;
-margin-top:18px
+.lecture {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 15px;
 }
 
-@media(max-width:500px){
-.grid{
-grid-template-columns:1fr
+.footer {
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  padding: 10px;
 }
 
-.row{
-align-items:center
-}
-}
 </style>
 
 </head>
 
 <body>
 
-<header>
-<h1>نظام حضور الطلاب</h1>
-<p>الحضور مرتبط بالطالب والمجموعة والمحاضرة والموقع</p>
-</header>
+<div class="container">
 
-<main>
+  <div class="card header">
 
-<div id="status" class="status">
-جاري تجهيز النظام...
+    <div class="logo">🎓</div>
+
+    <h1>نظام حضور الطلاب</h1>
+
+    <div>جامعة تعز</div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>بيانات الطالب</h2>
+
+    <label>الرقم الجامعي</label>
+
+    <input
+      id="studentId"
+      type="text"
+      placeholder="أدخل الرقم الجامعي">
+
+    <button
+      class="primary"
+      onclick="loadStudent()">
+
+      التحقق من الطالب
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="studentCard"
+    class="card hidden">
+
+    <h2>معلومات الطالب</h2>
+
+    <div class="student-info">
+
+      <div class="info-box">
+        <small>الرقم الجامعي</small>
+        <strong id="studentIdText"></strong>
+      </div>
+
+      <div class="info-box">
+        <small>الاسم</small>
+        <strong id="studentName"></strong>
+      </div>
+
+      <div class="info-box">
+        <small>المجموعة</small>
+        <strong id="studentGroup"></strong>
+      </div>
+
+      <div class="info-box">
+        <small>الأسبوع</small>
+        <strong id="weekNumber"></strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="lectureCard"
+    class="card hidden">
+
+    <h2>المحاضرة الحالية</h2>
+
+    <div
+      id="lectureBox"
+      class="lecture">
+
+      جاري البحث عن المحاضرة...
+
+    </div>
+
+    <button
+      id="attendanceButton"
+      class="primary"
+      onclick="recordAttendance()">
+
+      📍 تسجيل الحضور
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="gpsCard"
+    class="card hidden">
+
+    <h2>التحقق من الموقع</h2>
+
+    <div
+      id="gpsStatus"
+      class="info">
+
+      سيتم التحقق من موقعك عند تسجيل الحضور.
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="result"
+    class="result hidden">
+  </div>
+
+
+  <div class="card">
+
+    <h2>حالة الاتصال</h2>
+
+    <div
+      id="connectionStatus"
+      class="info">
+
+      جاري التحقق...
+
+    </div>
+
+    <button
+      class="secondary"
+      onclick="syncPending()">
+
+      🔄 مزامنة العمليات المعلقة
+
+    </button>
+
+  </div>
+
+
+  <div class="footer">
+    نظام حضور الطلاب © 2026
+  </div>
+
 </div>
-
-<section class="card">
-
-<label for="studentId">
-الرقم الجامعي
-</label>
-
-<input
-id="studentId"
-inputmode="numeric"
-autocomplete="off"
-placeholder="أدخل الرقم الجامعي"
->
-
-<div class="grid">
-
-<button id="loadBtn">
-تحقق من الطالب
-</button>
-
-<button id="clearBtn" class="secondary">
-مسح
-</button>
-
-</div>
-
-<p class="small">
-في أول استخدام يجب التحقق من الطالب مع الإنترنت حتى تُحفظ بياناته محليًا.
-</p>
-
-</section>
-
-
-<section id="studentCard" class="card hidden">
-
-<h3>
-بيانات الطالب
-</h3>
-
-<div class="row">
-<span>الاسم</span>
-<b id="studentName">—</b>
-</div>
-
-<div class="row">
-<span>المجموعة</span>
-<b id="studentGroup">—</b>
-</div>
-
-<div class="row">
-<span>الشبكة</span>
-<span id="netState" class="pill">—</span>
-</div>
-
-</section>
-
-
-<section id="lectureCard" class="card hidden">
-
-<h3>
-المحاضرة الحالية
-</h3>
-
-<div class="row">
-<span>المادة</span>
-<b id="subject">—</b>
-</div>
-
-<div class="row">
-<span>رمز المحاضرة</span>
-<b id="lectureId">—</b>
-</div>
-
-<div class="row">
-<span>الوقت</span>
-<b id="lectureTime">—</b>
-</div>
-
-<div class="row">
-<span>المجموعات</span>
-<b id="lectureGroups">—</b>
-</div>
-
-<button id="attendanceBtn">
-تحقق من الموقع وتسجيل الحضور
-</button>
-
-</section>
-
-
-<section class="card">
-
-<h3>
-المزامنة
-</h3>
-
-<div class="row">
-<span>سجلات معلقة</span>
-<b id="pendingCount">0</b>
-</div>
-
-<button id="syncBtn" class="secondary">
-مزامنة الآن
-</button>
-
-<p class="small">
-عند انقطاع الإنترنت يُحفظ السجل محليًا ويحاول التطبيق إرساله عند عودة الاتصال.
-لا نعتمد على رفع مضمون بعد إغلاق الصفحة.
-</p>
-
-</section>
-
-
-<footer>
-GitHub Pages + Google Apps Script + Google Sheets
-<br>
-DeviceID معرف محلي للمتصفح وليس معرفًا عتاديًا.
-</footer>
-
-</main>
 
 
 <script>
 
-"use strict";
-
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbxak31kru9o1TpgPIZHqhkXqfSJwxbOjChUDpzLFTZDF2f2LxnsjPkabYcpLqySP3A/exec";
 
+const SEMESTER_START =
+"2026-10-04";
 
-const TARGET_LAT = 13.571698,
-TARGET_LNG = 43.981730,
-MAX_DISTANCE_METERS = 150,
-MAX_GPS_ACCURACY_METERS = 150;
-
-
-const DB_NAME = "TaizAttendanceDB",
-DB_VERSION = 4,
-PENDING = "pendingAttendance",
-STUDENTS = "studentCache",
-META = "meta";
+const MAX_GPS_ACCURACY_METERS =
+150;
 
 
-const LECTURES = [
+/* =====================================================
+   IndexedDB
+   ===================================================== */
 
-{
-id:"SUN-01",
-day:"الأحد",
-start:"08:00",
-end:"10:00",
-subject:"عملي قواعد البيانات",
-groups:["1"]
-},
+const DB_NAME =
+"TaizAttendanceDB";
 
-{
-id:"SUN-02",
-day:"الأحد",
-start:"08:00",
-end:"10:00",
-subject:"عملي هياكل البيانات",
-groups:["2"]
-},
+const DB_VERSION = 5;
 
-{
-id:"SUN-03",
-day:"الأحد",
-start:"08:00",
-end:"10:00",
-subject:"عملي هياكل البيانات",
-groups:["3"]
-},
-
-{
-id:"SUN-04",
-day:"الأحد",
-start:"08:00",
-end:"10:00",
-subject:"عملي تحليل وتصميم النظم",
-groups:["4"]
-},
-
-{
-id:"SUN-05",
-day:"الأحد",
-start:"10:00",
-end:"12:00",
-subject:"عملي تصميم الشبكات",
-groups:["1"]
-},
-
-{
-id:"SUN-06",
-day:"الأحد",
-start:"10:00",
-end:"12:00",
-subject:"عملي هياكل البيانات",
-groups:["2"]
-},
-
-{
-id:"SUN-07",
-day:"الأحد",
-start:"10:00",
-end:"12:00",
-subject:"عملي قواعد البيانات",
-groups:["3"]
-},
-
-{
-id:"SUN-08",
-day:"الأحد",
-start:"10:00",
-end:"12:00",
-subject:"عملي تحليل وتصميم النظم",
-groups:["4"]
-},
-
-{
-id:"SUN-10",
-day:"الأحد",
-start:"12:00",
-end:"15:00",
-subject:"متطلبات هندسة البرمجيات",
-groups:["1","2"]
-},
-
-{
-id:"MON-01",
-day:"الإثنين",
-start:"08:00",
-end:"10:00",
-subject:"تصميم المنطق الرقمي",
-groups:["1","2"]
-},
-
-{
-id:"MON-02",
-day:"الإثنين",
-start:"08:00",
-end:"10:00",
-subject:"عملي هياكل البيانات",
-groups:["3"]
-},
-
-{
-id:"MON-03",
-day:"الإثنين",
-start:"10:00",
-end:"12:00",
-subject:"عملي هياكل البيانات",
-groups:["1"]
-},
-
-{
-id:"MON-04",
-day:"الإثنين",
-start:"10:00",
-end:"12:00",
-subject:"تصميم المنطق الرقمي",
-groups:["3","4"]
-},
-
-{
-id:"MON-05",
-day:"الإثنين",
-start:"10:00",
-end:"12:00",
-subject:"عملي هياكل البيانات",
-groups:["2"]
-},
-
-{
-id:"MON-06",
-day:"الإثنين",
-start:"12:00",
-end:"15:00",
-subject:"متطلبات هندسة البرمجيات",
-groups:["3","4"]
-},
-
-{
-id:"TUE-01",
-day:"الثلاثاء",
-start:"08:00",
-end:"10:00",
-subject:"عملي الاحتمالات والإحصاء",
-groups:["2","3"]
-},
-
-{
-id:"TUE-02",
-day:"الثلاثاء",
-start:"08:00",
-end:"10:00",
-subject:"عملي تحليل وتصميم النظم",
-groups:["1"]
-},
-
-{
-id:"TUE-03",
-day:"الثلاثاء",
-start:"08:00",
-end:"10:00",
-subject:"عملي قواعد البيانات",
-groups:["4"]
-},
-
-{
-id:"TUE-04",
-day:"الثلاثاء",
-start:"10:00",
-end:"12:00",
-subject:"عملي قواعد البيانات",
-groups:["2"]
-},
-
-{
-id:"TUE-05",
-day:"الثلاثاء",
-start:"10:00",
-end:"12:00",
-subject:"عملي تحليل وتصميم النظم",
-groups:["3"]
-},
-
-{
-id:"TUE-06",
-day:"الثلاثاء",
-start:"10:00",
-end:"12:00",
-subject:"عملي الاحتمالات والإحصاء",
-groups:["1","4"]
-},
-
-{
-id:"WED-01",
-day:"الأربعاء",
-start:"08:00",
-end:"10:00",
-subject:"تحليل وتصميم النظم",
-groups:["1","2"]
-},
-
-{
-id:"WED-02",
-day:"الأربعاء",
-start:"08:00",
-end:"10:00",
-subject:"هياكل البيانات والخوارزميات",
-groups:["3","4"]
-},
-
-{
-id:"WED-03",
-day:"الأربعاء",
-start:"10:00",
-end:"12:00",
-subject:"تحليل وتصميم النظم",
-groups:["3","4"]
-},
-
-{
-id:"WED-04",
-day:"الأربعاء",
-start:"10:00",
-end:"12:00",
-subject:"هياكل البيانات والخوارزميات",
-groups:["1","2"]
-},
-
-{
-id:"THU-01",
-day:"الخميس",
-start:"08:00",
-end:"10:00",
-subject:"الاحتمالات والإحصاء",
-groups:["1","2"]
-},
-
-{
-id:"THU-02",
-day:"الخميس",
-start:"08:00",
-end:"10:00",
-subject:"قواعد البيانات",
-groups:["3","4"]
-},
-
-{
-id:"THU-03",
-day:"الخميس",
-start:"10:00",
-end:"12:00",
-subject:"قواعد البيانات",
-groups:["1","2"]
-},
-
-{
-id:"THU-04",
-day:"الخميس",
-start:"12:00",
-end:"14:00",
-subject:"الاحتمالات والإحصاء",
-groups:["3","4"]
-}
-
-];
+let db;
 
 
-let db = null,
-currentStudent = null,
-currentLecture = null;
+function openDB() {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const request =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
+
+      request.onupgradeneeded =
+        event => {
+
+          const database =
+            event.target.result;
+
+          if (
+            !database.objectStoreNames.contains(
+              "pendingAttendance"
+            )
+          ) {
+
+            database.createObjectStore(
+              "pendingAttendance",
+              {
+                keyPath: "id",
+                autoIncrement: true
+              }
+            );
+
+          }
+
+          if (
+            !database.objectStoreNames.contains(
+              "studentCache"
+            )
+          ) {
+
+            database.createObjectStore(
+              "studentCache",
+              {
+                keyPath: "studentId"
+              }
+            );
+
+          }
+
+          if (
+            !database.objectStoreNames.contains(
+              "meta"
+            )
+          ) {
+
+            database.createObjectStore(
+              "meta",
+              {
+                keyPath: "key"
+              }
+            );
+
+          }
+
+        };
 
 
-const $ = id =>
-document.getElementById(id);
+      request.onsuccess =
+        event => {
+
+          db =
+            event.target.result;
+
+          resolve(db);
+
+        };
 
 
-function status(m,t=""){
+      request.onerror =
+        () => reject(
+          request.error
+        );
 
-$("status").className =
-"status " + t;
-
-$("status").textContent = m;
+    }
+  );
 
 }
 
 
-function online(){
+/* =====================================================
+   Device ID
+   ===================================================== */
 
-return navigator.onLine;
+async function getDeviceId() {
+
+  await openDB();
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
+          "meta",
+          "readonly"
+        );
+
+      const store =
+        tx.objectStore(
+          "meta"
+        );
+
+      const request =
+        store.get("deviceId");
+
+
+      request.onsuccess =
+        () => {
+
+          if (request.result) {
+
+            resolve(
+              request.result.value
+            );
+
+            return;
+
+          }
+
+
+          const id =
+            "WEB-" +
+            crypto.randomUUID();
+
+
+          const write =
+            db.transaction(
+              "meta",
+              "readwrite"
+            );
+
+
+          write
+            .objectStore("meta")
+            .put({
+
+              key:
+                "deviceId",
+
+              value:
+                id
+
+            });
+
+
+          resolve(id);
+
+        };
+
+
+      request.onerror =
+        () => reject(
+          request.error
+        );
+
+    }
+  );
 
 }
 
 
-function net(){
+/* =====================================================
+   API
+   ===================================================== */
 
-$("netState").textContent =
-online() ? "متصل" : "غير متصل";
+async function apiGet(params) {
+
+  const url =
+    API_URL +
+    "?" +
+    new URLSearchParams(
+      params
+    ).toString();
+
+  const response =
+    await fetch(
+      url,
+      {
+        method: "GET",
+        cache: "no-store"
+      }
+    );
+
+  if (!response.ok) {
+    throw new Error(
+      "HTTP " + response.status
+    );
+  }
+
+  return response.json();
 
 }
 
 
-function openDB(){
+async function apiPost(data) {
 
-return new Promise((ok,no)=>{
+  const response =
+    await fetch(
+      API_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+        body:
+          JSON.stringify(data)
+      }
+    );
 
-const r =
-indexedDB.open(DB_NAME,DB_VERSION);
+  if (!response.ok) {
+    throw new Error(
+      "HTTP " + response.status
+    );
+  }
+
+  return response.json();
+
+}
 
 
-r.onupgradeneeded = e => {
+/* =====================================================
+   بيانات الطالب
+   ===================================================== */
 
-const d = e.target.result;
+let currentStudent = null;
+let currentLecture = null;
 
 
-if(!d.objectStoreNames.contains(PENDING))
+async function loadStudent() {
 
-d.createObjectStore(
-PENDING,
-{keyPath:"sessionKey"}
+  const id =
+    document
+      .getElementById(
+        "studentId"
+      )
+      .value
+      .trim();
+
+
+  if (!id) {
+
+    showResult(
+      "أدخل الرقم الجامعي أولًا",
+      "warning"
+    );
+
+    return;
+
+  }
+
+
+  showResult(
+    "جاري التحقق من بيانات الطالب...",
+    "info"
+  );
+
+
+  try {
+
+    const data =
+      await apiGet({
+
+        action:
+          "student",
+
+        studentId:
+          id
+
+      });
+
+
+    if (!data.success) {
+
+      showResult(
+        data.message ||
+        "الطالب غير موجود",
+        "danger"
+      );
+
+      return;
+
+    }
+
+
+    currentStudent =
+      data.student;
+
+
+    document
+      .getElementById(
+        "studentCard"
+      )
+      .classList
+      .remove("hidden");
+
+
+    document
+      .getElementById(
+        "studentIdText"
+      )
+      .textContent =
+        currentStudent.StudentID;
+
+
+    document
+      .getElementById(
+        "studentName"
+      )
+      .textContent =
+        currentStudent.Name;
+
+
+    document
+      .getElementById(
+        "studentGroup"
+      )
+      .textContent =
+        currentStudent.Group;
+
+
+    const dateInfo =
+      await apiGet({
+
+        action:
+          "dateInfo"
+
+      });
+
+
+    document
+      .getElementById(
+        "weekNumber"
+      )
+      .textContent =
+        dateInfo.week || 0;
+
+
+    await loadCurrentLecture();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    showResult(
+      "تعذر الاتصال بالخادم",
+      "danger"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   المحاضرة الحالية
+   ===================================================== */
+
+async function loadCurrentLecture() {
+
+  const card =
+    document
+      .getElementById(
+        "lectureCard"
+      );
+
+  const box =
+    document
+      .getElementById(
+        "lectureBox"
+      );
+
+
+  card.classList.remove(
+    "hidden"
+  );
+
+
+  try {
+
+    const data =
+      await apiGet({
+
+        action:
+          "currentLecture",
+
+        studentId:
+          currentStudent.StudentID
+
+      });
+
+
+    if (
+      !data.success
+    ) {
+
+      currentLecture =
+        null;
+
+      box.textContent =
+        data.message ||
+        "لا توجد محاضرة متاحة.";
+
+      return;
+
+    }
+
+
+    currentLecture =
+      data.lecture;
+
+
+    if (!currentLecture) {
+
+      box.textContent =
+        data.message ||
+        "لا توجد محاضرة متاحة لك الآن.";
+
+      return;
+
+    }
+
+
+    box.innerHTML =
+
+      "<strong>" +
+      escapeHtml(
+        currentLecture.subject
+      ) +
+      "</strong>" +
+
+      "<br>المحاضرة: " +
+      escapeHtml(
+        currentLecture.lectureId
+      ) +
+
+      "<br>الوقت: " +
+      escapeHtml(
+        currentLecture.start
+      ) +
+      " - " +
+      escapeHtml(
+        currentLecture.end
+      );
+
+
+  } catch (error) {
+
+    box.textContent =
+      "تعذر تحميل المحاضرة.";
+
+  }
+
+}
+
+
+/* =====================================================
+   GPS
+   ===================================================== */
+
+function getGPS() {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      if (
+        !navigator.geolocation
+      ) {
+
+        reject(
+          new Error(
+            "GPS غير مدعوم"
+          )
+        );
+
+        return;
+
+      }
+
+
+      navigator.geolocation.getCurrentPosition(
+
+        position => {
+
+          resolve({
+
+            latitude:
+              position.coords.latitude,
+
+            longitude:
+              position.coords.longitude,
+
+            accuracy:
+              position.coords.accuracy
+
+          });
+
+        },
+
+        error => {
+
+          reject(error);
+
+        },
+
+        {
+
+          enableHighAccuracy:
+            true,
+
+          timeout:
+            20000,
+
+          maximumAge:
+            0
+
+        }
+
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   تسجيل الحضور
+   ===================================================== */
+
+async function recordAttendance() {
+
+  if (!currentStudent) {
+
+    showResult(
+      "تحقق من بيانات الطالب أولًا",
+      "warning"
+    );
+
+    return;
+
+  }
+
+
+  if (!currentLecture) {
+
+    showResult(
+      "لا توجد محاضرة متاحة لك الآن",
+      "warning"
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document
+      .getElementById(
+        "attendanceButton"
+      );
+
+
+  button.disabled =
+    true;
+
+
+  showResult(
+    "جاري الحصول على الموقع...",
+    "info"
+  );
+
+
+  try {
+
+    const gps =
+      await getGPS();
+
+
+    document
+      .getElementById(
+        "gpsCard"
+      )
+      .classList
+      .remove("hidden");
+
+
+    document
+      .getElementById(
+        "gpsStatus"
+      )
+      .innerHTML =
+
+      "دقة GPS: " +
+      Math.round(
+        gps.accuracy
+      ) +
+      " متر";
+
+
+    if (
+      gps.accuracy >
+      MAX_GPS_ACCURACY_METERS
+    ) {
+
+      showResult(
+        "دقة GPS غير كافية. حاول الحصول على موقع أدق.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    const deviceId =
+      await getDeviceId();
+
+
+    const payload = {
+
+      action:
+        "attendance",
+
+      studentId:
+        currentStudent.StudentID,
+
+      lectureId:
+        currentLecture.lectureId,
+
+      latitude:
+        gps.latitude,
+
+      longitude:
+        gps.longitude,
+
+      accuracy:
+        gps.accuracy,
+
+      deviceId:
+        deviceId
+
+    };
+
+
+    /*
+     * مهم:
+     * لا نسجل حضورًا محليًا دون GPS.
+     * إذا كان الإنترنت غير متوفر،
+     * نطلب GPS الآن ثم نخزن الإحداثيات.
+     */
+
+    if (
+      !navigator.onLine
+    ) {
+
+      await savePending(
+        payload
+      );
+
+
+      showResult(
+        "لا يوجد اتصال بالإنترنت. تم حفظ العملية وسيتم إرسالها عند عودة الاتصال.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    const response =
+      await apiPost(
+        payload
+      );
+
+
+    if (
+      response.success
+    ) {
+
+      showResult(
+        "✅ " +
+        response.message,
+        "success"
+      );
+
+      return;
+
+    }
+
+
+    showResult(
+      response.message ||
+      "لم يتم تسجيل الحضور",
+      "danger"
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    if (
+      !navigator.onLine
+    ) {
+
+      try {
+
+        const gps =
+          await getGPS();
+
+        const deviceId =
+          await getDeviceId();
+
+
+        await savePending({
+
+          action:
+            "attendance",
+
+          studentId:
+            currentStudent.StudentID,
+
+          lectureId:
+            currentLecture.lectureId,
+
+          latitude:
+            gps.latitude,
+
+          longitude:
+            gps.longitude,
+
+          accuracy:
+            gps.accuracy,
+
+          deviceId:
+            deviceId
+
+        });
+
+
+        showResult(
+          "تم حفظ العملية محليًا وسيتم إرسالها عند عودة الإنترنت.",
+          "warning"
+        );
+
+
+      } catch (offlineError) {
+
+        showResult(
+          "تعذر الحصول على الموقع.",
+          "danger"
+        );
+
+      }
+
+    } else {
+
+      showResult(
+        "تعذر الحصول على الموقع أو الاتصال بالخادم.",
+        "danger"
+      );
+
+    }
+
+
+  } finally {
+
+    button.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =====================================================
+   IndexedDB - العمليات المعلقة
+   ===================================================== */
+
+async function savePending(data) {
+
+  await openDB();
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
+          "pendingAttendance",
+          "readwrite"
+        );
+
+      tx.objectStore(
+        "pendingAttendance"
+      ).add({
+
+        ...data,
+
+        createdAt:
+          new Date().toISOString()
+
+      });
+
+
+      tx.oncomplete =
+        () => resolve();
+
+
+      tx.onerror =
+        () => reject(
+          tx.error
+        );
+
+    }
+  );
+
+}
+
+
+async function getPending() {
+
+  await openDB();
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
+          "pendingAttendance",
+          "readonly"
+        );
+
+
+      const request =
+        tx.objectStore(
+          "pendingAttendance"
+        ).getAll();
+
+
+      request.onsuccess =
+        () =>
+          resolve(
+            request.result
+          );
+
+
+      request.onerror =
+        () =>
+          reject(
+            request.error
+          );
+
+    }
+  );
+
+}
+
+
+async function deletePending(id) {
+
+  await openDB();
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
+          "pendingAttendance",
+          "readwrite"
+        );
+
+
+      tx.objectStore(
+        "pendingAttendance"
+      ).delete(id);
+
+
+      tx.oncomplete =
+        () => resolve();
+
+
+      tx.onerror =
+        () => reject(
+          tx.error
+        );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   المزامنة
+   ===================================================== */
+
+async function syncPending() {
+
+  if (!navigator.onLine) {
+
+    showResult(
+      "لا يوجد اتصال بالإنترنت.",
+      "warning"
+    );
+
+    return;
+
+  }
+
+
+  const items =
+    await getPending();
+
+
+  if (!items.length) {
+
+    showResult(
+      "لا توجد عمليات معلقة.",
+      "info"
+    );
+
+    return;
+
+  }
+
+
+  let synced = 0;
+
+
+  for (
+    const item of items
+  ) {
+
+    try {
+
+      const response =
+        await apiPost({
+
+          action:
+            "attendance",
+
+          studentId:
+            item.studentId,
+
+          lectureId:
+            item.lectureId,
+
+          latitude:
+            item.latitude,
+
+          longitude:
+            item.longitude,
+
+          accuracy:
+            item.accuracy,
+
+          deviceId:
+            item.deviceId
+
+        });
+
+
+      /*
+       * إذا نجح التسجيل أو كان
+       * مسجلًا مسبقًا، نحذف العملية
+       * من قائمة الانتظار.
+       */
+
+      if (
+        response.success ||
+        response.code === "DUPLICATE"
+      ) {
+
+        await deletePending(
+          item.id
+        );
+
+        synced++;
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "Sync error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  showResult(
+    "تمت مزامنة " +
+    synced +
+    " عملية.",
+    "success"
+  );
+
+}
+
+
+/* =====================================================
+   حالة الاتصال
+   ===================================================== */
+
+function updateConnectionStatus() {
+
+  const element =
+    document
+      .getElementById(
+        "connectionStatus"
+      );
+
+
+  if (
+    navigator.onLine
+  ) {
+
+    element.textContent =
+      "🟢 متصل بالإنترنت";
+
+  } else {
+
+    element.textContent =
+      "🔴 غير متصل بالإنترنت";
+
+  }
+
+}
+
+
+/* =====================================================
+   النتيجة
+   ===================================================== */
+
+function showResult(
+  message,
+  type
+) {
+
+  const element =
+    document
+      .getElementById(
+        "result"
+      );
+
+
+  element.textContent =
+    message;
+
+
+  element.className =
+    "result";
+
+
+  if (
+    type === "success"
+  ) {
+
+    element.style.background =
+      "#dcfce7";
+
+    element.style.color =
+      "#166534";
+
+  }
+
+  else if (
+    type === "danger"
+  ) {
+
+    element.style.background =
+      "#fee2e2";
+
+    element.style.color =
+      "#991b1b";
+
+  }
+
+  else if (
+    type === "warning"
+  ) {
+
+    element.style.background =
+      "#ffedd5";
+
+    element.style.color =
+      "#9a3412";
+
+  }
+
+  else {
+
+    element.style.background =
+      "#e0f2fe";
+
+    element.style.color =
+      "#075985";
+
+  }
+
+
+  element.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =====================================================
+   حماية HTML
+   ===================================================== */
+
+function escapeHtml(value) {
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+/* =====================================================
+   الأحداث
+   ===================================================== */
+
+window.addEventListener(
+  "online",
+  () => {
+
+    updateConnectionStatus();
+
+    syncPending();
+
+  }
 );
 
 
-if(!d.objectStoreNames.contains(STUDENTS))
-
-d.createObjectStore(
-STUDENTS,
-{keyPath:"studentId"}
+window.addEventListener(
+  "offline",
+  updateConnectionStatus
 );
 
 
-if(!d.objectStoreNames.contains(META))
+/* =====================================================
+   Service Worker
+   ===================================================== */
 
-d.createObjectStore(
-META,
-{keyPath:"key"}
-);
+if (
+  "serviceWorker" in navigator
+) {
 
-};
+  window.addEventListener(
+    "load",
+    () => {
 
+      navigator.serviceWorker
+        .register(
+          "./sw.js",
+          {
+            scope: "./"
+          }
+        )
+        .catch(
+          error =>
+            console.log(
+              "SW:",
+              error
+            )
+        );
 
-r.onsuccess = e => {
-
-db = e.target.result;
-
-ok();
-
-};
-
-
-r.onerror = () =>
-no(r.error);
-
-});
+    }
+  );
 
 }
 
 
-function st(n,m="readonly"){
+/* =====================================================
+   البداية
+   ===================================================== */
 
-return db
-.transaction(n,m)
-.objectStore(n);
+window.addEventListener(
+  "load",
+  async () => {
 
-}
+    await openDB();
 
+    updateConnectionStatus();
 
-function put(n,v){
+    if (
+      navigator.onLine
+    ) {
 
-return new Promise((a,b)=>{
+      syncPending();
 
-const r =
-st(n,"readwrite").put(v);
+    }
 
-r.onsuccess = () => a();
-
-r.onerror = () =>
-b(r.error);
-
-});
-
-}
-
-
-function get(n,k){
-
-return new Promise((a,b)=>{
-
-const r =
-st(n).get(k);
-
-r.onsuccess = () =>
-a(r.result);
-
-r.onerror = () =>
-b(r.error);
-
-});
-
-}
-
-
-function del(n,k){
-
-return new Promise((a,b)=>{
-
-const r =
-st(n,"readwrite").delete(k);
-
-r.onsuccess = () => a();
-
-r.onerror = () =>
-b(r.error);
-
-});
-
-}
-
-
-function all(n){
-
-return new Promise((a,b)=>{
-
-const r =
-st(n).getAll();
-
-r.onsuccess = () =>
-a(r.result || []);
-
-r.onerror = () =>
-b(r.error);
-
-});
-
-}
-
-
-async function count(){
-
-try{
-
-$("pendingCount").textContent =
-(await all(PENDING)).length;
-
-}catch{}
-
-}
-
-
-function device(){
-
-let x =
-localStorage.getItem(
-"taiz_device_id"
-);
-
-
-if(!x){
-
-x =
-window.crypto &&
-crypto.randomUUID ?
-
-crypto.randomUUID() :
-
-"dev-" +
-Date.now() +
-"-" +
-Math.random()
-.toString(36)
-.slice(2);
-
-
-localStorage.setItem(
-"taiz_device_id",
-x
-);
-
-}
-
-
-return x;
-
-}
-
-
-function day(d){
-
-return [
-
-"الأحد",
-"الإثنين",
-"الثلاثاء",
-"الأربعاء",
-"الخميس",
-"الجمعة",
-"السبت"
-
-][d.getDay()];
-
-}
-
-
-function min(t){
-
-const a =
-String(t)
-.split(":")
-.map(Number);
-
-return a[0] * 60 + a[1];
-
-}
-
-
-function localDate(){
-
-const d = new Date();
-
-return d.getFullYear() +
-"-" +
-String(
-d.getMonth()+1
-).padStart(2,"0") +
-"-" +
-String(
-d.getDate()
-).padStart(2,"0");
-
-}
-
-
-function lecture(g,d=new Date()){
-
-const m =
-d.getHours()*60 +
-d.getMinutes();
-
-const n =
-day(d);
-
-
-return LECTURES.find(x =>
-
-x.day === n &&
-m >= min(x.start) &&
-m < min(x.end) &&
-x.groups.includes(
-String(g).trim()
-)
-
-);
-
-}
-
-
-function dist(a,b,c,d){
-
-const R = 6371000,
-p = Math.PI / 180,
-x = (c-a) * p,
-y = (d-b) * p;
-
-const q =
-Math.sin(x/2)**2 +
-Math.cos(a*p) *
-Math.cos(c*p) *
-Math.sin(y/2)**2;
-
-return 2 * R *
-Math.asin(
-Math.sqrt(q)
-);
-
-}
-
-
-async function apiGet(p){
-
-const u =
-new URL(API_URL);
-
-
-Object.entries(p).forEach(
-([k,v]) =>
-u.searchParams.set(
-k,
-String(v)
-)
-);
-
-
-const r =
-await fetch(
-u.toString(),
-{
-method:"GET",
-cache:"no-store"
-}
-);
-
-
-if(!r.ok)
-throw Error(
-"HTTP " + r.status
-);
-
-
-return r.json();
-
-}
-
-
-async function apiPost(x){
-
-const r =
-await fetch(
-API_URL,
-{
-method:"POST",
-headers:{
-"Content-Type":
-"text/plain;charset=utf-8"
-},
-body:JSON.stringify(x),
-cache:"no-store"
-}
-);
-
-
-if(!r.ok)
-throw Error(
-"HTTP " + r.status
-);
-
-
-return r.json();
-
-}
-
-
-function parseGroups(v){
-
-return String(v || "")
-.replace(/[،؛]/g,",")
-.replace(/[و&+]/g,",")
-.split(/[,\s]+/)
-.map(x => x.trim())
-.filter(Boolean);
-
-}
-
-
-function serverLecture(x){
-
-if(!x)
-return null;
-
-
-return {
-
-id:
-x.lectureId ||
-x.id ||
-"",
-
-day:
-x.day ||
-"",
-
-start:
-x.start ||
-"",
-
-end:
-x.end ||
-"",
-
-subject:
-x.subject ||
-"",
-
-groups:
-parseGroups(x.group)
-
-};
-
-}
-
-
-async function loadStudent(){
-
-const id =
-$("studentId")
-.value
-.trim();
-
-
-if(!id)
-
-return status(
-"أدخل الرقم الجامعي أولًا",
-"bad"
-);
-
-
-status(
-"جارٍ التحقق من الطالب..."
-);
-
-
-try{
-
-let s;
-
-
-if(online()){
-
-const r =
-await apiGet({
-
-action:"student",
-
-studentId:id
-
-});
-
-
-if(!r.success)
-
-throw Error(
-r.message ||
-"الطالب غير موجود"
-);
-
-
-s = r.student;
-
-
-await put(
-STUDENTS,
-s
-);
-
-
-}else{
-
-s =
-await get(
-STUDENTS,
-id
-);
-
-
-if(!s)
-
-throw Error(
-"لا توجد بيانات محفوظة لهذا الطالب. يجب التحقق منه مرة واحدة مع الإنترنت."
-);
-
-}
-
-
-currentStudent = s;
-
-
-$("studentCard")
-.classList
-.remove("hidden");
-
-
-$("studentName")
-.textContent =
-s.name || "—";
-
-
-$("studentGroup")
-.textContent =
-s.group || "—";
-
-
-net();
-
-
-/*
-المحاضرة المحلية هي الأساس
-*/
-
-currentLecture =
-lecture(s.group);
-
-
-/*
-الخادم للتحقق الإضافي فقط
-*/
-
-if(online()){
-
-try{
-
-const r =
-await apiGet({
-
-action:"currentLecture",
-
-group:s.group
-
-});
-
-
-if(
-r.success &&
-r.lecture
-){
-
-const sl =
-serverLecture(
-r.lecture
-);
-
-
-if(sl && sl.id)
-
-currentLecture = sl;
-
-}
-
-}catch(e){
-
-console.warn(
-"تعذر جلب المحاضرة من الخادم:",
-e
-);
-
-}
-
-}
-
-
-if(!currentLecture){
-
-$("lectureCard")
-.classList
-.add("hidden");
-
-
-return status(
-"لا توجد محاضرة حالية لمجموعة الطالب.",
-"warn"
-);
-
-}
-
-
-$("lectureCard")
-.classList
-.remove("hidden");
-
-
-$("subject")
-.textContent =
-currentLecture.subject ||
-"—";
-
-
-$("lectureId")
-.textContent =
-currentLecture.id ||
-"—";
-
-
-$("lectureTime")
-.textContent =
-(currentLecture.start || "—") +
-" — " +
-(currentLecture.end || "—");
-
-
-$("lectureGroups")
-.textContent =
-(currentLecture.groups || [])
-.join(" ، ") ||
-"—";
-
-
-status(
-online() ?
-"تم التحقق من الطالب والمحاضرة." :
-"تم التحقق محليًا — يعمل دون اتصال.",
-"ok"
-);
-
-
-}catch(e){
-
-console.error(e);
-
-
-status(
-e.message ||
-"تعذر التحقق من الطالب",
-"bad"
-);
-
-}
-
-}
-
-
-function gps(){
-
-return new Promise((a,b)=>{
-
-if(!navigator.geolocation)
-
-return b(
-Error(
-"المتصفح لا يدعم GPS"
-)
-);
-
-
-navigator.geolocation.getCurrentPosition(
-
-a,
-
-e => {
-
-let m =
-"تعذر الحصول على الموقع.";
-
-
-if(e.code === 1)
-
-m =
-"تم رفض إذن الموقع. اسمح للموقع من إعدادات المتصفح.";
-
-
-if(e.code === 2)
-
-m =
-"تعذر تحديد الموقع. تأكد من تشغيل GPS.";
-
-
-if(e.code === 3)
-
-m =
-"انتهت مهلة تحديد الموقع.";
-
-
-b(Error(m));
-
-},
-
-{
-
-enableHighAccuracy:true,
-
-timeout:15000,
-
-maximumAge:0
-
-}
-
-);
-
-});
-
-}
-
-
-async function realGPS(){
-
-const p =
-await gps();
-
-
-const a =
-p.coords.latitude;
-
-const b =
-p.coords.longitude;
-
-const c =
-p.coords.accuracy;
-
-
-return {
-
-lat:a,
-
-lng:b,
-
-accuracy:c,
-
-distance:
-dist(
-a,
-b,
-TARGET_LAT,
-TARGET_LNG
-)
-
-};
-
-}
-
-
-function record(loc){
-
-const date =
-localDate();
-
-const id =
-currentLecture.id;
-
-
-return {
-
-studentId:
-String(
-currentStudent.studentId
-).trim(),
-
-lectureId:id,
-
-latitude:
-Number(loc.lat),
-
-longitude:
-Number(loc.lng),
-
-accuracy:
-Number(loc.accuracy),
-
-deviceId:
-device(),
-
-timestamp:
-new Date().toISOString(),
-
-sessionDate:
-date,
-
-sessionKey:
-String(
-currentStudent.studentId
-).trim() +
-"_" +
-id +
-"_" +
-date
-
-};
-
-}
-
-
-async function attendance(){
-
-if(
-!currentStudent ||
-!currentLecture
-)
-
-return status(
-"تحقق من الطالب والمحاضرة أولًا.",
-"bad"
-);
-
-
-status(
-"جارٍ التحقق من الموقع..."
-);
-
-
-try{
-
-const g =
-await realGPS();
-
-
-if(
-g.accuracy >
-MAX_GPS_ACCURACY_METERS
-)
-
-throw Error(
-`دقة GPS غير كافية (${Math.round(g.accuracy)}م). الحد ${MAX_GPS_ACCURACY_METERS}م.`
-);
-
-
-if(
-g.distance >
-MAX_DISTANCE_METERS
-)
-
-throw Error(
-`أنت خارج النطاق (${Math.round(g.distance)}م). الحد ${MAX_DISTANCE_METERS}م.`
-);
-
-
-const r =
-record(g);
-
-
-if(online()){
-
-try{
-
-const x =
-await apiPost(r);
-
-
-if(x.success){
-
-status(
-"تم تسجيل الحضور بنجاح.",
-"ok"
-);
-
-return;
-
-}
-
-
-if(x.duplicate){
-
-status(
-"الحضور مسجل مسبقًا لهذه المحاضرة.",
-"warn"
-);
-
-return;
-
-}
-
-
-throw Error(
-x.message ||
-"رفض الخادم"
-);
-
-
-}catch(e){
-
-console.error(e);
-
-
-await put(
-PENDING,
-r
-);
-
-
-status(
-"تعذر الإرسال؛ تم حفظ السجل للمزامنة.",
-"warn"
-);
-
-}
-
-}else{
-
-await put(
-PENDING,
-r
-);
-
-
-status(
-"لا يوجد إنترنت؛ تم حفظ السجل محليًا.",
-"warn"
-);
-
-}
-
-
-await count();
-
-
-}catch(e){
-
-console.error(e);
-
-
-status(
-e.message ||
-"تعذر الحصول على الموقع",
-"bad"
-);
-
-}
-
-}
-
-
-async function sync(){
-
-if(!online())
-
-return status(
-"لا يوجد إنترنت.",
-"warn"
-);
-
-
-const a =
-await all(PENDING);
-
-
-if(!a.length)
-
-return status(
-"لا توجد سجلات معلقة.",
-"ok"
-);
-
-
-let ok = 0,
-fail = 0;
-
-
-for(
-const r of a
-){
-
-try{
-
-const x =
-await apiPost(r);
-
-
-if(
-x.success ||
-x.duplicate
-){
-
-await del(
-PENDING,
-r.sessionKey
-);
-
-ok++;
-
-}else{
-
-fail++;
-
-}
-
-}catch(e){
-
-fail++;
-
-}
-
-}
-
-
-await count();
-
-
-status(
-`المزامنة: نجح ${ok}، بقي ${fail}.`,
-fail ?
-"warn" :
-"ok"
-);
-
-}
-
-
-async function clearLocal(){
-
-if(!confirm(
-"حذف بيانات التطبيق المحلية والسجلات المعلقة؟"
-))
-
-return;
-
-
-for(
-const x of await all(PENDING)
-)
-
-await del(
-PENDING,
-x.sessionKey
-);
-
-
-for(
-const x of await all(STUDENTS)
-)
-
-await del(
-STUDENTS,
-x.studentId
-);
-
-
-localStorage.removeItem(
-"taiz_device_id"
-);
-
-
-location.reload();
-
-}
-
-
-async function boot(){
-
-try{
-
-await openDB();
-
-
-await count();
-
-
-net();
-
-
-if(
-"serviceWorker" in navigator
-){
-
-try{
-
-await navigator.serviceWorker.register(
-"./sw.js",
-{
-scope:"./",
-updateViaCache:"none"
-}
-);
-
-}catch(e){
-
-console.warn(
-"Service Worker:",
-e
-);
-
-}
-
-}
-
-
-status(
-online() ?
-"النظام جاهز — متصل." :
-"النظام جاهز — دون اتصال.",
-"ok"
-);
-
-
-}catch(e){
-
-status(
-"تعذر تهيئة التطبيق: " +
-e.message,
-"bad"
-);
-
-}
-
-}
-
-
-$("loadBtn").onclick =
-loadStudent;
-
-
-$("attendanceBtn").onclick =
-attendance;
-
-
-$("syncBtn").onclick =
-sync;
-
-
-$("clearBtn").onclick =
-clearLocal;
-
-
-$("studentId").onkeydown =
-e => {
-
-if(e.key === "Enter")
-
-loadStudent();
-
-};
-
-
-addEventListener(
-"online",
-async() => {
-
-net();
-
-
-status(
-"عاد الاتصال بالإنترنت.",
-"ok"
-);
-
-
-await sync();
-
-}
-);
-
-
-addEventListener(
-"offline",
-() => {
-
-net();
-
-
-status(
-"انقطع الإنترنت — سيعمل التطبيق محليًا حسب البيانات المحفوظة.",
-"warn"
-);
-
-}
-);
-
-
-addEventListener(
-"load",
-boot
+  }
 );
 
 </script>
